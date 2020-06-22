@@ -34,8 +34,7 @@ public interface WordMapper {
     void upateWord(Word word);
 
 
-   @Select("")
-   List<Word> findWords(Integer wordbook_id,Integer curr,Integer size);
+
 
     @Select("select id, word, paraphrase, pron_us, pron_uk from words " +
             "where wordbook_id = #{id} " +
@@ -43,7 +42,9 @@ public interface WordMapper {
     List<Word> getWords(int id, PageUtil pageUtil);
 
 
-    //查询未背单词
+ /**
+  * 查询未背单词
+  */
     @Select("SELECT id,word,paraphrase,pron_us,pron_uk FROM words " +
             "WHERE wordbook_id = #{wordbook_id} " +
             "AND id NOT IN " +
@@ -53,7 +54,7 @@ public interface WordMapper {
             "LIMIT #{pageUtil.offset},#{pageUtil.size};")
     List<Word> getMyWordbookWords(Integer wordbook_id, Integer learner_id, PageUtil pageUtil);
 
-    //查询正在背单词
+ //查询正在背单词
     @Select("SELECT m.id,m.`memorized_count`,m.`next_time`," +
             "w.`word`,w.`paraphrase`,w.`pron_us`,w.`pron_uk` FROM memorize m  " +
             "INNER JOIN words w ON m.word_id = w.id " +

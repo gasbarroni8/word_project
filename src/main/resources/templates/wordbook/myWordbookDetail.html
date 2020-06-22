@@ -182,7 +182,7 @@
                     $.each(result.words,function (i,item) {
                         $('.unWordList').append("<div class=\"wordBox\">\n" +
                             "            <div class=\"col-xs-10 wordArea\">\n" +
-                            "                <p class=\"word\" title=\""+ item.word +"\">"+ item.word +"</p>\n" +
+                            "                <a href=\"/wordect/gotoWordDetail?word="+ item.word +"\"><p class=\"word\" title=\""+ item.word +"\">"+ item.word +"</p></a>\n" +
                             "                <!--            将换行去除-->\n" +
                             "                <p class=\"wordMean\">"+ item.paraphrase +"</p>\n" +
                             "            </div>\n" +
@@ -273,7 +273,7 @@
                     $.each(data,function (i,item) {
                         $('.unWordList').append("<div class=\"wordBox\">\n" +
                             "            <div class=\"col-xs-10 wordArea\">\n" +
-                            "                <p class=\"word\" title=\""+ item.word +"\">"+ item.word +"</p>\n" +
+                            "                <a href=\"/wordect/gotoWordDetail?word="+ item.word +"\"><p class=\"word\" title=\""+ item.word +"\">"+ item.word +"</p></a>\n" +
                             "                <!--            将换行去除-->\n" +
                             "                <p class=\"wordMean\">"+ item.paraphrase +"</p>\n" +
                             "            </div>\n" +
@@ -296,7 +296,7 @@
                     $.each(data,function (i,item) {
                         $('.wordingList').append("<div class=\"wordBox\">\n" +
                             "            <div class=\"col-xs-10 wordArea\">\n" +
-                            "                <p class=\"word\" title=\""+ item.word +"\">"+ item.word +"</p>\n" +
+                            "                <a href=\"/wordect/gotoWordDetail?word="+ item.word +"\"><p class=\"word\" title=\""+ item.word +"\">"+ item.word +"</p></a>\n" +
                             "                <!--            将换行去除-->\n" +
                             "                <p class=\"wordMean\">"+ item.paraphrase +"</p>\n" +
                             "            </div>\n" +
@@ -318,7 +318,7 @@
                     $.each(data,function (i,item) {
                         $('.wordedList').append("<div class=\"wordBox\">\n" +
                             "            <div class=\"col-xs-10 wordArea\">\n" +
-                            "                <p class=\"word\" title=\""+item.word+"\">"+item.word +"</p>\n" +
+                            "                <a href=\"/wordect/gotoWordDetail?word="+ item.word +"\"><p class=\"word\" title=\""+item.word+"\">"+item.word +"</p></a>\n" +
                             "                <p class=\"wordMean\">"+item.paraphrase+"</p>\n" +
                             "            </div>\n" +
                             "            <div class=\"col-xs-1 pronBox\" style=\"padding: 0 5px;\"><span title=\""+item.word+"\" class=\"glyphicon glyphicon-volume-down pron\" > </span></div>\n" +

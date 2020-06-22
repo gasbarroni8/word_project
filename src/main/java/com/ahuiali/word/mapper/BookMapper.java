@@ -16,7 +16,12 @@ public interface BookMapper {
     @Select("SELECT id,title,img,author,tag,summary,index_book,is_hot FROM book;")
     List<Book> getAllBooks();
 
-    //根据书籍号查询所有章节
+    /**
+     * 根据书籍号查询所有章节
+     * @param book_index
+     * @param pageUtil
+     * @return
+     */
     @Select("SELECT id,chapter_name,chapter_index FROM book_chapter " +
             "WHERE book_index = #{book_index} " +
             "limit #{pageUtil.offset},#{pageUtil.size};")
@@ -25,14 +30,32 @@ public interface BookMapper {
     @Select("select id,title,index_book, img from book where is_hot = 1;")
     List<Book> getHotBooks();
 
+    /**
+     * 根据分类找书籍
+     * @param tag 分类
+     * @param pageUtil 分页
+     * @return
+     */
     @Select("select id,title,index_book,img from book where tag like #{tag} " +
             "LIMIT #{pageUtil.offset},#{pageUtil.size};")
     List<Book> getBooksByTag(String tag, PageUtil pageUtil);
 
+    /**
+     *
+     *
+     * @param book_index
+     * @param learner_id
+     * @return
+     */
     @Select("select lastest_loc from learner_book where learner_id = #{learner_id} and book_index = #{book_index}")
     String findIsAddThisBook(Integer book_index, Integer learner_id);
 
-    //根据书籍号查询，并且返回是否加入
+    /**
+     * 根据书籍号查询，并且返回是否加入
+     * @param index_book
+     * @param learner_id
+     * @return
+     */
     @Select("SELECT id,title,index_book,img,tag,summary, " +
             "(SELECT lastest_loc FROM learner_book WHERE learner_id = #{learner_id} AND book_index = #{index_book} limit 1) as lastest_loc \n" +
             "FROM book WHERE index_book = #{index_book} limit 1;")

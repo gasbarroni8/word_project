@@ -2,20 +2,23 @@ package com.ahuiali.word.controller;
 
 import com.ahuiali.word.json.JsonBase;
 import com.ahuiali.word.json.NotebookJson;
+import com.ahuiali.word.json.WordEctJson;
 import com.ahuiali.word.json.WordJson;
 import com.ahuiali.word.pojo.Notebook;
-import com.ahuiali.word.pojo.Word;
+import com.ahuiali.word.pojo.WordEct;
 import com.ahuiali.word.service.NotebookService;
 import com.ahuiali.word.utils.PageUtil;
-import org.apache.ibatis.annotations.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
+
 import java.util.Map;
 
+/**
+ * @author ahui
+ */
 @Controller
 @RequestMapping("/notebook")
 public class NotebookController {
@@ -28,6 +31,9 @@ public class NotebookController {
 
     @Autowired
     WordJson wordJson;
+
+    @Autowired
+    WordEctJson wordEctJson;
 
     @Autowired
     NotebookService notebookService;
@@ -50,7 +56,6 @@ public class NotebookController {
     public @ResponseBody NotebookJson myNotebookJSON(HttpSession session){
 
         //获取学习者id
-
        Integer learner_id = (Integer) session.getAttribute("learnerId");
 
         notebookJson = notebookService.findAllNotebookByLearnerId(learner_id);
@@ -99,18 +104,17 @@ public class NotebookController {
 
     /**
      * 删除生词本(*)
-     * @param session
      * @param id 生词本id
      * @return
      */
     @RequestMapping(value = "/removeNotebook/{id}" ,produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase removeNotebook(HttpSession session, @PathVariable("id") Integer id){
+    public String  removeNotebook(@PathVariable("id") Integer id){
         jsonBase = notebookService.removeNotebook(id);
-        return jsonBase;
+        return "redirect:/notebook/gotoNotebook";
     }
 
     /**
-     * 为生词本添加单词
+     * 为生词本添加单词1
      * @param word  单词
      * @param id 生词本id
      * @return
@@ -120,6 +124,19 @@ public class NotebookController {
                                           @PathVariable("id") Integer id){
         jsonBase = notebookService.addWord(id,word);
         return jsonBase;
+    }
+
+    /**
+     * 为生词本添加单词2
+     * @param wordect  单词实体
+     * @param notebook_id 生词本id
+     * @return
+     */
+    @RequestMapping(value = "/addWordEct/{notebook_id}" ,produces = "application/json;charset=utf-8;")
+    public @ResponseBody WordEctJson addWord(@RequestBody WordEct wordect,
+                                          @PathVariable("notebook_id") Integer notebook_id){
+        wordEctJson = notebookService.addWordEct(notebook_id,wordect);
+        return wordEctJson;
     }
 
     /**
@@ -141,12 +158,12 @@ public class NotebookController {
      * @return
      */
     @RequestMapping(value = "/listWords/{notebook_id}")
-    public @ResponseBody WordJson listWords(@PathVariable("notebook_id") Integer notebook_id, @RequestBody PageUtil pageUtil){
+    public @ResponseBody NotebookJson listWords(@PathVariable("notebook_id") Integer notebook_id, @RequestBody PageUtil pageUtil){
 
         pageUtil.renew();
-        WordJson wordJson = notebookService.listWord(notebook_id,pageUtil);
+        NotebookJson notebookJson = notebookService.listWord(notebook_id,pageUtil);
 
-        return wordJson;
+        return notebookJson;
     }
 
     /**

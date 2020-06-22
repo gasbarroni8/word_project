@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -32,12 +33,21 @@ public class LearnerController {
     @Autowired
     private LearnerJson learnerJson;
 
-    //跳转至个人界面
+    /**
+     * 跳转至个人界面
+     * @return
+     */
     @RequestMapping("/profile")
     public String gotoProfile(){
         return "/learner/profile";
     }
 
+    /**
+     * 注册检测
+     * @param learner
+     * @param check
+     * @return
+     */
     @RequestMapping(value = "/register/{check}",produces = "application/json;charset=utf-8;")
     public @ResponseBody LearnerJson registerCheck(@RequestBody Learner learner, @PathVariable("check") String check){
         if("checkEmail".equals(check)){
@@ -77,33 +87,56 @@ public class LearnerController {
     }
 
     //登陆
-    @RequestMapping(value = "/login", produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase login(@RequestBody Learner learner,  HttpSession session){
+    @RequestMapping(value = "/login/{isRemember}", produces = "application/json;charset=utf-8;")
+    public @ResponseBody JsonBase login(@RequestBody Learner learner,
+                                        @PathVariable("isRemember") Integer isRemember,
+                                        HttpSession session){
         //根据邮箱和密码查询
         learnerJson =  learnerService.queryLearner(learner);
         if(learnerJson.getCode() == 200){
             session.setAttribute("learnerId",learnerJson.getLearner().getId());
+            //七天有效
+            if(isRemember == 1){
+                session.setMaxInactiveInterval(7*24*60);
+            }
+
         }
         return learnerJson;
     }
 
-    //跳转登录
+    /**
+     * 跳转登录
+     * @return
+     */
     @RequestMapping("/gotoLogin")
     public String gotoLogin(){
         return "/learner/login";
     }
-    //跳转注册
+
+    /**
+     * 跳转注册
+     * @return
+     */
     @RequestMapping("/gotoRegister")
     public String gotoRegister(){
         return "/learner/register";
     }
-    //跳转找回密码
+
+    /**
+     *
+     * 跳转找回密码
+     * @return
+     */
     @RequestMapping("/gotoFindPsw")
     public String gotoFindPsw(){
         return "/learner/resetPassword";
     }
 
-    //重新发送邮箱
+    /**
+     * 重新发送邮箱
+     * @param learner
+     * @return
+     */
     @RequestMapping(value = "/login/sentEmailAgain", produces = "application/json;charset=utf-8;")
     public @ResponseBody JsonBase sentEmailAgain(@RequestBody Learner learner){
 
@@ -112,21 +145,33 @@ public class LearnerController {
         return jsonBase;
     }
 
-    //找回密码
+    /**
+     * 找回密码
+     * @param learner
+     * @return
+     */
     @RequestMapping(value = "/findPassword",produces = "application/json;charset=utf-8;")
     public @ResponseBody JsonBase findPassword(@RequestBody Learner learner){
             jsonBase = learnerService.findPassword(learner.getEmail());
         return jsonBase;
     }
 
-    //修改密码
+    /**
+     * 修改密码
+     * @param learner
+     * @return
+     */
     @RequestMapping(value = "/updatePassword",produces = "application/json;charset=utf-8;")
     public @ResponseBody JsonBase updatePassword(@RequestBody Learner learner){
         jsonBase = learnerService.updatePassword(learner.getEmail(),learner.getPassword());
         return jsonBase;
     }
 
-    //退出登录
+    /**
+     * 退出登录
+     * @param session
+     * @return
+     */
     @RequestMapping("/loginOut")
     public String loginOut(HttpSession session){
         session.removeAttribute("learnerId");

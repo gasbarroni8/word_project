@@ -7,101 +7,146 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="/bootstrap-3.3.7/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/read.css">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
 </head>
 <body>
 
 
 
-<!--顶部-->
-<div id="topTab" class="topTab container">
-    <div class="row">
-        <div class="back col-xs-2 col-md-1 col-md-offset-1" style="cursor: pointer">
-            <p><span class="glyphicon glyphicon-menu-left"></span></p>
-        </div>
-        <div class="chapterName col-xs-8 col-md-8"></div>
-        <div class="gotoBookDetail  col-xs-2 " style="cursor: pointer">
-            <span class="glyphicon glyphicon-option-vertical bookDetail"></span></div>
-    </div>
-</div>
-
-<!--章节-->
-<div id="chapters" >
-    <ul id="chaptersUL">
-
-        <li class="bookName"></li>
-
-    </ul>
-</div>
-
-<div class="read container">
-
-<!--    <button class="showChapters" >章节</button>-->
-    <div id="content" style="min-height: 1000px;">
-<!--        <p id="pre">"He can't come back, Harry," said Lupin,-->
-<!--            his voice breaking as he struggled to contain Harry. "He can't come back, because he's d &#45;&#45;"</p>-->
-<!--        <p>"SIRIUS!" he bellowed. "SIRIUS!" <button>译</button></p>-->
-
-    </div>
-
-</div>
-<div id="functionTab" class="functionTab container ">
-    <div class="row">
-
-        <!--    字体修改-->
-        <div class="fontSizeBtn">
-            <img src="/img/readFontSize.png" alt="">
-
-        </div>
-        <!--    播放-->
-        <div class="listenBtn">
-            <img src="/img/readEarphone.png" alt="">
-        </div>
-        <!--    显示章节列表-->
-        <div class="chaptersBtn">
-            <img src="/img/readList.png" alt="">
-        </div>
-
-
-    </div>
-    <div class="fontSizeEdit">
-        <div class="sizeArea">
-            <span class="fontSizeSmaller fontSize ">A -</span>
-            <span class="fontSizeNum"></span>
-            <span class="fontSizeBigger fontSize ">A+</span>
-        </div>
-        <div class="fontFamily">
-            <span style='font-family: "Arial", "宋体"'>Arial</span>
-            <span style='font-family: "Georgia", "宋体"'>Georgia</span>
-            <span style='font-family: "Microsoft YaHei UI", "宋体"'>Ya Hei</span>
-        </div>
-        <div class="colorArea">
-            <span style="background-color: #ffffff;"></span>
-            <span style="background-color: #C7EDCC;"></span>
-            <span style="background-color: #FFF2E2;"></span>
-            <span style="background-color: #f0ffde;"></span>
-
+    <!--顶部-->
+    <div id="topTab" class="topTab container">
+        <div class="row">
+            <div class="back col-xs-2 col-md-1 col-md-offset-1" style="cursor: pointer">
+                <p><span class="glyphicon glyphicon-menu-left"></span></p>
+            </div>
+            <div class="chapterName col-xs-8 col-md-8"></div>
+            <div class="gotoBookDetail  col-xs-2 " style="cursor: pointer">
+                <span class="glyphicon glyphicon-option-vertical bookDetail"></span></div>
         </div>
     </div>
-</div>
-<div id="wordMeaning">
-<!--    类似于worddetail的第一部分-->
-    <div id="word" class="container" >
-        <audio id="sound" class="sound"  style="display:none;" src=""></audio>
+
+    <!--章节-->
+    <div id="chapters" >
+        <ul id="chaptersUL">
+
+            <li class="bookName"></li>
+
+        </ul>
+    </div>
+
+    <!--内容-->
+    <div class="read container">
+
+    <!--    <button class="showChapters" >章节</button>-->
+        <div id="content" style="min-height: 1000px;">
+    <!--        <p id="pre">"He can't come back, Harry," said Lupin,-->
+    <!--            his voice breaking as he struggled to contain Harry. "He can't come back, because he's d &#45;&#45;"</p>-->
+    <!--        <p>"SIRIUS!" he bellowed. "SIRIUS!" <button>译</button></p>-->
+
+        </div>
+
+    </div>
+    <!--    工具栏-->
+    <div id="functionTab" class="functionTab container ">
         <div class="row">
 
+            <!--    字体修改-->
+            <div class="fontSizeBtn">
+                <img src="/img/readFontSize.png" alt="">
+
+            </div>
+            <!--    播放-->
+            <div class="listenBtn">
+                <img src="/img/readEarphone.png" alt="">
+            </div>
+            <!--    显示章节列表-->
+            <div class="chaptersBtn">
+                <img src="/img/readList.png" alt="">
+            </div>
+
+
+        </div>
+        <div class="fontSizeEdit">
+            <div class="sizeArea">
+                <span class="fontSizeSmaller fontSize ">A -</span>
+                <span class="fontSizeNum"></span>
+                <span class="fontSizeBigger fontSize ">A+</span>
+            </div>
+            <div class="fontFamily">
+                <span style='font-family: "Arial", "宋体"'>Arial</span>
+                <span style='font-family: "Georgia", "宋体"'>Georgia</span>
+                <span style='font-family: "Microsoft YaHei UI", "宋体"'>Ya Hei</span>
+            </div>
+            <div class="colorArea">
+                <span style="background-color: #ffffff;"></span>
+                <span style="background-color: #C7EDCC;"></span>
+                <span style="background-color: #FFF2E2;"></span>
+                <span style="background-color: #f0ffde;"></span>
+
+            </div>
         </div>
     </div>
-</div>
-<div id="sentenceMeaning"></div>
+    <!--单词发音等简略信息框-->
+    <div id="wordMeaning" class="wordDetailBox sampleInfo container" style="position:fixed;">
 
+        <!--    单词-->
+        <div class="row wordName">
+            <div class=" col-xs-10 col-sm-8 col-sm-offset-1">
+                <p class="word" style="font-size: 20px;font-weight: 700;"></p>
+            </div>
+        </div>
+        <!--    音标-->
+        <div class="row wordPron">
+            <div class="col-xs-10 col-sm-8 col-sm-offset-1">
+
+                <p>英 [<span id="uk">'kəʊdɪŋ</span>] <span class="glyphicon glyphicon-volume-down pron_uk_volume"></span></p>
+                <!--            <audio id="soundUK" class="sound"  src="http://media.shanbay.com/audio/uk/coding.mp3"></audio>-->
+                <p>美 [<span id="us">'koʊdɪŋ</span>] <span class="glyphicon glyphicon-volume-down pron_us_volume"></span></p>
+                <!--            <audio id="soundUS" class="sound"  src="http://media.shanbay.com/audio/us/coding.mp3"></audio>-->
+            </div>
+        </div>
+        <!--    释义-->
+        <div class="row wordPara">
+            <div class="col-xs-12  col-sm-8 col-sm-offset-1">
+                <p class="wordParaP"></p>
+            </div>
+        </div>
+
+        <!--    收藏-->
+        <div class="collectWordBox" content="0">
+            收藏
+        </div>
+    </div>
+
+    <!--关闭生词本框-->
+    <div class="closeNotebookListBox">
+        X
+    </div>
+
+    <!--生词本列表-->
+    <div class="notebookListBox">
+        <h4 style="text-align:center;border-bottom: 1px solid rgba(35, 51, 51, 0.21);padding: 5px 0;margin: 5px 0;">请选择要添加的生词本</h4>
+        <ul class="notebookListBoxLists">
+
+        </ul>
+        <a href="/notebook/gotoNotebook" style="font-size: 16px;display: block;text-align:center;;">去新建生词本....</a>
+    </div>
+
+
+    <div id="sentenceMeaning"></div>
+
+    <!--提示框，提示加入或移除单词信息-->
+    <div class="tipBox" >
+
+    </div>
+
+    <audio id="sound" class="sound" style="width: 0;height: 0;"  src=""></audio>
 </body>
 
 </html>
 <script src="/jq/jquery.min.js"></script>
 <script src="/js/scrollbot.min.js"></script>
-
+<script src="/js/collectWord.js"></script>
 <!--样式修改-->
 <script>
     //修改样式按钮
@@ -131,7 +176,6 @@
     }
 
     //很奇怪，pc端不能改变字体大小，手机端就可以
-
 
     // $(".fontSizeNum").html(fontSizeNum);
     //字体变小
@@ -189,8 +233,9 @@
     })
 </script>
 <script>
-
-
+    let pron_us;
+    let pron_uk;
+    let paraphrase;
 
     //滚动框
     let myChapters;
@@ -200,10 +245,24 @@
         event.stopPropagation();
     });
 
+    function init() {
+        //发音
+        $(".pron_us_volume").click(function () {
+            let word = $(".wordName .word").html();
+            let src = "http://media.shanbay.com/audio/us/"+word+".mp3";
+            $("#sound").attr("src",src);
+            $("#sound")[0].play();
+        });
+        //发音
+        $(".pron_uk_volume").click(function () {
+            let word = $(".wordName .word").html();
+            let src = "http://media.shanbay.com/audio/uk/"+word+".mp3";
+            $("#sound").attr("src",src);
+            $("#sound")[0].play();
+        });
+    }
 
     function initReadFun(){
-
-
         //显示单词释义
         $("#content p").on("click","span",function () {
             let word = $(this).html();
@@ -217,14 +276,31 @@
                 success: function (result) {
                     // console.log(result);
                     if(result.code === 200){
-                        let wordect = result.wordEct;
-                        $("#wordMeaning #word").html("<div class=\"col-xs-10\">\n" +
-                            "            <p class=\"word\" content=\""+ wordect.word +"\">"+ wordect.word +"</p>\n" +
-                            "            <p class=\"wordList-pron\" >"+"美 ["+wordect.pron_us +"]   英 ["+ wordect.pron_uk +"]</p>\n" +
-                            "            <p class=\"wordMean\">"+ wordect.translation.replace(/\\n/gi,"  ") +"</p>\n" +
-                            "        </div>\n" +
-                            "        <div class=\"col-xs-2\"><span title=\""+ wordect.word +"\" class=\"glyphicon glyphicon-volume-down pron\"></span></div>\n");
-                        // $("#wordMeaning #mean").html(wordect.translation.replace(/\\n/gi,"<br>"));
+                        let word = result.wordEct;
+                        //填入相应数据
+                        wordName = word.word + "";
+                        //搜索框自动填充(可能会耗费一些资源)
+                        //其他字段填充
+                        pron_uk = word.pron_uk;
+                        pron_us = word.pron_us;
+                        paraphrase = word.translation;
+                        $(".wordName .word").html(wordName);
+                        $(".wordPron #us").html(word.pron_us);
+                        $(".wordPron #uk").html(word.pron_uk);
+
+                        //单词收藏处理
+                        //wordEctDetail.notebook_id不等于0就说明已经收藏过了
+                        //这里的notebook_id其实是notebook_word表的id,只是借用这个属性
+                        if(word.notebook_word_id != 0){
+                            $(".collectWordBox").html("已收藏")
+                                .css({"color":"#fdf1da","background-color":"#f27c7c"})
+                                .attr("content", word.notebook_word_id);
+
+                        }
+
+                        //释义处理，因为这个结果返回的释义用\n换行，所以要将其替换为<br>
+                        $(".wordPara .wordParaP").html(word.translation.replace(/\\n/gi,"<br>"));
+
                         $("#wordMeaning").fadeIn(200);
                         $(".functionTab,.topTab,#sentenceMeaning").fadeOut(200);
                     }
@@ -238,11 +314,10 @@
 
             // 防止击穿
             event.stopPropagation();
+
+            init();
         });
-
-
     }
-
 
     // 点击空白出现功能栏
     $(".read,body").click(function () {
@@ -264,8 +339,6 @@
         }
         //
     });
-
-
 
     //章节号
     let chapter_index = getQueryVariable("chapter_index");
@@ -299,7 +372,6 @@
                             reading_id = item.id;
                         }
                         //释义处理，因为这个结果返回的释义用\n换行，所以要将其替换为<br>
-
                         let para_en = item.para_en;
                         let en = para_en.replace(/([A-z]+)/gi,'<span>$1</span>');
                         $("#content")
@@ -307,6 +379,7 @@
                     })
 
                 }
+                //自动跳转到上次阅读位置
                 if(last_para_id != 0 && last_para_id != undefined && last_para_id != "undefined"){
                     // console.log($("p[title='"+last_para_id+"']").offset().top);
                     //跳转
@@ -344,12 +417,15 @@
 
             },
             error: function (errmsg) {
-
                 console.log("Ajax获取服务器数据出错了！" + errmsg);
             }
         })
     });
 
+    //防止单词释义框被击穿
+    $("#wordMeaning div, #wordMeaning p").click(function () {
+        event.stopPropagation();
+    })
 
     let curr = 1;
     //显示章节列表
@@ -392,6 +468,7 @@
                     }
                 });
 
+                //新建一个滑动框
                 myChapters = new scrollbot("#chapters",10);
                 myChapters.setStyle({
                     "background":"#3c3c3c",
@@ -417,7 +494,6 @@
         }
 
     });
-
 
     //返回
     $(".back").click(function () {
@@ -448,7 +524,7 @@
     });
 
 
-    //已添加的才监听
+    //已添加到书架的才监听
     if("shelf" == from){
         //滚动监听,获取最顶部的句子
         $(window).scroll(function() {

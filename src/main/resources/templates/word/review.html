@@ -256,7 +256,7 @@
                 url: "/wordect//findWordDetailJson/"+word,
                 dataType: "json", //json类型
                 success: function(result) {
-                    // console.log(result);
+                    console.log(result);
 
                     if(result.code == 200){
                         let word = result.wordEctDetail;
@@ -280,11 +280,11 @@
                         $.each(word.sentences,function (i,item) {
                             $(".sentences").append("<div class=\"row sentence\">\n" +
                                 "        <div class=\"col-xs-12 sentence_en\">\n" +
-                                "            "+ parseInt(parseInt(i)+1) +". <p>"+ item.en +"</p>\n" +
+                                "            "+ parseInt(parseInt(i)+1) +". <p>"+ item.sentence_en +"</p>\n" +
                                 "        </div>\n" +
                                 "\n" +
                                 "        <div class=\"col-xs-12 sentence_cn\">\n" +
-                                "            <p>" + item.cn +
+                                "            <p>" + item.sentence_cn +
                                 "                <span class=\"glyphicon glyphicon-volume-down sentencePron\"></span></p>\n" +
                                 "        </div>\n" +
                                 "    </div>")

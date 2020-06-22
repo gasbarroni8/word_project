@@ -88,6 +88,14 @@
     height: 1px;
     background-color: rgba(60,60,60,0.47);
 }
+
+#words span{
+    font-size: 18px;
+
+}
+#words img{
+    width: 100%;
+}
 .bottomBox{
     width: 100%;
     padding: 0 5%;
@@ -130,7 +138,7 @@
     display: none;
 }
 
-.learnBtn{
+#showMore{
     float: left;
     margin: 5px 0;
     background-color: #5CB8FF;
@@ -142,21 +150,21 @@
     /*bottom: 20px;*/
 }
 
-.learnBtn:hover{
+#showMore:hover{
     background-color: #60d1ff;
 }
 
-.learnBtn p{
+#showMore p{
     line-height: 40px;
     margin: 0;
     font-weight: bold;
-    color: #e2fff6;
+    color: #6e7a77;
 }
 
 
 /*屏幕大于640px使用*/
 @media screen and (min-width: 640px) {
-    .learnBtn p{
+    #showMore p{
         font-size: 18px;
     }
     .bottomBox{
@@ -167,7 +175,7 @@
 
 /*屏幕大于800px使用*/
 @media screen and (min-width: 800px) {
-    .learnBtn p{
+    #showMore p{
         font-size: 22px;
     }
 

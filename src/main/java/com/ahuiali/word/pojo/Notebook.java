@@ -9,25 +9,39 @@ import java.util.List;
  */
 public class Notebook implements Serializable {
 
-    //id
+    /**
+     * id
+     */
     private Integer id;
 
-    //用户id
+    /**
+     * 用户id
+     */
     private Integer learner_id;
 
-    //生词本名字
+    /**
+     * 生词本名字
+     */
     private String name;
 
-    //生词本单词数量
+    /**
+     * 生词本单词数量
+     */
     private Integer count;
 
-    //创建日期
+    /**
+     * 创建日期
+     */
     private Date created;
 
-    //修改日期
+    /**
+     * 修改日期
+     */
     private Date modified;
 
-    //生词本单词
+    /**
+     * 生词本单词
+     */
     private List<Word> words;
 
     @Override

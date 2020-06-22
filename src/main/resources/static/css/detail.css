@@ -44,13 +44,13 @@
 
 }
 
-
 .wordDetailBox{
     background-color: rgba(216, 228, 231, 0.56);
     border: 5px solid #FFFFFF;
     box-shadow: 0 2px 15px rgba(35, 51, 51, 0.58);
     margin-bottom: 20px;
-
+    padding: 10px;
+    border-radius: 7px;
 }
 
 .wordDetailBox p{
@@ -59,8 +59,99 @@
     font-size: 16px;
 }
 
+/*英语释义设置为14px*/
+.wordDetailBox .english_definition{
+    font-size: 14px;
+}
+
 .wordDetailBox #wordTypes {
     font-style: italic;
+}
+
+/*收藏*/
+.collectWordBox{
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    /*background-color: #f27c7c;*/
+    padding: 8px 8px;
+    border-radius: 20px;
+    box-shadow: 0px 3px 8px rgba(35, 51, 51, 0.58);
+    /*color: #fdf1da;*/
+    cursor: pointer;
+    color: #63615c;
+    background-color: #bddffa;
+}
+
+.collectWordBox:hover{
+    background-color: #f4d3b7;
+}
+
+/*生词本列表框*/
+.notebookListBox {
+    position: fixed;
+    left: 20%;
+    top: 25%;
+    z-index: 999;
+    background-color: #d9edf7e8;
+    padding: 2% 5%;
+    list-style: none;
+    width: 60%;
+    height: 40%;
+    border-radius: 15px;
+    box-shadow: 0 5px 17px;
+    display: none;
+
+}
+.notebookListBox li{
+    list-style: none;
+    font-size: 16px;
+    padding: 4px;
+    text-align: center;
+    color: #2aabd2;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(35, 51, 51, 0.21);
+    margin: 5px 0;
+}
+
+/*关闭生词本框*/
+.closeNotebookListBox{
+    position: fixed;
+    z-index: 1000;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #319af3;
+    top: calc(25% - 12px);
+    right: calc(20% - 12px);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 28px;
+    text-align: center;
+    color: #FFF;
+    box-shadow: 8px 5px 15px #125d86;
+    display: none;
+}
+
+.closeNotebookListBox:hover{
+    background-color: #2185d9;
+}
+
+.tipBox{
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    background-color: rgba(34, 51, 51, 0.71);
+    color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px rgba(35, 51, 51, 0.59);
+    line-height: 50px;
+    font-size: 18px;
+    display: none;
+    position: fixed;
+    left: calc(50% - 100px);
+    bottom: calc(50% - 25px);
+    z-index: 999
 }
 
 .glyphicon-volume-down{
@@ -74,14 +165,14 @@
 
 .sentences .sentence p{
     font-size: 14px;
-
+    padding: 5px 10px 2px 10px;
     line-height: 20px;
-
+    font-family: Arial,sans-serif;
 }
 
 .sentences .sentence_cn p{
     padding-bottom: 5px;
-    border-bottom: 1px solid rgba(35, 51, 51, 0.66);
+    border-bottom: 1px solid rgba(35, 51, 51, 0.21);
 }
 .wordPara{
 
@@ -91,6 +182,13 @@
     color: #1b6d85;
 }
 
+/*屏幕小于800px使用*/
+@media screen and (max-width: 800px) {
+    .wordDetailBox{
+        margin: 10px 10px 20px 10px;
+    }
+}
+
 /*屏幕大于640px使用*/
 @media screen and (min-width: 640px) {
 
@@ -98,6 +196,9 @@
         font-size: 20px;
         line-height: 40px;
     }
+
+
+
 }
 
 /*屏幕大于800px使用*/
@@ -106,5 +207,8 @@
     .topTab  p{
         font-size: 24px;
         line-height: 40px;
+    }
+    .wordDetailBox .english_definition{
+        font-size: 16px;
     }
 }

@@ -47,7 +47,7 @@
 
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">欢迎：ahui</a></li>
+<!--                <li><a href="#">欢迎：ahui</a></li>-->
 <!--                <li><a href="#">登录 <span class="glyphicon glyphicon-log-in"></span></a></li>-->
 <!--                <li><a href="#">注册 <span class="glyphicon glyphicon-registration-mark"></span></a></li>-->
 <!--                <li><a href="#">退出登录 <span class="glyphicon glyphicon-log-out"></span></a></li>-->
@@ -60,7 +60,6 @@
 </nav>
 
 
-
 <!--主页内容-->
 <div class="index">
     <div class="visible-sm-block visible-xs-block" style="height: 15px;"></div>
@@ -69,29 +68,21 @@
     <div class="row" style="margin: 0">
         <div class="col-md-6 col-xs-10 col-md-offset-3  col-xs-offset-1" >
             <div  style="display:flex;justify-content: center;position:relative;;">
-
                 <input id="searchWord"  type="text" placeholder="search word..." class="" >
                 <!--提示框-->
                 <button id="searchBtn" style="display: inline-block"><img src="/img/search.png" alt="" style="width: 30px;height: 30px;"></button>
                 <div id="tips">
-                    <table class="table table-hover">
-                        <tbody>
-                        <tr>
-                            <td>apple</td>
-                            <td class="text-right">n.苹果</td>
-                        </tr>
-                        </tbody>
-                    </table>
-
+<!--                    <div>-->
+<!--                        <li class="text-left">apple</li>-->
+<!--                        <li class="text-right">n.苹果</li>-->
+<!--                    </div>-->
                 </div>
-
-
             </div>
         </div>
     </div>
 
+<!--    logo-->
     <div style="display: flex;justify-content: center"><img src="/img/logo/logo200.svg" alt="" ></div>
-
 
     <!--词书-->
     <div class="row" style="margin: 0;" >
@@ -214,8 +205,9 @@
 
 <!--    网页所有权-->
 <!--    由于主页内容少，撑不起，所以只能用fixed弄，如果用盒子撑开，移动端又会有问题，等下一版本再搞吧。👴被整懵了-->
+<!--    下一版本👴还是不搞，咋滴?-->
     <footer class="footer hidden-xs hidden-sm" style="text-align: center;width: 100%;position:fixed;bottom: 20px;">
-        <p style="font-size: 14px;font-weight: normal;font-family: 'Arial'">Copyright © 2019 ZCH. All rights reserved.</p>
+        <p style="font-size: 14px;font-weight: normal;font-family: 'Arial'">Copyright © 2019-2020 ZCH. All rights reserved.</p>
     </footer>
 </div>
 
@@ -229,14 +221,13 @@
     //初始化
     $(function () {
         $.ajax({
-
             type: "post",
             async: true,     //异步执行
             contentType: "application/json;charset=UTF-8",
             url: "/index",
             dataType: "json", //json类型
             success: function(result) {
-                console.log(result);
+                // console.log(result);
                 if(result.code == 200){
                     let wordbook = result.wordbook;
                     wordbookId = wordbook.id;
@@ -245,7 +236,6 @@
                     $("#wordbookName").html(wordbook.name);
                     $("#reviewCount").html(wordbook.review_count);
                     $("#wordProgress").html(wordbook.learned_count+"/"+wordbook.count);
-
                     $("#wordProgress").css("width",((wordbook.learned_count/wordbook.count)*100)+"%");
                 }
 
@@ -258,55 +248,74 @@
 </SCRIPT>
 
 <script>
-    var sentence_en = $("#sentence_en").html();
-
     //点击修改跳转至我的词书界面
     $("#edit").click(function () {
        window.location.href = "/wordbook/gotoMyWordbooks";
     });
 
-    //鼠标移至单词时的效果
-    $("p>span").mousemove(function (e) {
-        $(this).css("background","#233");
-        $(this).css("color","#fff");
-    });
-    $("p>span").mouseout(function (e) {
-        $(this).css("background","transparent");
-        $(this).css("color","#000");
-    });
-    $("p>span").click(function (e) {
-        alert($(this).html())
-
-        //向后端查询或者调用金山接口
-        //代码。。。
-    });
-    let str = "Truth's needs no color; beauty, no pencil.";
-    let strReg = str.replace(/([A-z]+)/gi,'<span>$1</span>');
-    console.log(strReg)//mm  上面那段$2这个就是表示正则第二组个匹配到的内容
-
-    //获取焦点即跳转
-    // $("#searchWord").focus(function () {
-    //     window.location.href = "/wordect/gotoSearch";
-    // })
-
     //输入提示框(*)
     $("#searchWord").keyup(function (event) {
-        // let word = $("#searchWord").val();
-        // console.log(word);
-        //
-        // if(!(word=="")){
-        //     $("#tips").fadeIn("normal");
-        //
-        // }else{
-        //     $("#tips").fadeOut("normal");
-        //
-        // }
+
+        //回车
+        if(event.keyCode == 13){
+            window.location.href="/wordect/gotoWordDetail?word="+ $("#searchWord").val();
+        }
+        let word = $("#searchWord").val();
+        //65-90为大小写,8为Backspace
+        if(event.keyCode >= 65 && event.keyCode <= 90 || event.keyCode == 8){
+
+            $("#tips").fadeIn("normal");
+
+            //前缀查词
+            let url = "/wordect/input/" + word;
+            $.ajax({
+                type: "post",
+                async: true,     //异步执行
+                contentType: "application/json;charset=UTF-8",
+                url: url,
+                dataType: "json", //json类型
+                success: function (result) {
+                    if(result.code == 200){
+                        console.log(result)
+                        $("#tips").html("");
+                        $.each(result.wordEctList, function (i,item) {
+                            $("#tips").append(" <div content='"+ item.word +"'>\n" +
+                                "                        <li class=\"text-left\">"+ item.word +"</li>\n" +
+                                "                        <li class=\"text-right\">"+ item.translation +"</li>\n" +
+                                "                    </div>")
+                        })
+                        tipInit();
+                    } else if(result.code == 700){
+                        // 该单词模糊查询已无结果
+                        //关闭提示框
+                        $("#tips").html("").fadeOut(400);
+                    }
+
+                },
+                error: function (errmsg) {
+                    console.log("Ajax获取服务器数据出错了！"+ errmsg);
+                }
+            })
+        }
+
+        if(word == ""){
+            $("#tips").fadeOut("normal");
+        }
+
+
     });
+
+    //提示框点击单词init
+    function tipInit() {
+        $("#tips>div").click(function () {
+            let word = $(this).attr("content");
+            window.location.href="/wordect/gotoWordDetail?word="+ word;
+
+        })
+    }
 
     // 背单词跳转
     function memorize() {
-
-
         window.location.href = "/words/goto?wordbook_id="+wordbookId;
 
         //向后端发送跳转请求，权限拦截，查询复习和待背词汇并将其返回，然后跳转至背词页面
@@ -317,10 +326,11 @@
         window.location.href = "/wordbook/gotoReview?wordbook_id="+wordbookId;
     }
 
-    //单词搜索
+    //单词搜索(按钮)
     $("#searchBtn").click(function () {
         window.location.href="/wordect/gotoWordDetail?word="+ $("#searchWord").val();
     })
+
 </script>
 
 </html>

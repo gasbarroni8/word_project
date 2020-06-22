@@ -4,14 +4,15 @@ import java.io.Serializable;
 
 /**
  * Created by shkstart on 2019/10/6
+ * @author ahui
  */
 public class Sentence implements Serializable {
 
     private Integer id;
 
-    private String en;
+    private String sentence_en;
 
-    private String cn;
+    private String sentence_cn;
 
     public Integer getId() {
         return id;
@@ -21,28 +22,28 @@ public class Sentence implements Serializable {
         this.id = id;
     }
 
-    public String getEn() {
-        return en;
+    public String getSentence_en() {
+        return sentence_en;
     }
 
-    public void setEn(String en) {
-        this.en = en;
+    public void setSentence_en(String sentence_en) {
+        this.sentence_en = sentence_en;
     }
 
-    public String getCn() {
-        return cn;
+    public String getSentence_cn() {
+        return sentence_cn;
     }
 
-    public void setCn(String cn) {
-        this.cn = cn;
+    public void setSentence_cn(String sentence_cn) {
+        this.sentence_cn = sentence_cn;
     }
 
     @Override
     public String toString() {
         return "Sentence{" +
                 "id=" + id +
-                ", sentence_en='" + en + '\'' +
-                ", sentence_cn='" + cn + '\'' +
+                ", sentence_en='" + sentence_en + '\'' +
+                ", sentence_cn='" + sentence_cn + '\'' +
                 '}';
     }
 }

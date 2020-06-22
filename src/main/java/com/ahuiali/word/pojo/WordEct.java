@@ -17,7 +17,7 @@ public class WordEct implements Serializable {
 
     private String translation;
 
-    private Integer notebook_id;
+    private Integer notebook_word_id = 0;
 
     public String getTranslation() {
         return translation;
@@ -59,12 +59,12 @@ public class WordEct implements Serializable {
         this.pron_uk = pron_uk;
     }
 
-    public void setNotebook_id(Integer notebook_id) {
-        this.notebook_id = notebook_id;
+    public Integer getNotebook_word_id() {
+        return notebook_word_id;
     }
 
-    public Integer getNotebook_id() {
-        return notebook_id;
+    public void setNotebook_word_id(Integer notebook_word_id) {
+        this.notebook_word_id = notebook_word_id;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class WordEct implements Serializable {
                 ", pron_us='" + pron_us + '\'' +
                 ", pron_uk='" + pron_uk + '\'' +
                 ", translation='" + translation + '\'' +
-                ", notebook_id=" + notebook_id +
+                ", notebook_id=" + notebook_word_id +
                 '}';
     }
 }

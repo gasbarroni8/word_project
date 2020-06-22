@@ -90,21 +90,6 @@
 </div>
 
 
-
-
-<!--    <form id="form1" action="#" onsubmit="return false">-->
-<!--        e-mail : <input type="text" name="email" id="email">-->
-
-<!--        password : <input type="password" id="password" name="password">-->
-<!--        <span class="passwordMsg"></span><br>-->
-<!--        confirm password : <input type="password" id="confirm">-->
-<!--        <span class="confirmMsg"></span><br>-->
-<!--        nickname : <input type="text" id="nickname" name="nickname">-->
-<!--        <span class="nicknameMsg"></span><br>-->
-
-<!--    </form><button onclick="submit();">submit</button><span class="submitMsg"></span><br>-->
-<!--    <a href="../learner/login.html">去登录</a>-->
-<!--    <span id="data"></span>-->
 </body>
 
 
@@ -126,13 +111,13 @@
     $("#email").bind("input propertychange change",function () {
         if($("#email").val() == ""){
             emailFlag = false;
-            $(".emailMsg").text("邮箱不能为空！");
+            $(".emailMsg").text("邮箱不能为空！").css("color","rgba(255, 94, 84, 0.86)");
         }else if(!(emailReg.test($("#email").val()))){
             emailFlag = false;
-            $(".emailMsg").text("格式不对！")
+            $(".emailMsg").text("格式不对！").css("color","rgba(255, 94, 84, 0.86)");
         } else{
             //检查
-            $(".emailMsg").text("格式正确！")
+            $(".emailMsg").text("格式正确！").css("color","rgb(2, 164, 1)");
             checkEmail();
         }
     });
@@ -141,7 +126,7 @@
     $("#nickname").bind("input propertychange change",function () {
         if(!nicknameReg.test($("#nickname").val())){
             nicknameFlag =false;
-            $(".nicknameMsg").text("昵称无效！请输入4位到12位的中文或数字或英语")
+            $(".nicknameMsg").text("昵称无效！请输入4位到12位的中文或数字或英语").css("color","rgba(255, 94, 84, 0.86)");
         }else{
             checkNickname();
         }
@@ -153,16 +138,16 @@
         if(!passwordReg.test($("#password").val())){
             confirmFlag = false;
             passwordFlag = false;
-            $(".confirmMsg").text("两次密码不一致!");
-            $(".passwordMsg").text("密码格式不正确！请输入6-40位又字母或数字组成的密码！")
+            $(".confirmMsg").text("两次密码不一致!").css("color","rgba(255, 94, 84, 0.86)");
+            $(".passwordMsg").text("密码格式不正确！请输入6-40位又字母或数字组成的密码！").css("color","rgba(255, 94, 84, 0.86)");
         }else {
             if($("#confirm").val() == $("#password").val() || $("#confirm").val() == "" || $("#confirm").val() == undefined){
                 passwordFlag = true;
-                $(".passwordMsg").text("密码格式正确!")
+                $(".passwordMsg").text("密码格式正确!").css("color","rgb(2, 164, 1)");
             } else {
                 confirmFlag = false;
                 passwordFlag = false;
-                $(".confirmMsg").text("两次密码不一致!");
+                $(".confirmMsg").text("两次密码不一致!").css("color","rgba(255, 94, 84, 0.86)");
 
             }
 
@@ -173,10 +158,10 @@
     $("#confirmPassword").bind("input propertychange change",function (e) {
         if($("#confirmPassword").val() == $("#password").val() && passwordFlag){
             confirmFlag = true;
-            $(".confirmPasswordMsg").text("密码一致！");
+            $(".confirmPasswordMsg").text("密码一致！").css("color","rgb(2, 164, 1)");
         }else {
             confirmFlag = false;
-            $(".confirmPasswordMsg").text("两次密码不一致!");
+            $(".confirmPasswordMsg").text("两次密码不一致!").css("color","rgba(255, 94, 84, 0.86)");
         }
     });
 
@@ -184,7 +169,7 @@
     //向后端查询检测邮箱
     function checkEmail(){
 
-        var str = {email:$("#email").val()}
+        var str = {email:$("#email").val()};
         var data = JSON.stringify(str);
         $.ajax({
             type: "post",
@@ -198,10 +183,10 @@
                 //如果数据库中不存在该email，则有效，将emailFlag设置为true
                 if(result.code === 407 ){
                     emailFlag = true;
-                    $(".emailMsg").text("有效邮箱！")
+                    $(".emailMsg").text("有效邮箱！").css("color","rgb(2, 164, 1)");
                 } else if(result.code === 408){
                     emailFlag = false;
-                    $(".emailMsg").text("该邮箱已注册！")
+                    $(".emailMsg").text("该邮箱已注册！").css("color","rgba(255, 94, 84, 0.86)");
                 }
             },
             error: function(errmsg) {
@@ -228,13 +213,13 @@
                 //如果数据库中不存在该nickname，则有效，将nicknameFlag设置为true
                 if(result.code === 200){
                     nicknameFlag = true;
-                    $(".nicknameMsg").text("昵称有效！")
+                    $(".nicknameMsg").text("昵称有效！").css("color","rgb(2, 164, 1)");
                     //用*代表敏感词汇，*不能作为昵称，正则过不了
 
                 }else if(result.code === 444){
-                    $(".nicknameMsg").text("涉及敏感词汇!请更换昵称！")
+                    $(".nicknameMsg").text("涉及敏感词汇!请更换昵称！").css("color","rgba(255, 94, 84, 0.86)");
                 }else if(result.code === 401){
-                    $(".nicknameMsg").text("该昵称已被占用！")
+                    $(".nicknameMsg").text("该昵称已被占用！").css("color","rgba(255, 94, 84, 0.86)");
                 }
             },
             error: function(errmsg) {
@@ -254,7 +239,7 @@
             //提交,发送邮箱，点击邮箱链接即可解锁
             var str = {password:$("#password").val(),nickname:$("#nickname").val(),email:$("#email").val()};
             var data = JSON.stringify(str);
-            $(".registerBtn").html("正在发送...");
+            $(".registerBtn").html("正在发送...").css("pointer-event","none");
             $.ajax({
                 type: "post",
                 async: true,     //异步执行
@@ -272,7 +257,7 @@
 
             })
         } else{
-            $(".submitMsg").text("请按照规定填写信息！")
+            $(".submitMsg").text("请按照规定填写信息！").css("color","rgba(255, 94, 84, 0.86)");
         }
 
     }

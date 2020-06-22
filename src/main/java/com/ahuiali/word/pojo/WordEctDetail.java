@@ -9,7 +9,7 @@ import java.util.List;
 @Component
 public class WordEctDetail extends WordEct implements Serializable {
 
-    private Integer id_d;
+    private Integer word_id;
 
     private String definition;
 
@@ -29,25 +29,13 @@ public class WordEctDetail extends WordEct implements Serializable {
 
     private List<Sentence> sentences;
 
-    //是否收藏
-    private Integer notebook_id = 0;
-
-    public Integer getNotebook_id() {
-        return notebook_id;
+    public Integer getWord_id() {
+        return word_id;
     }
 
-    public void setNotebook_id(Integer notebook_id) {
-        this.notebook_id = notebook_id;
+    public void setWord_id(Integer word_id) {
+        this.word_id = word_id;
     }
-
-    public Integer getId_d() {
-        return id_d;
-    }
-
-    public void setId_d(Integer id_d) {
-        this.id_d = id_d;
-    }
-
 
     public String getDefinition() {
         return definition;
@@ -124,7 +112,7 @@ public class WordEctDetail extends WordEct implements Serializable {
     @Override
     public String toString() {
         return "WordEctDetail{" +
-                "id_d=" + id_d +
+                "word_id=" + word_id +
                 ", definition='" + definition + '\'' +
                 ", collins=" + collins +
                 ", oxford=" + oxford +
@@ -134,7 +122,6 @@ public class WordEctDetail extends WordEct implements Serializable {
                 ", exchange='" + exchange + '\'' +
                 ", sentence_list='" + sentence_list + '\'' +
                 ", sentences=" + sentences +
-                ", notebook_id=" + notebook_id +
                 super.toString()+
                 '}';
     }

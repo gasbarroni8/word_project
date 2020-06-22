@@ -56,18 +56,18 @@
 
 
 <!--创建生词本模态框 创建生词本-->
-<div class="modal fade" id="addNotebook" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+<div class="modal fade" id="addNotebookModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">新建生词本</h4>
+                <h4 class="modal-title" >新建生词本</h4>
             </div>
             <div class="modal-body">
-                <form id="notebookForm" action="/notebook/addNotebook">
+                <form id="addNotebookForm" action="/notebook/addNotebook">
                     <div class="form-group">
                         <label for="notebookName" class="control-label">生词本名字:</label>
-                        <input type="text" class="form-control" id="notebookName" name="notebookName" maxlength="8">
+                        <input type="text" class="form-control" id="notebookName" name="notebookName" maxlength="12">
                     </div>
                 </form>
             </div>
@@ -80,15 +80,15 @@
 </div>
 
 <!--删除生词本-->
-<div class="modal fade" id="deleteNotebook" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+<div class="modal fade" id="deleteNotebookModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModal">是否删除该生词本？</h4>
+                <h4 class="modal-title" >是否删除该生词本？</h4>
             </div>
             <div class="modal-body">
-                <div>暂不提供此功能！</div>
+                <div>确定要删除嘛？</div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -100,15 +100,15 @@
 
 
 <!--修改生词本-->
-<div class="modal fade" id="editNotebook" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+<div class="modal fade" id="editNotebookModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="editNotebookModal">修改生词本</h4>
+                <h4 class="modal-title" >修改生词本</h4>
             </div>
             <div class="modal-body">
-                <form id="editNotebookForm" action="/notebook/editNotebook">
+                <form id="editNotebookModelForm" action="/notebook/editNotebook">
                     <div class="form-group">
                         <label for="notebookName" class="control-label">修改生词本名字:</label>
                         <input type="text" class="form-control" id="Name" name="notebookName" maxlength="8" value="">
@@ -175,36 +175,40 @@
 <!--模态框 modal.js-->
 <script src="/bootstrap-3.3.7/js/modal.js"></script>
 <script>
-
+    let notebook_id = 0;
     //返回
     $(".back").click(function () {
         //回退
         window.location.href = "/";
     });
 
-    init();
-    function init(){
+
+    initModel();
+    //模块框的显示
+    function initModel(){
+        //这里是为了提前为这些生词本按钮绑定事件，不然到时js生成的时候会没有事件，如果用vue就好了，可惜
         // 待处理生词本id
         let id;
+        //删除生词本模块框
         $('.deleteNotebook').on('click',this,function () {
             // 获取生词本id
-            id = $(this).parent().attr('content');
-            $("#deleteNotebook").modal('show')
+            id = $(this).attr('content');
+            notebook_id = id;
+            $("#deleteNotebookModel").modal('show')
         });
 
-        //暂不处理删除生词本操作
-        $('.confirmDelete').on('click',this,function () {
-            // 删除
-            // 参数：id
-            $("#deleteNotebook").modal('hide')
+        //增加生词本模块框
+        $('.addNotebook').on('click',this,function () {
+            $("#addNotebookModel").modal('show');
         });
 
+        //修改生词本模块框
         $('.editNotebook').on('click',this,function () {
             // 删除
             // 参数：id
             id = $(this).attr("content");
-            $("#editNotebookForm .id").val(id);
-            $("#editNotebook").modal('show');
+            $("#editNotebookModelForm .id").val(id);
+            $("#editNotebookModel").modal('show');
         });
     }
 
@@ -214,11 +218,13 @@
 
     //创建
     $(".create").click(function () {
-        $("#notebookForm").submit();
+        $("#addNotebookForm").submit();
     });
 
     //删除
-
+    $(".confirmDelete").click(function () {
+        window.location.href = "/notebook/removeNotebook/"+notebook_id;
+    });
     //修改
     $(".confirmEdit").click(function () {
         $("#editNotebookForm").submit();
@@ -239,12 +245,12 @@
                     $.each(result.notebooks,function (i,item) {
 
                         let img = "/img/notebook/notebooks.png";
-                        // $(".notebooks").append("<a href='/notebook/gotoNoteDetail?id=" + item.id+ "');'>"+item.name+"</a><br>")
                         $(".notebooks").append("<div class=\"col-xs-8\" class=\"notebookArea\">\n" +
                             "            <div class=\"imgArea\">\n" +
                             "                <a href=\"/notebook/gotoNoteDetail?id="+ item.id +"\">" +
                             "                   <img src=\"/img/notebook/notebooks.png\" class=\"notebookImg\"></a>\n" +
-                            "                <div class=\"notebookName\"><p>" + item.name+  "</p></div>\n" +
+                            "                <div class=\"notebookName\"><p>" + item.name+  "</p>" +
+                            "                   <p class='count' style=' label label-primary'>总数: "+ item.count +"个</p></div>\n" +
                             "            </div>\n" +
                             "        </div>\n" +
                             "        <div class=\"col-xs-2 editArea\" content=\""+ item.id +"\" >\n" +
@@ -253,9 +259,11 @@
                             "        </div>\n" +
                             "        <div class=\"col-xs-12 line\"></div>")
 
-                    })
+
+                    });
+
+                initModel();
                 }
-                init();
             },
             error: function (errmsg) {
                 console.log("Ajax获取服务器数据出错了！" + errmsg);

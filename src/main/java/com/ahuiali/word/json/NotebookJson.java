@@ -6,9 +6,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * @author ahui
+ */
 @Component
 @Scope("prototype")
 public class NotebookJson extends JsonBase {
+    private Notebook notebook;
 
     private List<Notebook> notebooks;
 
@@ -20,10 +24,19 @@ public class NotebookJson extends JsonBase {
         this.notebooks = notebooks;
     }
 
+    public void setNotebook(Notebook notebook) {
+        this.notebook = notebook;
+    }
+
+    public Notebook getNotebook() {
+        return notebook;
+    }
+
     @Override
     public String toString() {
         return "NotebookJson{" +
-                "notebooks=" + notebooks +
+                "notebook=" + notebook +
+                ", notebooks=" + notebooks +
                 ", code=" + code +
                 ", message='" + message + '\'' +
                 '}';

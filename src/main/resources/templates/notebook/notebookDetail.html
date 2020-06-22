@@ -52,7 +52,7 @@
 
     <div class="container bottomBox" >
         <div class="editBtn"><span class="glyphicon glyphicon-trash edit"></span></div>
-        <div class="learnBtn" style="width: 70%"><p style="text-align:center;">立即复习</p></div>
+        <div id="showMore" style="width: 70%"><p style="text-align:center;">显示更多</p></div>
     </div>
 
 </body>
@@ -79,9 +79,39 @@
         );
 
         //点击删除单词
-        $(".glyphicon-remove-circle").on('click',this,function () {
+        $(".removeWord").on('click',this,function () {
             // $(this).parent().removeChild(this);
-            this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode)
+            let is_success = false;
+            //获取单词的id
+            let word_id = $(this).attr("content");
+
+            let thisNode = $(this).parent().parent();
+            //提交
+            $.ajax({
+                type: "post",
+                async: true,     //异步执行
+                contentType: "application/json;charset=UTF-8",
+                url: "/notebook/removeWord/"+word_id,
+                dataType: "json", //json类型
+                success: function (result) {
+                    if(result.code == 200){
+                        //移除就完事
+                        is_success = true;
+                        //提示
+                        $(thisNode).remove();
+                    }
+                },
+                error: function (errmsg) {
+                    console.log("Ajax获取服务器数据出错了！" + errmsg);
+
+                }
+            });
+
+            //如果移除成功
+            if(is_success){
+                this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+            }
+
         });
 
 
@@ -91,11 +121,13 @@
 
 </script>
 <script>
-    var curr = 1;
-    var notebookId = getQueryVariable("id");
+    let curr = 1;
+    let notebookId = getQueryVariable("id");
+    //用来计数,看看是否能显示更多..
+    let count = 0;
     $(function () {
 
-        var data = {curr:curr,size:30};
+        let data = {curr:curr,size:30};
         data = JSON.stringify(data);
 
         $.ajax({
@@ -106,20 +138,20 @@
             url: "/notebook/listWords/"+notebookId,
             dataType: "json", //json类型
             success: function (result) {
-                // console.log(result);
-                if(result.code === 200){
+                if(result.code == 200){
                     curr++;
-                    // console.log(curr);
-                    $.each(result.words,function (i,item) {
+
+                    $.each(result.notebook.words,function (i,item) {
+                        count++;
                         // $("#words").append("<a href='/wordect/gotoWordDetail/"+ item.word+"'>"+item.word+"</a><br>")
                         $("#words").append("<div class=\"row\">\n" +
                             "            <div class=\"col-xs-10\">\n" +
-                            "                <a href=\"/wordect/gotoWordDetail/"+ item.word +"\"><p class=\"word\" content=\""+ item.word +"\">"+ item.word +"</p></a>\n" +
+                            "                <a href=\"/wordect/gotoWordDetail?word="+ item.word +"\"><p class=\"word\" content=\""+ item.word +"\">"+ item.word +"</p></a>\n" +
                             "                <!--            将换行去除-->\n" +
                             "                <p class=\"wordMean\">"+ item.paraphrase +"</p>\n" +
                             "            </div>\n" +
                             "            <div class=\"col-xs-1\"><span content=\""+ item.word +"\" class=\"glyphicon glyphicon-volume-down pron\"></span></div>\n" +
-                            "            <div class=\"col-xs-1\"><span content=\""+ item.word +"\" class=\"glyphicon glyphicon-remove-circle\"></span></div>\n" +
+                            "            <div class=\"col-xs-1\"><span content=\""+ item.id +"\" class=\"glyphicon glyphicon-remove-circle removeWord\"></span></div>\n" +
                             "\n" +
                             "        </div>")
 
@@ -130,6 +162,24 @@
                         $(".glyphicon-remove-circle").toggle(400);
                         $(".edit").toggleClass('active');
                     });
+                    //如果count大于30,说明或许还有
+                    if(count == 30){
+                        $("#showMore").css({"pointer-event":"all","background-color":"#5CB8FF"});
+                        $("#showMore>p").html("显示更多");
+                    }else {
+                        $("#showMore").css({"pointer-event":"none","background-color":"#bbffe3"});
+                        $("#showMore>p").html("已经到底了");
+                    }
+                    //重置
+                    count = 0;
+                }else if(result.code == 605){
+                    // 生词本单词为空
+                    $("#showMore").css({"pointer-event":"none","background-color":"#bbffe3"});
+                    $("#showMore>p").html("已经到底了");
+
+                    $("#words").append("<img src='/img/notebookWordNone.png'/>");
+
+                    return;
                 }
             },
             error: function (errmsg) {
@@ -141,10 +191,10 @@
 
     })
 
+    //显示更多
     $("#showMore").click(function () {
-        var data = {curr:curr,size:30};
+        let data = {curr:curr,size:30};
         data = JSON.stringify(data);
-
         $.ajax({
             type: "post",
             async: true,     //异步执行
@@ -153,14 +203,27 @@
             url: "/notebook/listWords/"+notebookId,
             dataType: "json", //json类型
             success: function (result) {
-                if(result.code === 200){
-                    // console.log(result);
-                    $.each(result.words,function (i,item) {
-
+                if(result.code == 200){
+                    $.each(result.notebook.words,function (i,item) {
                         $("#words").append("<a href='/notebook/'>"+item.word+"</a><br>")
                         curr++;
-
-                    })
+                        count++;
+                    });
+                    init();
+                    //如果count大于30,说明或许还有
+                    if(count == 30){
+                        $("#showMore").css({"pointer-event":"all","background-color":"#5CB8FF"});
+                        $("#showMore>p").html("显示更多");
+                    }else {
+                        $("#showMore").css({"pointer-event":"none","background-color":"#bbffe3"});
+                        $("#showMore>p").html("已经到底了");
+                    }
+                    //重置
+                    count = 0;
+                }else if(result.code == 605){
+                    // 生词本单词为空
+                    $("#showMore").css({"pointer-event":"none","background-color":"#bbffe3"});
+                    $("#showMore>p").html("已经到底了");
                 }
             },
             error: function (errmsg) {

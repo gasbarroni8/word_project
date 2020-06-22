@@ -2,17 +2,23 @@ package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.json.JsonBase;
 import com.ahuiali.word.json.NotebookJson;
+import com.ahuiali.word.json.WordEctJson;
 import com.ahuiali.word.json.WordJson;
 import com.ahuiali.word.mapper.NotebookMapper;
 import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.Word;
+import com.ahuiali.word.pojo.WordEct;
 import com.ahuiali.word.service.NotebookService;
 import com.ahuiali.word.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * @author ahui
+ */
 @Service
 public class NotebookServiceImpl  implements NotebookService {
 
@@ -27,6 +33,9 @@ public class NotebookServiceImpl  implements NotebookService {
 
     @Autowired
     NotebookJson notebookJson;
+
+    @Autowired
+    WordEctJson wordEctJson;
 
     /**
      * 根据用户id查询所有生词本
@@ -65,7 +74,6 @@ public class NotebookServiceImpl  implements NotebookService {
         if(total > 0){
             //大于0说明插入成功
             notebookJson.create(200,"success");
-//            notebookJson.setNotebooks((List<Notebook>) notebook);
         }else{
             //小于0说明插入失败
             notebookJson.create(601,"生词本添加失败");
@@ -76,10 +84,12 @@ public class NotebookServiceImpl  implements NotebookService {
 
     /**
      * 根据生词本id删除生词本
+     *  开启事务
      * @param id
      * @return
      */
     @Override
+    @Transactional(rollbackFor=Exception.class)
     public JsonBase removeNotebook(Integer id) {
         jsonBase = new JsonBase();
 
@@ -87,11 +97,13 @@ public class NotebookServiceImpl  implements NotebookService {
         if(total > 0){
             //大于0说明删除成功
             jsonBase.create(200,"success");
+            //删除生词本的所有单词
+            Integer total1 = notebookMapper.removeAllNotebookWords(id);
         }else{
             //小于0说明删除失败
             jsonBase.create(602,"生词本删除失败");
         }
-        return null;
+        return jsonBase;
     }
 
     /**
@@ -102,10 +114,12 @@ public class NotebookServiceImpl  implements NotebookService {
     @Override
     public JsonBase removeWord(Integer id) {
         jsonBase = new JsonBase();
-
+        Integer notebook_id = notebookMapper.findIdByNotebookWordId(id);
         Integer total = notebookMapper.removeWord(id);
         if(total > 0){
             //大于0说明删除成功
+            //生词本单词数量减一
+            notebookMapper.notebookCountMinus(notebook_id);
             jsonBase.create(200,"success");
         }else{
             //小于0说明删除失败
@@ -115,7 +129,7 @@ public class NotebookServiceImpl  implements NotebookService {
     }
 
     /**
-     * 为生词本添加单词
+     * 为生词本添加单词(弃用)
      * @param notebook_id 生词本id
      * @param word 单词
      * @return jsonbase
@@ -142,18 +156,21 @@ public class NotebookServiceImpl  implements NotebookService {
      * @return
      */
     @Override
-    public WordJson listWord(Integer notebook_id, PageUtil pageUtil) {
-        wordJson = new WordJson();
+    public NotebookJson listWord(Integer notebook_id, PageUtil pageUtil) {
+        notebookJson = new NotebookJson();
         //获取单词列表
         List<Word> words = notebookMapper.listWords(notebook_id,pageUtil);
+        Notebook notebook = new Notebook();
+        notebook.setWords(words);
         //不为空返回200
         if(words.size()>0){
-            wordJson.create(200,"success",words);
+            notebookJson.setNotebook(notebook);
+            notebookJson.create(200,"success");
         } else{
             //为空返回605
-            wordJson.create(605,"生词本单词为空",null);
+            notebookJson.create(605,"生词本单词为空");
         }
-        return wordJson;
+        return notebookJson;
     }
 
 
@@ -173,6 +190,26 @@ public class NotebookServiceImpl  implements NotebookService {
             notebookJson.create(606,"生词本修改失败");
         }
         return notebookJson;
+    }
+
+    /**
+     * 为生词本添加单词（能返回主键）
+     * @param notebook_id 生词本id
+     * @param wordect 单词实体
+     * @return wordctJson
+     */
+    @Override
+    public WordEctJson addWordEct(Integer notebook_id, WordEct wordect) {
+        //增加
+        notebookMapper.addWordEct(wordect,notebook_id);
+        if(wordect.getId() != null){
+            //notebook中的count字段也要加一
+            notebookMapper.notebookCountPlus(notebook_id);
+            wordEctJson.setWordEct(wordect);
+            wordEctJson.create(200,"success");
+        }
+
+        return wordEctJson;
     }
 
 

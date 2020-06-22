@@ -1,6 +1,7 @@
 package com.ahuiali.word.controller;
 
 
+import com.ahuiali.word.json.WordEctJson;
 import com.ahuiali.word.json.WordJson;
 import com.ahuiali.word.mapper.WordMapper;
 import com.ahuiali.word.pojo.Word;
@@ -30,6 +31,8 @@ public class WordController {
 
     @Autowired
     WordJson wordJson;
+
+
 
 
 

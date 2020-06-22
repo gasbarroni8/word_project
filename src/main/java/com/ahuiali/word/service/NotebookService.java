@@ -3,12 +3,10 @@ package com.ahuiali.word.service;
 
 import com.ahuiali.word.json.JsonBase;
 import com.ahuiali.word.json.NotebookJson;
-import com.ahuiali.word.json.WordJson;
+import com.ahuiali.word.json.WordEctJson;
 import com.ahuiali.word.pojo.Notebook;
-import com.ahuiali.word.pojo.Word;
+import com.ahuiali.word.pojo.WordEct;
 import com.ahuiali.word.utils.PageUtil;
-
-import java.util.List;
 
 public interface NotebookService {
 
@@ -23,7 +21,9 @@ public interface NotebookService {
 
     JsonBase addWord(Integer notebook_id, String word);
 
-    WordJson listWord(Integer notebook_id, PageUtil pageUtil);
+    NotebookJson listWord(Integer notebook_id, PageUtil pageUtil);
 
     NotebookJson editNotebook(String trim, Integer learner_id);
+
+    WordEctJson addWordEct(Integer id, WordEct wordect);
 }
