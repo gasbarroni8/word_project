@@ -5,11 +5,9 @@ import com.ahuiali.word.json.WordJson;
 import com.ahuiali.word.json.WordbookJson;
 
 import com.ahuiali.word.pojo.Word;
-import com.ahuiali.word.pojo.Wordbook;
 import com.ahuiali.word.service.WordService;
 import com.ahuiali.word.service.WordbookService;
 import com.ahuiali.word.utils.PageUtil;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 词书控制器

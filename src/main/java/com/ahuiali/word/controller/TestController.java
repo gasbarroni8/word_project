@@ -1,11 +1,8 @@
 package com.ahuiali.word.controller;
 
 import com.ahuiali.word.json.WordEctDetailJson;
-import com.ahuiali.word.mapper.WordEctMapper;
-import com.ahuiali.word.pojo.WordEctDetail;
 import com.ahuiali.word.service.WordEctService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

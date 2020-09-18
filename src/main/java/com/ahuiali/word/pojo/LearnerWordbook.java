@@ -1,6 +1,5 @@
 package com.ahuiali.word.pojo;
 
-import org.omg.PortableInterceptor.INACTIVE;
 
 import java.io.Serializable;
 import java.util.Date;

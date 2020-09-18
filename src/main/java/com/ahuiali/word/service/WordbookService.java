@@ -2,7 +2,6 @@ package com.ahuiali.word.service;
 
 import com.ahuiali.word.json.JsonBase;
 import com.ahuiali.word.json.WordbookJson;
-import com.ahuiali.word.pojo.Wordbook;
 
 public interface WordbookService {
     WordbookJson getWordbooks();

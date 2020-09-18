@@ -4,10 +4,9 @@ import com.ahuiali.word.json.BookJson;
 import com.ahuiali.word.json.ChapterJson;
 import com.ahuiali.word.json.JsonBase;
 import com.ahuiali.word.json.ParagraphJson;
-import com.ahuiali.word.pojo.Paragraph;
 import com.ahuiali.word.utils.PageUtil;
 
-import java.util.List;
+
 
 public interface BookService {
     BookJson findHotBooks();

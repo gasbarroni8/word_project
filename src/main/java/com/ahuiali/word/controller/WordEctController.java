@@ -2,8 +2,6 @@ package com.ahuiali.word.controller;
 
 import com.ahuiali.word.json.WordEctDetailJson;
 import com.ahuiali.word.json.WordEctJson;
-import com.ahuiali.word.mapper.WordEctMapper;
-import com.ahuiali.word.mapper.WordMapper;
 import com.ahuiali.word.service.WordEctService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 /**
  * 单词总表

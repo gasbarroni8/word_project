@@ -1,13 +1,11 @@
 package com.ahuiali.word.mapper;
 
 
-import com.ahuiali.word.json.WordJson;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.utils.PageUtil;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
 /**

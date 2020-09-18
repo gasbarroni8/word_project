@@ -1,10 +1,7 @@
 package com.ahuiali.word.controller;
 
 
-import com.ahuiali.word.json.WordEctJson;
 import com.ahuiali.word.json.WordJson;
-import com.ahuiali.word.mapper.WordMapper;
-import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.service.WordService;
 import com.ahuiali.word.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 单词控制器
@@ -32,10 +27,6 @@ public class WordController {
     @Autowired
     WordJson wordJson;
 
-
-
-
-
     @RequestMapping(value = "/getWords/",produces = "application/json;charset=utf-8;")
     public @ResponseBody WordJson getWords(@RequestBody PageUtil pageUtil){
 
@@ -43,8 +34,6 @@ public class WordController {
         return wordJson;
 
     }
-
-
 
     @RequestMapping(value = {"/goto"})
     public String gotoMemorize(){
@@ -71,12 +60,9 @@ public class WordController {
 
     }
 
-
-
     /**
      * 返回新词15个
      */
-
 
     /**
      * 添加单词到记忆库（批量）

@@ -31,9 +31,6 @@ public class NextTimeUtils {
 
             case 6: calendar.add(Calendar.DAY_OF_MONTH,7);
                 return sdf.format(calendar.getTime());
-//不要这个了
-//            case 7: calendar.add(Calendar.DAY_OF_MONTH,15);
-//                return sdf.format(calendar.getTime());
 
         }
         //否则传回当前时间
