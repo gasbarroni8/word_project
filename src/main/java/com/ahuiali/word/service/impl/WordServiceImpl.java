@@ -28,8 +28,6 @@ public class WordServiceImpl implements WordService {
     @Autowired
     JsonBase jsonBase;
 
-    @Autowired
-    NextTimeUtils nextTimeUtils;
     @Override
     public WordJson getWords(int id, PageUtil pageUtil) {
 
@@ -132,8 +130,7 @@ public class WordServiceImpl implements WordService {
     public WordJson insertWords(Integer wordbook_id, Integer learner_id, List<Long> ids) {
         wordJson = new WordJson();
         StringBuilder sql = new StringBuilder();
-        nextTimeUtils = new NextTimeUtils();
-        String next_time = nextTimeUtils.getNextTime(1, Calendar.getInstance());
+        String next_time = NextTimeUtils.getNextTime(1, Calendar.getInstance());
 
         sql.append("insert into memorize(learner_id,wordbook_id,word_id,next_time,created,modified) values ");
         for(Long id : ids){
@@ -165,16 +162,15 @@ public class WordServiceImpl implements WordService {
 
         wordJson = new WordJson();
         StringBuilder sql = new StringBuilder();
-        nextTimeUtils = new NextTimeUtils();
         //ids的
         StringBuilder ids = new StringBuilder();
         sql.append("UPDATE memorize SET next_time = CASE ")
-                .append("WHEN memorized_count = 1 THEN ").append(" \""+nextTimeUtils.getNextTime(2, Calendar.getInstance())+"\" ")
-                .append("WHEN memorized_count = 2 THEN ").append(" \""+nextTimeUtils.getNextTime(3, Calendar.getInstance())+"\" ")
-                .append("WHEN memorized_count = 3 THEN ").append(" \""+nextTimeUtils.getNextTime(4, Calendar.getInstance())+"\" ")
-                .append("WHEN memorized_count = 4 THEN ").append(" \""+nextTimeUtils.getNextTime(5, Calendar.getInstance())+"\" ")
-                .append("WHEN memorized_count = 5 THEN ").append(" \""+nextTimeUtils.getNextTime(6, Calendar.getInstance())+"\" ")
-                .append("WHEN memorized_count = 6 THEN ").append(" \""+nextTimeUtils.getNextTime(7, Calendar.getInstance())+"\" ")
+                .append("WHEN memorized_count = 1 THEN ").append(" \""+NextTimeUtils.getNextTime(2, Calendar.getInstance())+"\" ")
+                .append("WHEN memorized_count = 2 THEN ").append(" \""+NextTimeUtils.getNextTime(3, Calendar.getInstance())+"\" ")
+                .append("WHEN memorized_count = 3 THEN ").append(" \""+NextTimeUtils.getNextTime(4, Calendar.getInstance())+"\" ")
+                .append("WHEN memorized_count = 4 THEN ").append(" \""+NextTimeUtils.getNextTime(5, Calendar.getInstance())+"\" ")
+                .append("WHEN memorized_count = 5 THEN ").append(" \""+NextTimeUtils.getNextTime(6, Calendar.getInstance())+"\" ")
+                .append("WHEN memorized_count = 6 THEN ").append(" \""+NextTimeUtils.getNextTime(7, Calendar.getInstance())+"\" ")
                 .append(" end,").append("memorized_count = memorized_count + 1 WHERE id IN (");
         for(Word word : words){
             ids.append(word.getId()+",");

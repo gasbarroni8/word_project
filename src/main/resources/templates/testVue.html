@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edg">
+    <meta charset="UTF-8">
+    <title>测试Vue</title>
+    <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+
+</head>
+<body>
+<div id="box">
+    <input type="button" @click="getWord()" value="点我异步获取数据(Get)">
+    <input type="text"  v-model="word">
+    <p>{{wordEctDetail.id}}</p>
+    <ul>
+        <li v-for="sen in wordEctDetail.sentences">
+            {{sen.id}}
+            <br>
+            {{sen.sentence_en}}
+            <br>
+            {{sen.sentence_cn}}
+        </li>
+    </ul>
+</div>
+<script type = "text/javascript">
+
+        var vm = new Vue({
+            el:'#box',
+            data:{
+                msg:'Hello World!',
+                wordEctDetail:{
+
+                },
+                word:""
+            },
+            methods:{
+                get:function(){
+                    //发送get请求
+                    this.$http.get('/vue/getWord/word').then(function(res){
+                        this.wordEctDetail = res.body.wordEctDetail;
+                        console.log(res.body.wordEctDetail);
+                        console.log(res)
+                    },function(){
+                        console.log('请求失败处理');
+                    });
+                },
+                getWord:function () {
+                    console.log(this.word);
+                    if(this.word != "" && this.word!= null){
+                        let url = '/vue/getWord/' + this.word;
+                        //发送get请求
+                        this.$http.get(url).then(function(res){
+                            this.wordEctDetail = res.body.wordEctDetail;
+                        },function(){
+                            console.log('请求失败处理');
+                        });
+                    }
+
+                }
+            }
+        });
+
+</script>
+</body>
+</html>

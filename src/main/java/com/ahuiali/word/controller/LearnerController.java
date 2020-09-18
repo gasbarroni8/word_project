@@ -55,7 +55,6 @@ public class LearnerController {
         }else if("checkNickname".equals(check)){
             learnerJson = learnerService.queryLearnerByNickname(learner.getNickname());
         }else{
-
             learnerJson.setCode(-1);
             learnerJson.setMessage("参数错误！");
         }

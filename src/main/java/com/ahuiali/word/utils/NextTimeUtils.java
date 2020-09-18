@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Component
 public class NextTimeUtils {
-    public String getNextTime(Integer count,Calendar calendar){
+    public static String getNextTime(Integer count,Calendar calendar){
 
 
         //HH是24小时制，hh是12小时制，巨坑！
