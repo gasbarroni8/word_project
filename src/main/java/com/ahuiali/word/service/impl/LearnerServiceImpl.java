@@ -137,15 +137,12 @@ public class LearnerServiceImpl implements LearnerService {
         learner.setActivecode(token);
         //添加用户
         learnerMapper.addLearner(learner);
-
         //发送邮箱
         String title = "注册检测（背词系统）";
         String msg = "<html><body><a href='http://119.23.219.54:80/learner/register/confirm/"+
                 token +"'>点击即可确认身份！</a></body></html>";
         jsonBase = sentEmail(learner.getEmail(),title,msg);
-
         return jsonBase;
-
     }
 
     //激活用户
@@ -266,6 +263,7 @@ public class LearnerServiceImpl implements LearnerService {
      */
     public JsonBase sentEmail(String email,String title, String msg){
         try{
+            // MimeMessage可以显示html效果
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom("1170782807@qq.com");
@@ -279,7 +277,6 @@ public class LearnerServiceImpl implements LearnerService {
             jsonBase.setCode(409);
             jsonBase.setMessage("邮箱发送失败");
             return jsonBase;
-
         }
         //成功，返回200
         jsonBase.setCode(200);

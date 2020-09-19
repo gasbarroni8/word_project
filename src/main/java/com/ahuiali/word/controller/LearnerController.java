@@ -80,7 +80,9 @@ public class LearnerController {
 
     }
 
-    //登陆
+    /**
+     *  登陆
+     */
     @RequestMapping(value = "/login/{isRemember}", produces = "application/json;charset=utf-8;")
     public @ResponseBody JsonBase login(@RequestBody Learner learner,
                                         @PathVariable("isRemember") Integer isRemember,
