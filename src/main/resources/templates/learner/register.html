@@ -191,6 +191,10 @@
             },
             error: function(errmsg) {
                 console.log("Ajax获取服务器数据出错了！"+ errmsg);
+                emailFlag = false;
+                $(".emailMsg").text("发送失败！").css("color","rgba(255, 94, 84, 0.86)");
+                // 恢复发送
+                $(".registerBtn").html("发送").css("pointer-event","all");
             }
 
         })
