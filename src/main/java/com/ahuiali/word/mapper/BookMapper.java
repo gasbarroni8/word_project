@@ -3,7 +3,7 @@ package com.ahuiali.word.mapper;
 import com.ahuiali.word.pojo.Book;
 import com.ahuiali.word.pojo.Chapter;
 import com.ahuiali.word.pojo.Paragraph;
-import com.ahuiali.word.utils.PageUtil;
+import com.ahuiali.word.common.utils.PageUtil;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 

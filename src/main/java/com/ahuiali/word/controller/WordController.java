@@ -3,7 +3,7 @@ package com.ahuiali.word.controller;
 
 import com.ahuiali.word.json.WordJson;
 import com.ahuiali.word.service.WordService;
-import com.ahuiali.word.utils.PageUtil;
+import com.ahuiali.word.common.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

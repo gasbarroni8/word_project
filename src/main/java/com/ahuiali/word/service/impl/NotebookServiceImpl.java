@@ -9,7 +9,7 @@ import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.pojo.WordEct;
 import com.ahuiali.word.service.NotebookService;
-import com.ahuiali.word.utils.PageUtil;
+import com.ahuiali.word.common.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

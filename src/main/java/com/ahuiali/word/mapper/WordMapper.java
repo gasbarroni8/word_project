@@ -2,7 +2,7 @@ package com.ahuiali.word.mapper;
 
 
 import com.ahuiali.word.pojo.Word;
-import com.ahuiali.word.utils.PageUtil;
+import com.ahuiali.word.common.utils.PageUtil;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 

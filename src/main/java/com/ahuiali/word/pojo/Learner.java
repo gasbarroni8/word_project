@@ -1,11 +1,14 @@
 package com.ahuiali.word.pojo;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by shkstart on 2019/10/20
  */
+@Data
 public class Learner implements Serializable {
 
     private Integer id;
@@ -31,81 +34,5 @@ public class Learner implements Serializable {
     //修改日期
     private Date modified;
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setActivecode(String activecode) {
-        this.activecode = activecode;
-    }
-
-    public String getActivecode() {
-        return activecode;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getModified() {
-        return modified;
-    }
-
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
-
-    @Override
-    public String toString() {
-        return "Learner{" +
-                "id=" + id +
-                ", activecode='" + activecode + '\'' +
-                ", password='" + password + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", email='" + email + '\'' +
-                ", status=" + status +
-                ", created=" + created +
-                ", modified=" + modified +
-                '}';
-    }
 }

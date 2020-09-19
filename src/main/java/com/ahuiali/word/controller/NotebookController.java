@@ -7,7 +7,7 @@ import com.ahuiali.word.json.WordJson;
 import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.WordEct;
 import com.ahuiali.word.service.NotebookService;
-import com.ahuiali.word.utils.PageUtil;
+import com.ahuiali.word.common.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

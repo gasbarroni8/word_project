@@ -6,7 +6,7 @@ import com.ahuiali.word.json.NotebookJson;
 import com.ahuiali.word.json.WordEctJson;
 import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.WordEct;
-import com.ahuiali.word.utils.PageUtil;
+import com.ahuiali.word.common.utils.PageUtil;
 
 public interface NotebookService {
 

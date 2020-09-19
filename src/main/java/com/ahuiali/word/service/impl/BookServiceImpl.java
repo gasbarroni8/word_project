@@ -9,7 +9,7 @@ import com.ahuiali.word.pojo.Book;
 import com.ahuiali.word.pojo.Chapter;
 import com.ahuiali.word.pojo.Paragraph;
 import com.ahuiali.word.service.BookService;
-import com.ahuiali.word.utils.PageUtil;
+import com.ahuiali.word.common.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;

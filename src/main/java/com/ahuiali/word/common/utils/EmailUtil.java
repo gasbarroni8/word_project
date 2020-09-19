@@ -1,4 +1,4 @@
-package com.ahuiali.word.utils;
+package com.ahuiali.word.common.utils;
 
 import com.ahuiali.word.json.JsonBase;
 import org.springframework.beans.factory.annotation.Autowired;

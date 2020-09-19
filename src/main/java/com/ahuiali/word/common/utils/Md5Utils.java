@@ -1,4 +1,4 @@
-package com.ahuiali.word.utils;
+package com.ahuiali.word.common.utils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

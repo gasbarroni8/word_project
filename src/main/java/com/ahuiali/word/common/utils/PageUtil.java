@@ -1,4 +1,4 @@
-package com.ahuiali.word.utils;
+package com.ahuiali.word.common.utils;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

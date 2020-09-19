@@ -26,12 +26,12 @@ public interface LearnerMapper {
     Learner queryLearner(Learner learner);
 
     //根据邮箱查询learner
-    @Select("select email from learner where email = #{email} limit 1;")
-    Learner queryLearnerByEmail(String email);
+    @Select("select count(*) from learner where email = #{email} limit 1;")
+    Integer queryLearnerByEmail(String email);
 
     //根据昵称查询learner，返回值无所谓
-    @Select("select nickname from learner where nickname = #{nickname} limit 1;")
-    Learner queryLearnerByNickname(String nickname);
+    @Select("select count(*) from learner where nickname = #{nickname} limit 1;")
+    Integer queryLearnerByNickname(String nickname);
 
     //根据激活码查询id
     @Select("select id from learner where activecode = #{activecode}")
@@ -46,5 +46,5 @@ public interface LearnerMapper {
     void setActivecodeByEmail(String email,String activecode);
 
     @Update("update learner set password = #{password}, modified = NOW() where email = #{email}")
-    void updatePassword(String email, String password);
+    Integer updatePassword(String email, String password);
 }

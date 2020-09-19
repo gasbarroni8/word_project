@@ -1,10 +1,13 @@
 package com.ahuiali.word.controller;
 
 
+import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.json.JsonBase;
 import com.ahuiali.word.json.LearnerJson;
 import com.ahuiali.word.pojo.Learner;
 import com.ahuiali.word.service.LearnerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/learner")
+@Slf4j
 public class LearnerController {
 
     @Autowired
@@ -44,17 +48,16 @@ public class LearnerController {
      * @return
      */
     @RequestMapping(value = "/register/{check}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody LearnerJson registerCheck(@RequestBody Learner learner, @PathVariable("check") String check){
+    public @ResponseBody Response<?> registerCheck(@RequestBody Learner learner, @PathVariable("check") String check){
+        Response<?> response = null;
         if("checkEmail".equals(check)){
-            learnerJson = learnerService.queryLearnerByEmail(learner.getEmail());
+            response = learnerService.queryLearnerByEmail(learner.getEmail());
         }else if("checkNickname".equals(check)){
-            learnerJson = learnerService.queryLearnerByNickname(learner.getNickname());
+            response = learnerService.queryLearnerByNickname(learner.getNickname());
         }else{
-            learnerJson.setCode(-1);
-            learnerJson.setMessage("参数错误！");
+            response = Response.result(Constant.Error.ARG_ERROR);
         }
-
-        return learnerJson;
+        return response;
     }
 
     /**
@@ -63,9 +66,8 @@ public class LearnerController {
      * @return
      */
     @RequestMapping(value = "/register",produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase  register(@RequestBody Learner learner){
-        jsonBase =  learnerService.register(learner);
-        return jsonBase;
+    public @ResponseBody Response<?> register(@RequestBody Learner learner){
+        return  learnerService.register(learner);
     }
 
     /**
@@ -74,30 +76,28 @@ public class LearnerController {
      * @return
      */
     @RequestMapping(value = "/register/confirm/{token}")
-    public @ResponseBody JsonBase confirm(@PathVariable("token") String token){
-        jsonBase =learnerService.confirm(token);
-        return jsonBase;
-
+    public @ResponseBody Response<?> confirm(@PathVariable("token") String token){
+        return learnerService.confirm(token);
     }
 
     /**
      *  登陆
      */
     @RequestMapping(value = "/login/{isRemember}", produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase login(@RequestBody Learner learner,
+    public @ResponseBody Response<?> login(@RequestBody Learner learner,
                                         @PathVariable("isRemember") Integer isRemember,
                                         HttpSession session){
+        log.info("用户登录, learnerId:{}", learner.getEmail());
         //根据邮箱和密码查询
-        learnerJson =  learnerService.queryLearner(learner);
-        if(learnerJson.getCode() == 200){
-            session.setAttribute("learnerId",learnerJson.getLearner().getId());
+        Response<Learner> response = (Response<Learner>) learnerService.queryLearner(learner);
+        if("200".equals(response.getCode())){
+            session.setAttribute("learnerId",response.getData().getId());
             //七天有效
             if(isRemember == 1){
                 session.setMaxInactiveInterval(7*24*60);
             }
-
         }
-        return learnerJson;
+        return response;
     }
 
     /**
@@ -134,11 +134,10 @@ public class LearnerController {
      * @return
      */
     @RequestMapping(value = "/login/sentEmailAgain", produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase sentEmailAgain(@RequestBody Learner learner){
+    public @ResponseBody Response<?> sentEmailAgain(@RequestBody Learner learner){
 
-        jsonBase = learnerService.sentEmailAgain(learner.getEmail());
-        System.out.println(jsonBase);
-        return jsonBase;
+        Response<?> response = learnerService.sentEmailAgain(learner.getEmail());
+        return response;
     }
 
     /**
@@ -147,9 +146,8 @@ public class LearnerController {
      * @return
      */
     @RequestMapping(value = "/findPassword",produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase findPassword(@RequestBody Learner learner){
-            jsonBase = learnerService.findPassword(learner.getEmail());
-        return jsonBase;
+    public @ResponseBody Response<?> findPassword(@RequestBody Learner learner){
+        return learnerService.findPassword(learner.getEmail());
     }
 
     /**
@@ -158,9 +156,8 @@ public class LearnerController {
      * @return
      */
     @RequestMapping(value = "/updatePassword",produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase updatePassword(@RequestBody Learner learner){
-        jsonBase = learnerService.updatePassword(learner.getEmail(),learner.getPassword());
-        return jsonBase;
+    public @ResponseBody Response<?> updatePassword(@RequestBody Learner learner){
+        return learnerService.updatePassword(learner.getEmail(),learner.getPassword());
     }
 
     /**

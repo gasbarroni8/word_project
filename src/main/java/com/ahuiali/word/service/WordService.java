@@ -4,7 +4,7 @@ package com.ahuiali.word.service;
 import com.ahuiali.word.json.JsonBase;
 import com.ahuiali.word.json.WordJson;
 import com.ahuiali.word.pojo.Word;
-import com.ahuiali.word.utils.PageUtil;
+import com.ahuiali.word.common.utils.PageUtil;
 
 import java.util.List;
 
