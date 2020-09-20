@@ -38,6 +38,16 @@ public class Constant {
         Result WORDBOOK_WORD_NOT_ALL_UPDATE = new Result("506", "记忆表中的单词没有全部更新成功");
         Result NO_REVIEW_WORD = new Result("507", "没有需要复习的单词");
 
+        // 生词本模块
+        Result NOTEBOOK_EMPTY = new Result("600", "生词本列表为空");
+        Result NOTEBOOK_ADD_ERROR = new Result("601", "生词本添加失败");
+        Result NOTEBOOK_DELETE_ERROR = new Result("602", "生词本删除失败");
+        Result NOTEBOOK_WORD_DELETE_ERROR = new Result("603", "生词本单词删除失败");
+        Result NOTEBOOK_WORD_ADD_ERROR = new Result("604", "生词本单词添加失败");
+        Result NOTEBOOK_WORD_EMPTY = new Result("605", "生词本单词为空");
+        Result NOTEBOOK_UPDATE_ERROR = new Result("606", "生词本修改失败");
+
+
         // 700
         Result WORD_PRE_NOT_FOUNDED = new Result("700", "该单词模糊查询无结果");
         Result WORDECT_NOT_FOUNDED = new Result("701", "数据库中找不到该单词");

@@ -94,7 +94,7 @@
                 url: "/notebook/removeWord/"+word_id,
                 dataType: "json", //json类型
                 success: function (result) {
-                    if(result.code == 200){
+                    if(result.code === "200"){
                         //移除就完事
                         is_success = true;
                         //提示
@@ -138,10 +138,10 @@
             url: "/notebook/listWords/"+notebookId,
             dataType: "json", //json类型
             success: function (result) {
-                if(result.code == 200){
+                if(result.code === "200"){
                     curr++;
 
-                    $.each(result.notebook.words,function (i,item) {
+                    $.each(result.data.words,function (i,item) {
                         count++;
                         // $("#words").append("<a href='/wordect/gotoWordDetail/"+ item.word+"'>"+item.word+"</a><br>")
                         $("#words").append("<div class=\"row\">\n" +
@@ -172,7 +172,7 @@
                     }
                     //重置
                     count = 0;
-                }else if(result.code == 605){
+                }else if(result.code === "605"){
                     // 生词本单词为空
                     $("#showMore").css({"pointer-event":"none","background-color":"#bbffe3"});
                     $("#showMore>p").html("已经到底了");

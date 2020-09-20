@@ -1,9 +1,7 @@
 package com.ahuiali.word.service.impl;
 
-import com.ahuiali.word.json.JsonBase;
-import com.ahuiali.word.json.NotebookJson;
-import com.ahuiali.word.json.WordEctJson;
-import com.ahuiali.word.json.WordJson;
+import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.mapper.NotebookMapper;
 import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.Word;
@@ -25,39 +23,22 @@ public class NotebookServiceImpl  implements NotebookService {
     @Autowired
     NotebookMapper notebookMapper;
 
-    @Autowired
-    JsonBase jsonBase;
-
-    @Autowired
-    WordJson wordJson;
-
-    @Autowired
-    NotebookJson notebookJson;
-
-    @Autowired
-    WordEctJson wordEctJson;
-
     /**
      * 根据用户id查询所有生词本
      * @param learner_id
      * @return
      */
     @Override
-    public NotebookJson findAllNotebookByLearnerId(Integer learner_id) {
-
-        notebookJson = new NotebookJson();
-
+    public Response<?> findAllNotebookByLearnerId(Integer learner_id) {
+        Response<List<Notebook>> response = Response.success();
         //根据id查询所有生词本
         List<Notebook> notebooks = notebookMapper.findAllNotebookByLearnerId(learner_id);
         //大于0则返回
-        if(notebooks.size() > 0){
-            notebookJson.create(200,"success");
-            notebookJson.setNotebooks(notebooks);
-        } else{
-            notebookJson.create(600,"生词本列表为空");
+        if(notebooks.size() <= 0){
+            return Response.result(Constant.Error.NOTEBOOK_ADD_ERROR);
         }
-
-        return notebookJson;
+        response.setData(notebooks);
+        return response;
     }
 
     /**
@@ -66,20 +47,14 @@ public class NotebookServiceImpl  implements NotebookService {
      * @return
      */
     @Override
-    public NotebookJson addNotebook(Notebook notebook) {
-        notebookJson = new NotebookJson();
-
+    public Response<?> addNotebook(Notebook notebook) {
+        Response<?> response = Response.success();
         //返回影响条数
         Integer total = notebookMapper.addNotebook(notebook);
-        if(total > 0){
-            //大于0说明插入成功
-            notebookJson.create(200,"success");
-        }else{
-            //小于0说明插入失败
-            notebookJson.create(601,"生词本添加失败");
+        if(total <= 0){
+            response = Response.result(Constant.Error.NOTEBOOK_ADD_ERROR);
         }
-
-        return notebookJson;
+        return response;
     }
 
     /**
@@ -90,20 +65,19 @@ public class NotebookServiceImpl  implements NotebookService {
      */
     @Override
     @Transactional(rollbackFor=Exception.class)
-    public JsonBase removeNotebook(Integer id) {
-        jsonBase = new JsonBase();
-
+    public Response<?> removeNotebook(Integer id) {
+        Response<?> response = Response.success();
         Integer total = notebookMapper.removeNotebook(id);
         if(total > 0){
-            //大于0说明删除成功
-            jsonBase.create(200,"success");
+            //删除生词本成功
             //删除生词本的所有单词
+            // TODO 之后要用队列
             Integer total1 = notebookMapper.removeAllNotebookWords(id);
         }else{
             //小于0说明删除失败
-            jsonBase.create(602,"生词本删除失败");
+            response = Response.result(Constant.Error.NOTEBOOK_DELETE_ERROR);
         }
-        return jsonBase;
+        return response;
     }
 
     /**
@@ -112,20 +86,19 @@ public class NotebookServiceImpl  implements NotebookService {
      * @return
      */
     @Override
-    public JsonBase removeWord(Integer id) {
-        jsonBase = new JsonBase();
+    public Response<?> removeWord(Integer id) {
+        Response<?> response = Response.success();
         Integer notebook_id = notebookMapper.findIdByNotebookWordId(id);
         Integer total = notebookMapper.removeWord(id);
         if(total > 0){
             //大于0说明删除成功
             //生词本单词数量减一
             notebookMapper.notebookCountMinus(notebook_id);
-            jsonBase.create(200,"success");
         }else{
             //小于0说明删除失败
-            jsonBase.create(603,"生词本单词删除失败");
+            response = Response.result(Constant.Error.NOTEBOOK_WORD_DELETE_ERROR);
         }
-        return jsonBase;
+        return response;
     }
 
     /**
@@ -135,18 +108,13 @@ public class NotebookServiceImpl  implements NotebookService {
      * @return jsonbase
      */
     @Override
-    public JsonBase addWord(Integer notebook_id, String word) {
-        jsonBase = new JsonBase();
-
+    public Response<?> addWord(Integer notebook_id, String word) {
+        Response<?> response = Response.success();
         Integer total = notebookMapper.addWord(notebook_id,word);
-        if(total > 0){
-            //大于0说明添加成功
-            jsonBase.create(200,"success");
-        }else{
-            //小于0说明添加失败
-            jsonBase.create(604,"生词本单词添加失败");
+        if(total <= 0){
+            response = Response.result(Constant.Error.NOTEBOOK_WORD_ADD_ERROR);
         }
-        return jsonBase;
+        return response;
     }
 
     /**
@@ -156,23 +124,19 @@ public class NotebookServiceImpl  implements NotebookService {
      * @return
      */
     @Override
-    public NotebookJson listWord(Integer notebook_id, PageUtil pageUtil) {
-        notebookJson = new NotebookJson();
+    public Response<?> listWord(Integer notebook_id, PageUtil pageUtil) {
+        Response<Notebook> response = Response.success();
         //获取单词列表
         List<Word> words = notebookMapper.listWords(notebook_id,pageUtil);
         Notebook notebook = new Notebook();
         notebook.setWords(words);
         //不为空返回200
-        if(words.size()>0){
-            notebookJson.setNotebook(notebook);
-            notebookJson.create(200,"success");
-        } else{
-            //为空返回605
-            notebookJson.create(605,"生词本单词为空");
+        if(words.size() <= 0){
+            return Response.result(Constant.Error.NOTEBOOK_WORD_EMPTY);
         }
-        return notebookJson;
+        response.setData(notebook);
+        return response;
     }
-
 
     /**
      * 修改生词本名称
@@ -181,17 +145,14 @@ public class NotebookServiceImpl  implements NotebookService {
      * @return
      */
     @Override
-    public NotebookJson editNotebook(String name, Integer learner_id) {
-        notebookJson = new NotebookJson();
+    public Response<?> editNotebook(String name, Integer learner_id) {
+        Response<?> response = Response.success();
         Integer count = notebookMapper.editNotebookName(name,learner_id);
-        if(count > 0){
-            notebookJson.create(200,"success");
-        }else {
-            notebookJson.create(606,"生词本修改失败");
+        if(count <= 0){
+            response = Response.result(Constant.Error.NOTEBOOK_UPDATE_ERROR);
         }
-        return notebookJson;
+        return response;
     }
-
     /**
      * 为生词本添加单词（能返回主键）
      * @param notebook_id 生词本id
@@ -199,17 +160,17 @@ public class NotebookServiceImpl  implements NotebookService {
      * @return wordctJson
      */
     @Override
-    public WordEctJson addWordEct(Integer notebook_id, WordEct wordect) {
+    public Response<?> addWordEct(Integer notebook_id, WordEct wordect) {
+        Response<WordEct> response = Response.success();
         //增加
         notebookMapper.addWordEct(wordect,notebook_id);
         if(wordect.getId() != null){
             //notebook中的count字段也要加一
             notebookMapper.notebookCountPlus(notebook_id);
-            wordEctJson.setWordEct(wordect);
-            wordEctJson.create(200,"success");
+            response.setData(wordect);
         }
-
-        return wordEctJson;
+        // TODO 失败没做处理
+        return response;
     }
 
 

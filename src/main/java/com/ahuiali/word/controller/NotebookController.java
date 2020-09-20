@@ -1,9 +1,6 @@
 package com.ahuiali.word.controller;
 
-import com.ahuiali.word.json.JsonBase;
-import com.ahuiali.word.json.NotebookJson;
-import com.ahuiali.word.json.WordEctJson;
-import com.ahuiali.word.json.WordJson;
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.WordEct;
 import com.ahuiali.word.service.NotebookService;
@@ -24,18 +21,6 @@ import java.util.Map;
 public class NotebookController {
 
     @Autowired
-    NotebookJson notebookJson;
-
-    @Autowired
-    JsonBase jsonBase;
-
-    @Autowired
-    WordJson wordJson;
-
-    @Autowired
-    WordEctJson wordEctJson;
-
-    @Autowired
     NotebookService notebookService;
 
     /**
@@ -53,14 +38,10 @@ public class NotebookController {
      * @return
      */
     @RequestMapping(value = "/myNotebookJson")
-    public @ResponseBody NotebookJson myNotebookJSON(HttpSession session){
-
+    public @ResponseBody Response<?> myNotebookJSON(HttpSession session){
         //获取学习者id
        Integer learner_id = (Integer) session.getAttribute("learnerId");
-
-        notebookJson = notebookService.findAllNotebookByLearnerId(learner_id);
-
-        return notebookJson;
+        return notebookService.findAllNotebookByLearnerId(learner_id);
     }
 
     /**
@@ -72,9 +53,7 @@ public class NotebookController {
     public String editNotebook(HttpSession session,
                                @RequestParam(value = "notebookName",required = false) String name,
                                @RequestParam(value = "id",required = false) Integer id){
-
-
-        notebookJson = notebookService.editNotebook(name.trim(),id);
+        notebookService.editNotebook(name.trim(),id);
         //重定向
         return "redirect:/notebook/gotoNotebook";
     }
@@ -89,14 +68,13 @@ public class NotebookController {
     public String addNotebook(HttpSession session,
                               @RequestParam(value = "notebookName",required = false) String name){
         //获取学习者id
-       Integer learnerId = (Integer) session.getAttribute("learnerId");
+        Integer learnerId = (Integer) session.getAttribute("learnerId");
         Notebook notebook = new Notebook();
         notebook.setLearner_id(learnerId);
         notebook.setName(name.trim());
-        notebookJson = notebookService.addNotebook(notebook);
+        notebookService.addNotebook(notebook);
 
         //前端自动判断，若添加成功，则在生词本列表追加，否则显示‘添加生词本失败信息’，code为601(*)
-
 
         //重定向
         return "redirect:/notebook/gotoNotebook";
@@ -109,7 +87,8 @@ public class NotebookController {
      */
     @RequestMapping(value = "/removeNotebook/{id}" ,produces = "application/json;charset=utf-8;")
     public String  removeNotebook(@PathVariable("id") Integer id){
-        jsonBase = notebookService.removeNotebook(id);
+        // TODO
+        notebookService.removeNotebook(id);
         return "redirect:/notebook/gotoNotebook";
     }
 
@@ -120,10 +99,9 @@ public class NotebookController {
      * @return
      */
     @RequestMapping(value = "/addWord/{word}/{id}" ,produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase addWord(@PathVariable("word") String  word,
+    public @ResponseBody Response<?> addWord(@PathVariable("word") String  word,
                                           @PathVariable("id") Integer id){
-        jsonBase = notebookService.addWord(id,word);
-        return jsonBase;
+        return notebookService.addWord(id,word);
     }
 
     /**
@@ -133,10 +111,9 @@ public class NotebookController {
      * @return
      */
     @RequestMapping(value = "/addWordEct/{notebook_id}" ,produces = "application/json;charset=utf-8;")
-    public @ResponseBody WordEctJson addWord(@RequestBody WordEct wordect,
+    public @ResponseBody Response<?> addWord(@RequestBody WordEct wordect,
                                           @PathVariable("notebook_id") Integer notebook_id){
-        wordEctJson = notebookService.addWordEct(notebook_id,wordect);
-        return wordEctJson;
+        return notebookService.addWordEct(notebook_id,wordect);
     }
 
     /**
@@ -145,9 +122,8 @@ public class NotebookController {
      * @return
      */
     @RequestMapping(value = "/removeWord/{id}" ,produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase removeWord(@PathVariable("id") Integer id){
-        jsonBase = notebookService.removeWord(id);
-        return jsonBase;
+    public @ResponseBody Response<?> removeWord(@PathVariable("id") Integer id){
+        return notebookService.removeWord(id);
     }
 
 
@@ -158,12 +134,9 @@ public class NotebookController {
      * @return
      */
     @RequestMapping(value = "/listWords/{notebook_id}")
-    public @ResponseBody NotebookJson listWords(@PathVariable("notebook_id") Integer notebook_id, @RequestBody PageUtil pageUtil){
-
+    public @ResponseBody Response<?> listWords(@PathVariable("notebook_id") Integer notebook_id, @RequestBody PageUtil pageUtil){
         pageUtil.renew();
-        NotebookJson notebookJson = notebookService.listWord(notebook_id,pageUtil);
-
-        return notebookJson;
+        return notebookService.listWord(notebook_id,pageUtil);
     }
 
     /**

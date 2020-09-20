@@ -1,28 +1,26 @@
 package com.ahuiali.word.service;
 
 
-import com.ahuiali.word.json.JsonBase;
-import com.ahuiali.word.json.NotebookJson;
-import com.ahuiali.word.json.WordEctJson;
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.WordEct;
 import com.ahuiali.word.common.utils.PageUtil;
 
 public interface NotebookService {
 
-    NotebookJson findAllNotebookByLearnerId(Integer learner_id);
+    Response<?> findAllNotebookByLearnerId(Integer learner_id);
 
-    NotebookJson addNotebook(Notebook notebook);
+    Response<?> addNotebook(Notebook notebook);
 
-    JsonBase removeNotebook(Integer id);
+    Response<?> removeNotebook(Integer id);
 
-    JsonBase removeWord(Integer id);
+    Response<?> removeWord(Integer id);
 
-    JsonBase addWord(Integer notebook_id, String word);
+    Response<?> addWord(Integer notebook_id, String word);
 
-    NotebookJson listWord(Integer notebook_id, PageUtil pageUtil);
+    Response<?> listWord(Integer notebook_id, PageUtil pageUtil);
 
-    NotebookJson editNotebook(String trim, Integer learner_id);
+    Response<?> editNotebook(String trim, Integer learner_id);
 
-    WordEctJson addWordEct(Integer id, WordEct wordect);
+    Response<?> addWordEct(Integer id, WordEct wordect);
 }

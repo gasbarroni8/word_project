@@ -119,7 +119,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button " class="btn btn-primary confirmEdit">确认</button>
+                <button type="button submit" class="btn btn-primary confirmEdit" >确认</button>
             </div>
         </div>
     </div>
@@ -212,10 +212,6 @@
         });
     }
 
-</script>
-
-<script>
-
     //创建
     $(".create").click(function () {
         $("#addNotebookForm").submit();
@@ -227,8 +223,10 @@
     });
     //修改
     $(".confirmEdit").click(function () {
-        $("#editNotebookForm").submit();
+        $("#editNotebookModelForm").submit();
     });
+
+
 
 
     $(function () {
@@ -240,9 +238,9 @@
             dataType: "json", //json类型
             success: function (result) {
                 // console.log(result)
-                if(result.code === 200){
+                if(result.code === "200"){
 
-                    $.each(result.notebooks,function (i,item) {
+                    $.each(result.data,function (i,item) {
 
                         let img = "/img/notebook/notebooks.png";
                         $(".notebooks").append("<div class=\"col-xs-8\" class=\"notebookArea\">\n" +

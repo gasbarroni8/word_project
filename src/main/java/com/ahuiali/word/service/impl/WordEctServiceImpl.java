@@ -159,17 +159,15 @@ public class WordEctServiceImpl implements WordEctService {
         WordEct wordEct = new WordEct();
         //先去redis查有没有该单词
         boolean hasWordKey = template.opsForHash().hasKey("words",word);
-        String wordRedis = "";
         //如果redis中能找到
         if(hasWordKey){
             //获取该单词的信息
             String wordJsonStr = (String) template.opsForHash().get("words","word");
-            if(!"".equals(wordRedis) && wordRedis != null){
+            if(!"".equals(wordJsonStr) && wordJsonStr != null){
                 //将json转换为单词对象
                 wordEct =  JSON.parseObject(wordJsonStr,WordEct.class);
             }
-        }
-        if("".equals(wordRedis) || null == wordRedis){
+        } else {
             //数据库中查询
             wordEct = wordEctMapper.findWord(word);
             if(wordEct == null){
