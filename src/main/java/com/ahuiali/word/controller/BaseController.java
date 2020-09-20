@@ -1,5 +1,6 @@
 package com.ahuiali.word.controller;
 
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.json.WordbookJson;
 import com.ahuiali.word.service.WordbookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,6 @@ public class BaseController {
      */
     @RequestMapping("/")
     public String gotoIndex(){
-
         return "/index";
     }
 
@@ -37,11 +37,9 @@ public class BaseController {
      * @return
      */
     @RequestMapping(value = "/index", produces = "application/json;charset=utf-8;" )
-    public @ResponseBody WordbookJson
-    indexInit(HttpSession session){
+    public @ResponseBody Response<?> indexInit(HttpSession session){
         //获取学习者id
        Integer learnerId = (Integer) session.getAttribute("learnerId");
-        wordbookJson = wordbookService.getMemorizingWordbookAndReviewCount(learnerId);
-        return wordbookJson;
+       return wordbookService.getMemorizingWordbookAndReviewCount(learnerId);
     }
 }

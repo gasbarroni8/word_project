@@ -178,8 +178,8 @@
                 currUn++;
                 unFlag = false;
                 // console.log(result)
-                if(result.code == 200){
-                    $.each(result.words,function (i,item) {
+                if(result.code === "200"){
+                    $.each(result.data,function (i,item) {
                         $('.unWordList').append("<div class=\"wordBox\">\n" +
                             "            <div class=\"col-xs-10 wordArea\">\n" +
                             "                <a href=\"/wordect/gotoWordDetail?word="+ item.word +"\"><p class=\"word\" title=\""+ item.word +"\">"+ item.word +"</p></a>\n" +
@@ -260,13 +260,13 @@
             success: function(result) {
                 // console.log(result);
                 let data;
-                if(result.code == 200){
-                    data = result.words;
+                if(result.code === "200"){
+                    data = result.data;
                 }
-                if(type == 1){
+                if(type === 1){
                     $("#words>div").hide();
                     $(".unWordList").show();
-                    if(result.code == 504){
+                    if(result.code === "504"){
                         $(".showWordsBtn p").html("已到底部");
                         return ;
                     }
@@ -289,7 +289,7 @@
                 }else if(type == 2){
                     $("#words>div").hide();
                     $(".wordingList").show();
-                    if(result.code == 504){
+                    if(result.code === "504"){
                         $(".showWordsBtn p").html("已到底部");
                         return ;
                     }
@@ -311,7 +311,7 @@
                 }else if(type == 3){
                     $("#words>div").hide();
                     $(".wordedList").show();
-                    if(result.code == 504){
+                    if(result.code === "504"){
                         $(".showWordsBtn p").html("已到底部");
                         return ;
                     }

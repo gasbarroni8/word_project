@@ -258,8 +258,8 @@
                 success: function(result) {
                     console.log(result);
 
-                    if(result.code == 200){
-                        let word = result.wordEctDetail;
+                    if(result.code === "200"){
+                        let word = result.data;
                         //填入相应数据
                         $(".wordName .word").html(word.word);
                         $(".wordPron #us").html(word.pron_us);
@@ -320,9 +320,9 @@
             dataType: "json", //json类型
             success: function(result) {
                 // var result = JSON.stringify(result);  // 需解析，否则返回 object
-                // console.log(result);
-                if(result.code == 200){
-                    words = result.words;
+                console.log(result);
+                if(result.code === "200"){
+                    words = result.data;
 
                     let word = words[0];
                     $("#word").html(word.word);
@@ -330,7 +330,7 @@
                     $("#pron_us").html(word.pron_us);
                     $("#meaning").html(word.paraphrase);
 
-                }else if(result.code == 507){
+                }else if(result.code === "507"){
                     alert("复习完了所有的单词！");
                     window.location.href = "/";
                 }
@@ -383,7 +383,7 @@
                     dataType: "json", //json类型
                     success: function(result) {
                         // console.log(result);
-                        if(result.code == 200){
+                        if(result.code === "200"){
 
                         }
                     },
@@ -429,8 +429,8 @@
             success: function(result) {
                 // var result = JSON.stringify(result);  // 需解析，否则返回 object
                 // console.log(result);
-                if(result.code == 200){
-                    words = result.words;
+                if(result.code === "200"){
+                    words = result.data;
 
                     let word = words[0];
                     $("#word").html(word.word);

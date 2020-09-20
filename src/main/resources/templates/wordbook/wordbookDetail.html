@@ -26,7 +26,7 @@
 <div class="container myWordbookBox">
     <div class="row myWordbook">
         <div class="bookImg col-md-4 col-sm-4 col-lg-4 col-xs-4" id="书籍的id">
-            <img src="/img/wordbook/cet4core.jpg" >
+            <img src="" >
 
         </div>
         <div class="wordbookInfo col-sm-8 col-md-8 col-lg-8 col-xs-8">
@@ -156,9 +156,9 @@
             success: function(result) {
 
                 console.log(result);
-                if(result.code == 200){
+                if(result.code === "200"){
                     // let img = "/img/wordbook/cet4core.jpg";
-                    let wb = result.wordbook;
+                    let wb = result.data;
                     // wb.img = img;
                     $(".bookImg img").attr('src',wb.img);
                     $(".summary").html(wb.summary)
@@ -211,12 +211,12 @@
             dataType: "json", //json类型
             success: function(result) {
 
-                if(result.code == 200){
+                if(result.code === "200"){
                     curr++;
                     console.log(curr)
                     console.log(result)
-                    let wordbook = result.wordbook;
-                    $.each(result.words,function (i,item) {
+                    let wordbook = result.data;
+                    $.each(result.data, function (i,item) {
                         // $("#words").append("<p>"+item.word+"</p>")
                         $("#words .row").append("<div class=\"col-xs-10\">\n" +
                             "            <a href=\"/wordect/gotoWordDetail?word="+ item.word +"\"><p class=\"word\" title=\""+ item.word +"\">"+ item.word +"</p></a>\n" +

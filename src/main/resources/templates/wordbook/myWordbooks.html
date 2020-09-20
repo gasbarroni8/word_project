@@ -125,9 +125,9 @@
             url: "/wordbook/myWordbooks",
             dataType: "json", //json类型
             success: function (result) {
-                if(result.code === 200){
-                    // console.log(result)
-                    $.each(result.wordbooks,function (i,item) {
+                if(result.code === "200"){
+                    console.log(result);
+                    $.each(result.data,function (i,item) {
                         // $("#myWordbooks").append("<a href='/wordbook/gotoMyWordbookDetail?id=" + item.id+ "');'>"+item.name+"</a><br>")
                         //如果是当前计划
                         if(item.is_memorizing == 1){

@@ -100,9 +100,9 @@
             url: "/wordbook/",
             dataType: "json", //json类型
             success: function (result) {
-                // console.log(result)
-                if(result.code === 200){
-                    $.each(result.wordbooks,function (i,item) {
+                console.log(result);
+                if(result.code === "200"){
+                    $.each(result.data, function (i,item) {
                         // $("#wordbooks").append("<a href='/wordbook/gotoWordbookDetail?id=" + item.id+ "');'>"+item.name+"</a><br>")
                         // let img = "/img/wordbook/cet4core.jpg";
                         $(".wordbooks").append("<div>\n" +

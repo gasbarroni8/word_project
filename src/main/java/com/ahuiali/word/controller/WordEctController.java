@@ -1,5 +1,6 @@
 package com.ahuiali.word.controller;
 
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.json.WordEctDetailJson;
 import com.ahuiali.word.json.WordEctJson;
 import com.ahuiali.word.service.WordEctService;
@@ -44,11 +45,8 @@ public class WordEctController {
      */
     @RequestMapping(value = "/input/{word}",produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    WordEctJson input(@PathVariable("word") String wordpre){
-
-        wordEctJson = wordEctService.getWordsByPre(wordpre);
-
-        return wordEctJson;
+    Response<?> input(@PathVariable("word") String wordpre){
+        return wordEctService.getWordsByPre(wordpre);
     }
 
     /**

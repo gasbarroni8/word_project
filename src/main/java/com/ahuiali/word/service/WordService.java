@@ -12,14 +12,14 @@ import java.util.List;
 public interface WordService {
     Response<?> getWords(int id, PageUtil pageUtil);
 
-    WordJson myWordbookWords(Integer wordbook_id, Integer learnerId, PageUtil pageUtil, Integer wordsType);
+    Response<?> myWordbookWords(Integer wordbook_id, Integer learnerId, PageUtil pageUtil, Integer wordsType);
 
-    JsonBase wordTypeChange(Integer learner_id, Integer wordbook_id, Integer id, Integer type);
+    Response<?> wordTypeChange(Integer learner_id, Integer wordbook_id, Integer id, Integer type);
 
     Response<?> getReviewWords(Integer learner_id, Integer wordbook_id, PageUtil pageUtil);
 
-    WordJson insertWords(Integer wordbook_id, Integer learner_id,List<Long> ids);
+    Response<?> insertWords(Integer wordbook_id, Integer learner_id,List<Long> ids);
 
-    WordJson updateWords(List<Word> words);
+    Response<?> updateWords(List<Word> words);
 
 }

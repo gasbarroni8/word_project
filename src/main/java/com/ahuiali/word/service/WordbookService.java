@@ -1,24 +1,25 @@
 package com.ahuiali.word.service;
 
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.json.JsonBase;
 import com.ahuiali.word.json.WordbookJson;
 
 public interface WordbookService {
-    WordbookJson getWordbooks();
+    Response<?> getWordbooks();
 
-    WordbookJson getWordbookDetail(Integer id, Integer learner_id);
+    Response<?> getWordbookDetail(Integer id, Integer learner_id);
 
-    WordbookJson getWords(Integer id, int curr, int size);
+    Response<?> getWords(Integer id, int curr, int size);
 
-    JsonBase addWordbook(Integer learnerId, Integer wordbook_id) throws Exception;
+    Response<?> addWordbook(Integer learnerId, Integer wordbook_id) throws Exception;
 
-    WordbookJson findMyWordbooks(Integer learnerId);
+    Response<?> findMyWordbooks(Integer learnerId);
 
-    JsonBase updateWordbookPlan(Integer learnerId, Integer wordbook_id);
+    Response<?> updateWordbookPlan(Integer learnerId, Integer wordbook_id);
 
-    WordbookJson myMemorizingWordbook(Integer learnerId);
+    Response<?> myMemorizingWordbook(Integer learnerId);
 
     Integer findReviewCount( Integer learnerId, Integer wordbook_id);
 
-    WordbookJson getMemorizingWordbookAndReviewCount(Integer learnerId);
+    Response<?> getMemorizingWordbookAndReviewCount(Integer learnerId);
 }

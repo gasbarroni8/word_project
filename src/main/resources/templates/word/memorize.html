@@ -266,8 +266,8 @@
                 success: function(result) {
                     // console.log(result);
 
-                    if(result.code == 200){
-                        let word = result.wordEctDetail;
+                    if(result.code === "200"){
+                        let word = result.data;
                         //填入相应数据
                         $(".wordName .word").html(word.word);
                         $(".wordPron #us").html(word.pron_us);
@@ -334,8 +334,8 @@
             success: function(result) {
                 // var result = JSON.stringify(result);  // 需解析，否则返回 object
                 console.log(result);
-                if(result.code == 200){
-                    words = result.words;
+                if(result.code === "200"){
+                    words = result.data;
                     if(words.length > 0){
                         let word = words[0];
                         $("#word").html(word.word);
@@ -393,7 +393,7 @@
                     dataType: "json", //json类型
                     success: function(result) {
                         console.log(result);
-                        if(result.code == 200){
+                        if(result.code === "200"){
 
                         }
                     },
@@ -424,8 +424,8 @@
             success: function(result) {
                 // var result = JSON.stringify(result);  // 需解析，否则返回 object
                 console.log(result);
-                if(result.code == 200){
-                    words = result.words;
+                if(result.code === "200"){
+                    words = result.data;
                     if(words.length > 0){
                         let word = words[0];
                         $("#word").html(word.word);

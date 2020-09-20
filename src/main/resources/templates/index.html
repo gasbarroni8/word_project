@@ -228,8 +228,8 @@
             dataType: "json", //json类型
             success: function(result) {
                 // console.log(result);
-                if(result.code == 200){
-                    let wordbook = result.wordbook;
+                if(result.code === "200"){
+                    let wordbook = result.data;
                     wordbookId = wordbook.id;
                     let href = "/wordbook/gotoMyWordbookDetail?id=" + wordbook.id;
                     $(".wordbookHref").attr('href',href);
@@ -275,17 +275,17 @@
                 url: url,
                 dataType: "json", //json类型
                 success: function (result) {
-                    if(result.code == 200){
-                        console.log(result)
+                    if(result.code === "200"){
+                        console.log(result);
                         $("#tips").html("");
-                        $.each(result.wordEctList, function (i,item) {
+                        $.each(result.data, function (i,item) {
                             $("#tips").append(" <div content='"+ item.word +"'>\n" +
                                 "                        <li class=\"text-left\">"+ item.word +"</li>\n" +
                                 "                        <li class=\"text-right\">"+ item.translation +"</li>\n" +
                                 "                    </div>")
-                        })
+                        });
                         tipInit();
-                    } else if(result.code == 700){
+                    } else if(result.code === "700"){
                         // 该单词模糊查询已无结果
                         //关闭提示框
                         $("#tips").html("").fadeOut(400);

@@ -1,5 +1,7 @@
 package com.ahuiali.word.service.impl;
 
+import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.json.WordEctDetailJson;
 import com.ahuiali.word.json.WordEctJson;
 import com.ahuiali.word.mapper.NotebookMapper;
@@ -53,20 +55,17 @@ public class WordEctServiceImpl implements WordEctService {
      * @return
      */
     @Override
-    public WordEctJson getWordsByPre(String wordpre) {
+    public Response<?> getWordsByPre(String wordpre) {
         wordEctJson = new WordEctJson();
-
+        Response<List<WordEct>> response = Response.success();
         //数据库中查找
         List<WordEct> wordEctList = wordEctMapper.getWordsByPre(wordpre);
-
         //如果大于0说明仍有提示
-        if(wordEctList.size() > 0){
-            wordEctJson.setWordEctList(wordEctList);
-            wordEctJson.create(200,"success");
-        } else {
-            wordEctJson.create(700,"该单词模糊查询已无结果");
+        if(wordEctList.size() <= 0){
+           return Response.result(Constant.Error.WORD_PRE_NOT_FOUNDED);
         }
-        return wordEctJson;
+        response.setData(wordEctList);
+        return response;
     }
 
     /**

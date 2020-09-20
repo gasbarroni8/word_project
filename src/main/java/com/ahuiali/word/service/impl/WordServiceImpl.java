@@ -2,11 +2,9 @@ package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.Constant;
 import com.ahuiali.word.common.resp.Response;
-import com.ahuiali.word.common.resp.Result;
 import com.ahuiali.word.json.JsonBase;
 import com.ahuiali.word.json.WordJson;
 import com.ahuiali.word.mapper.WordMapper;
-import com.ahuiali.word.pojo.Learner;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.service.WordService;
 import com.ahuiali.word.common.utils.NextTimeUtils;
@@ -26,49 +24,44 @@ public class WordServiceImpl implements WordService {
     @Autowired
     WordMapper wordMapper;
 
-    @Autowired
-    WordJson wordJson;
-
-    @Autowired
-    JsonBase jsonBase;
-
     @Override
     public Response<?> getWords(int id, PageUtil pageUtil) {
-        Response<Word> response = Response.success();
+        Response<List<Word>> response = Response.success();
         List<Word> words = wordMapper.getWords(id,pageUtil);
         if(words.size() <= 0){
-            response = Response.result(Constant.Error.WORDBOOK_EMPTY);
+            return Response.result(Constant.Error.WORDBOOK_EMPTY);
         }
+        response.setData(words);
         return response;
     }
 
-    //获取不同类型单词，未背，记忆中，已掌握
+    /**
+     * 获取不同类型单词，未背，记忆中，已掌握
+     * @param wordbook_id
+     * @param learnerId
+     * @param pageUtil
+     * @param wordsType
+     * @return
+     */
     @Override
-    public WordJson myWordbookWords(Integer wordbook_id, Integer learnerId, PageUtil pageUtil, Integer wordsType) {
-        wordJson = new WordJson();
-        List<Word> words = new ArrayList<>();
+    public Response<?> myWordbookWords(Integer wordbook_id, Integer learnerId, PageUtil pageUtil, Integer wordsType) {
+        Response<List<Word>> response = Response.success();
+        List<Word> words = new ArrayList<>(pageUtil.getSize());
         //返回单词类型，1为未背，2为记忆中，3为已掌握
         if(wordsType == 1){
             words = wordMapper.getMyWordbookWords(wordbook_id,learnerId,pageUtil);
-
         } else if(wordsType == 2){
             words = wordMapper.findMemorizingWords(wordbook_id,learnerId,pageUtil);
-
-
         } else if(wordsType == 3){
             words = wordMapper.findMemorizdWords(wordbook_id,learnerId,pageUtil);
-
         } else{
-            wordJson.create(-1,"参数出错");
-            return wordJson;
+            return Response.result(Constant.Error.ARG_ERROR);
         }
         if(words.size() == 0){
-            wordJson.create(504,"词书单词为空");
-            return wordJson;
+            return Response.result(Constant.Error.WORDBOOK_EMPTY);
         }
-        wordJson.setWords(words);
-        wordJson.create(200,"success");
-        return wordJson;
+        response.setData(words);
+        return response;
     }
 
     /**
@@ -81,12 +74,11 @@ public class WordServiceImpl implements WordService {
      * @return
      */
     @Override
-    public JsonBase wordTypeChange(Integer learner_id, Integer wordbook_id, Integer id, Integer type) {
-        jsonBase = new JsonBase();
+    public Response<?> wordTypeChange(Integer learner_id, Integer wordbook_id, Integer id, Integer type) {
+        Response<?> response = Response.success();
         if(type == 1){
             //记忆中->掌握
             wordMapper.setWordIsMemorized(id);
-
         } else if(type == 2){
             //未背->掌握，该id是words表的id
             wordMapper.addWordAndSetMemorized(learner_id,wordbook_id,id);
@@ -94,10 +86,9 @@ public class WordServiceImpl implements WordService {
             //掌握->未背 重新学习
             wordMapper.removeMemorizeWord(id);
         } else{
-            jsonBase.create(444,"参数出错");
+            response = Response.result(Constant.Error.ARG_ERROR);
         }
-        jsonBase.create(200,"success");
-        return jsonBase;
+        return response;
     }
 
     /**
@@ -109,12 +100,12 @@ public class WordServiceImpl implements WordService {
      */
     @Override
     public Response<?> getReviewWords(Integer learner_id, Integer wordbook_id, PageUtil pageUtil) {
-        wordJson = new WordJson();
-        Response<Word> response = Response.success();
+        Response<List<Word>> response = Response.success();
         List<Word> words = wordMapper.getReviewWords(learner_id,wordbook_id,pageUtil);
         if(words.size() <= 0){
-           response = Response.result(Constant.Error.NO_REVIEW_WORD);
+           return Response.result(Constant.Error.NO_REVIEW_WORD);
         }
+        response.setData(words);
         return response;
     }
     /**
@@ -125,15 +116,15 @@ public class WordServiceImpl implements WordService {
      * @return
      */
     @Override
-    public WordJson insertWords(Integer wordbook_id, Integer learner_id, List<Long> ids) {
-        wordJson = new WordJson();
+    public Response<?> insertWords(Integer wordbook_id, Integer learner_id, List<Long> ids) {
+        Response<?> response = Response.success();
         StringBuilder sql = new StringBuilder();
         String next_time = NextTimeUtils.getNextTime(1, Calendar.getInstance());
-
         sql.append("insert into memorize(learner_id,wordbook_id,word_id,next_time,created,modified) values ");
         for(Long id : ids){
-            sql.append("(").append(learner_id).append(",").append(wordbook_id).append(",").append(id).append(",")
-                    .append("\""+next_time+"\"").append(",").append("NOW(),NOW()").append("),");
+            sql.append("(").append(learner_id).append(",").append(wordbook_id).append(",")
+                    .append(id).append(",").append("\"").append(next_time).append("\"").append(",")
+                    .append("NOW(),NOW()").append("),");
         }
 
         sql.setLength(sql.length() - 1);
@@ -141,13 +132,10 @@ public class WordServiceImpl implements WordService {
         if(count > 0){
             //更新学习数量
             wordMapper.updateLearnCount(wordbook_id,learner_id,count);
-            wordJson.create(200,"success");
-            return wordJson;
-
         }else {
-            wordJson.create(505,"新词保存失败");
+            response = Response.result(Constant.Error.WORD_BATCH_INSERT_ERROR);
         }
-        return wordJson;
+        return response;
     }
 
     /**
@@ -156,35 +144,31 @@ public class WordServiceImpl implements WordService {
      * @return
      */
     @Override
-    public WordJson updateWords(List<Word> words) {
-
-        wordJson = new WordJson();
+    public Response<?> updateWords(List<Word> words) {
+        Response<?> response = Response.success();
         StringBuilder sql = new StringBuilder();
         //ids的
         StringBuilder ids = new StringBuilder();
         sql.append("UPDATE memorize SET next_time = CASE ")
-                .append("WHEN memorized_count = 1 THEN ").append(" \""+NextTimeUtils.getNextTime(2, Calendar.getInstance())+"\" ")
-                .append("WHEN memorized_count = 2 THEN ").append(" \""+NextTimeUtils.getNextTime(3, Calendar.getInstance())+"\" ")
-                .append("WHEN memorized_count = 3 THEN ").append(" \""+NextTimeUtils.getNextTime(4, Calendar.getInstance())+"\" ")
-                .append("WHEN memorized_count = 4 THEN ").append(" \""+NextTimeUtils.getNextTime(5, Calendar.getInstance())+"\" ")
-                .append("WHEN memorized_count = 5 THEN ").append(" \""+NextTimeUtils.getNextTime(6, Calendar.getInstance())+"\" ")
-                .append("WHEN memorized_count = 6 THEN ").append(" \""+NextTimeUtils.getNextTime(7, Calendar.getInstance())+"\" ")
+                .append("WHEN memorized_count = 1 THEN ").append(" \"").append(NextTimeUtils.getNextTime(2, Calendar.getInstance())).append("\" ")
+                .append("WHEN memorized_count = 2 THEN ").append(" \"").append(NextTimeUtils.getNextTime(3, Calendar.getInstance())).append("\" ")
+                .append("WHEN memorized_count = 3 THEN ").append(" \"").append(NextTimeUtils.getNextTime(4, Calendar.getInstance())).append("\" ")
+                .append("WHEN memorized_count = 4 THEN ").append(" \"").append(NextTimeUtils.getNextTime(5, Calendar.getInstance())).append("\" ")
+                .append("WHEN memorized_count = 5 THEN ").append(" \"").append(NextTimeUtils.getNextTime(6, Calendar.getInstance())).append("\" ")
+                .append("WHEN memorized_count = 6 THEN ").append(" \"").append(NextTimeUtils.getNextTime(7, Calendar.getInstance())).append("\" ")
                 .append(" end,").append("memorized_count = memorized_count + 1 WHERE id IN (");
         for(Word word : words){
-            ids.append(word.getId()+",");
+            ids.append(word.getId()).append(",");
         }
-
         ids.setLength(ids.length() - 1);
-        sql.append(ids.toString()+");");
+        sql.append(ids.toString()).append(");");
         Integer count = wordMapper.updateReviewWords(sql.toString());
 
         //如果全部更新成功
-        if(count == words.size()){
-            wordJson.create(200,"success");
-        }else {
-            wordJson.create(506,"记忆表单词更新失败");
+        if(count != words.size()){
+            response = Response.result(Constant.Error.WORDBOOK_WORD_NOT_ALL_UPDATE);
         }
-        return wordJson;
+        return response;
     }
 
 

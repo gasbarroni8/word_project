@@ -32,14 +32,6 @@ public class WordBookController {
     @Autowired
     WordService wordService;
 
-    @Autowired
-    WordJson wordJson;
-
-    @Autowired
-    WordbookJson wordbookJson;
-
-    @Autowired
-    JsonBase jsonBase;
 
     //跳转至词库
     @RequestMapping("/gotoWordbook")
@@ -80,9 +72,8 @@ public class WordBookController {
      * @return
      */
     @RequestMapping(value = "/",produces = "application/json;charset=utf-8;")
-    public @ResponseBody WordbookJson getWordbooks(){
-        wordbookJson = wordbookService.getWordbooks();
-        return wordbookJson;
+    public @ResponseBody Response<?> getWordbooks(){
+        return wordbookService.getWordbooks();
     }
 
     /**
@@ -92,12 +83,11 @@ public class WordBookController {
      * @return
      */
     @RequestMapping(value = "/detail/{id}")
-    public @ResponseBody WordbookJson getWordbookDetail(@PathVariable("id") String id,
+    public @ResponseBody Response<?> getWordbookDetail(@PathVariable("id") String id,
                                                         HttpSession session){
         //获取学习者id
         Integer learner_id = (Integer) session.getAttribute("learnerId");
-        wordbookJson = wordbookService.getWordbookDetail(Integer.parseInt(id),learner_id);
-        return wordbookJson;
+        return wordbookService.getWordbookDetail(Integer.parseInt(id),learner_id);
     }
 
 
@@ -122,11 +112,10 @@ public class WordBookController {
      * @throws Exception
      */
     @RequestMapping(value = "/addWordbook/{wordbook_id}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase addWordbook(@PathVariable("wordbook_id") Integer wordbook_id, HttpSession session) throws Exception {
+    public @ResponseBody Response<?> addWordbook(@PathVariable("wordbook_id") Integer wordbook_id, HttpSession session) throws Exception {
         //获取学习者id
         Integer learnerId = (Integer) session.getAttribute("learnerId");
-        jsonBase = wordbookService.addWordbook(learnerId,wordbook_id);
-        return jsonBase;
+        return wordbookService.addWordbook(learnerId,wordbook_id);
     }
 
     /**
@@ -140,7 +129,8 @@ public class WordBookController {
     public String changeWordbook(@PathVariable("wordbook_id") Integer wordbook_id, HttpSession session){
         //获取学习者id
         Integer learnerId = (Integer) session.getAttribute("learnerId");
-        jsonBase = wordbookService.updateWordbookPlan(learnerId,wordbook_id);
+        // TODO 这里要加个判断
+        wordbookService.updateWordbookPlan(learnerId,wordbook_id);
         return "redirect:/wordbook/gotoMyWordbooks";
     }
 
@@ -150,12 +140,11 @@ public class WordBookController {
      * @return
      */
     @RequestMapping(value = "/myWordbooks" , produces = "application/json;charset=utf-8;")
-    public @ResponseBody WordbookJson myWordbooks(HttpSession session){
+    public @ResponseBody Response<?> myWordbooks(HttpSession session){
         //获取学习者id
        Integer learnerId = (Integer) session.getAttribute("learnerId");
         //session中保存我的词书
-        wordbookJson = wordbookService.findMyWordbooks(learnerId);
-        return wordbookJson;
+        return wordbookService.findMyWordbooks(learnerId);
     }
 
 
@@ -168,15 +157,14 @@ public class WordBookController {
      * @return
      */
     @RequestMapping(value = "/myWordbook/words/{wordbook_id}/{wordsType}" , produces = "application/json;charset=utf-8;")
-    public @ResponseBody WordJson myWordbookWords(
+    public @ResponseBody Response<?> myWordbookWords(
             @PathVariable("wordbook_id") Integer wordbook_id,
             @PathVariable("wordsType") Integer wordsType,
             @RequestBody PageUtil pageUtil,
             HttpSession session){
         Integer learner_id = (Integer) session.getAttribute("learnerId");
         pageUtil.renew();
-        wordJson = wordService.myWordbookWords(wordbook_id,learner_id,pageUtil,wordsType);
-        return wordJson;
+        return wordService.myWordbookWords(wordbook_id,learner_id,pageUtil,wordsType);
     }
 
     /**
@@ -189,13 +177,12 @@ public class WordBookController {
      * @return
      */
     @RequestMapping("/myWordbook/words/wordTypeChange/{wordbook_id}/{id}/{type}")
-    public @ResponseBody JsonBase wordTypeChange(@PathVariable("wordbook_id") Integer wordbook_id,
+    public @ResponseBody Response<?> wordTypeChange(@PathVariable("wordbook_id") Integer wordbook_id,
                                                  @PathVariable("id") Integer id,
                                                  @PathVariable("type") Integer type,
                                                  HttpSession session){
         Integer learner_id = (Integer) session.getAttribute("learnerId");
-        jsonBase = wordService.wordTypeChange(learner_id,wordbook_id,id,type);
-        return jsonBase;
+        return wordService.wordTypeChange(learner_id,wordbook_id,id,type);
     }
 
 
@@ -206,13 +193,11 @@ public class WordBookController {
      * @return
      */
     @RequestMapping(value = "/myWordbook/insert/{wordbook_id}" , produces = "application/json;charset=utf-8;")
-    public @ResponseBody WordJson insert(@PathVariable("wordbook_id") Integer wordbook_id,
+    public @ResponseBody Response<?> insert(@PathVariable("wordbook_id") Integer wordbook_id,
                                                   @RequestBody List<Long> ids,
                                                   HttpSession session){
         Integer learner_id = (Integer) session.getAttribute("learnerId");
-        wordJson = new WordJson();
-        wordJson = wordService.insertWords(wordbook_id,learner_id,ids);
-        return wordJson;
+        return wordService.insertWords(wordbook_id,learner_id,ids);
     }
 
     /**
@@ -222,10 +207,8 @@ public class WordBookController {
      * @return
      */
     @RequestMapping(value = "/myWordbook/review" , produces = "application/json;charset=utf-8;")
-    public @ResponseBody WordJson review(@RequestBody List<Word> words){
-        wordJson = new WordJson();
-        wordJson = wordService.updateWords(words);
-        return wordJson;
+    public @ResponseBody Response<?> review(@RequestBody List<Word> words){
+        return wordService.updateWords(words);
     }
 
 

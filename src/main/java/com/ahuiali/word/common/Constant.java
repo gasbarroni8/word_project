@@ -29,8 +29,18 @@ public class Constant {
         Result BLOCK_WORD = new Result("444", "敏感词汇");
 
         // 单词模块
+        Result WORDBOOK_NOT_FOUNDED = new Result("500", "找不到词书");
+        Result ADD_WORDBOOK_ERROR = new Result("501", "用户添加词书失败");
+        Result LEARNER_NOT_WORDBOOK = new Result("502", "用户无词书");
+        Result SET_NEW_WORDBOOK_PLAN_ERROR = new Result("503", "用户设置词书计划失败");
         Result WORDBOOK_EMPTY = new Result("504", "词书单词为空");
+        Result WORD_BATCH_INSERT_ERROR = new Result("505", "新词批量保存失败");
+        Result WORDBOOK_WORD_NOT_ALL_UPDATE = new Result("506", "记忆表中的单词没有全部更新成功");
         Result NO_REVIEW_WORD = new Result("507", "没有需要复习的单词");
+
+        // 700
+        Result WORD_PRE_NOT_FOUNDED = new Result("700", "该单词模糊查询无结果");
+
 
     }
 }
