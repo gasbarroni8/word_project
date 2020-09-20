@@ -25,10 +25,10 @@ $("#searchWord").keyup(function (event) {
             url: url,
             dataType: "json", //json类型
             success: function (result) {
-                if(result.code == 200){
+                if(result.code === "200"){
                     console.log(result)
                     $("#tips").html("");
-                    $.each(result.wordEctList, function (i,item) {
+                    $.each(result.data, function (i,item) {
                         $("#tips").append(" <div content='"+ item.word +"'>\n" +
                             "                        <li class=\"text-left\">"+ item.word +"</li>\n" +
                             "                        <li class=\"text-right\">"+ item.translation +"</li>\n" +

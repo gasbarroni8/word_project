@@ -1,5 +1,6 @@
 package com.ahuiali.word.controller;
 
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.json.WordEctDetailJson;
 import com.ahuiali.word.service.WordEctService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,10 @@ public class TestController {
 
 
     @RequestMapping(value = "/getWord/{word}",produces = "application/json;charset=utf-8;" )
-    public @ResponseBody WordEctDetailJson demoVue(@PathVariable("word") String word,
-                                                   HttpSession session){
-        wordEctDetailJson = wordEctService.findWordDetail(word, (Integer) session.getAttribute("learnerId"));
-        return wordEctDetailJson;
+    public @ResponseBody
+    Response<?> demoVue(@PathVariable("word") String word,
+                     HttpSession session){
+        return wordEctService.findWordDetail(word, (Integer) session.getAttribute("learnerId"));
     }
 
     @RequestMapping("/test")

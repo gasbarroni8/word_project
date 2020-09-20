@@ -207,8 +207,8 @@
         success: function(result) {
             console.log(result);
 
-            if(result.code == 200){
-                let word = result.wordEctDetail;
+            if(result.code === "200"){
+                let word = result.data;
                 //填入相应数据
                 wordName = word.word + "";
                 //搜索框自动填充(可能会耗费一些资源)

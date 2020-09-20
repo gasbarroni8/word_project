@@ -8,11 +8,11 @@ import com.ahuiali.word.json.WordEctJson;
 public interface WordEctService {
     Response<?> getWordsByPre(String wordpre);
 
-    WordEctDetailJson findWordDetail(String word, Integer learner_id);
+    Response<?> findWordDetail(String word, Integer learner_id);
 
-    WordEctJson findWord(String word, Integer learner_id);
+    Response<?> findWord(String word, Integer learner_id);
 
-    WordEctDetailJson findWordDetailNoRedis(String word, Integer learnerId);
+    Response<?> findWordDetailNoRedis(String word, Integer learnerId);
 
-    WordEctJson findWordNoRedis(String word, Integer learnerId);
+    Response<?> findWordNoRedis(String word, Integer learnerId);
 }

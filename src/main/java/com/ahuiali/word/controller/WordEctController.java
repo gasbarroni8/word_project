@@ -56,15 +56,13 @@ public class WordEctController {
      * @return
      */
     @RequestMapping(value = "/findWordDetailJson/{word}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody WordEctDetailJson findWordDetailJSON(@PathVariable("word") String word, HttpSession session){
+    public @ResponseBody Response<?> findWordDetailJSON(@PathVariable("word") String word, HttpSession session){
 
         Integer learnerId = (Integer) session.getAttribute("learnerId");
         //这个是使用了redis，不过，我服务器老是被攻击，redis老是不行，暂时不用它了
         //但至少说明，这个是能用的，而且速度还不错，要怪就怪服务器不行
 //        wordEctDetailJson = wordEctService.findWordDetail(word,learnerId);
-
-        wordEctDetailJson = wordEctService.findWordDetailNoRedis(word, learnerId);
-        return wordEctDetailJson;
+        return wordEctService.findWordDetailNoRedis(word, learnerId);
     }
 
 
@@ -84,13 +82,12 @@ public class WordEctController {
      * @return
      */
     @RequestMapping(value = "/findWord/{word}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody WordEctJson findWord(@PathVariable("word") String word,HttpSession session){
+    public @ResponseBody Response<?> findWord(@PathVariable("word") String word,HttpSession session){
         Integer learnerId = (Integer) session.getAttribute("learnerId");
         //这个是使用了redis，不过，我服务器老是被攻击，redis老是不行，暂时不用它了
         //但至少说明，这个是能用的，而且速度还不错，要怪就怪服务器不行
 //        wordEctJson = wordEctService.findWord(word,learnerId);
-        wordEctJson = wordEctService.findWordNoRedis(word, learnerId);
-        return wordEctJson;
+        return wordEctService.findWordNoRedis(word, learnerId);
     }
 
 }

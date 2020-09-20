@@ -40,6 +40,8 @@ public class Constant {
 
         // 700
         Result WORD_PRE_NOT_FOUNDED = new Result("700", "该单词模糊查询无结果");
+        Result WORDECT_NOT_FOUNDED = new Result("701", "数据库中找不到该单词");
+
 
 
     }

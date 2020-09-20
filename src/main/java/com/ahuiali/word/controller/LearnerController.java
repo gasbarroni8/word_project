@@ -3,8 +3,6 @@ package com.ahuiali.word.controller;
 
 import com.ahuiali.word.common.Constant;
 import com.ahuiali.word.common.resp.Response;
-import com.ahuiali.word.json.JsonBase;
-import com.ahuiali.word.json.LearnerJson;
 import com.ahuiali.word.pojo.Learner;
 import com.ahuiali.word.service.LearnerService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +23,6 @@ public class LearnerController {
 
     @Autowired
     private LearnerService learnerService;
-
-    @Autowired
-    private JsonBase jsonBase;
-
-    @Autowired
-    private LearnerJson learnerJson;
 
     /**
      * 跳转至个人界面
@@ -91,7 +83,7 @@ public class LearnerController {
         //根据邮箱和密码查询
         Response<Learner> response = (Response<Learner>) learnerService.queryLearner(learner);
         if("200".equals(response.getCode())){
-            session.setAttribute("learnerId",response.getData().getId());
+            session.setAttribute("learnerId", response.getData().getId());
             //七天有效
             if(isRemember == 1){
                 session.setMaxInactiveInterval(7*24*60);

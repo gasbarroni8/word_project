@@ -26,13 +26,7 @@ import java.util.List;
 public class WordEctServiceImpl implements WordEctService {
 
     @Autowired
-    WordEctJson wordEctJson;
-
-    @Autowired
     WordEctMapper wordEctMapper;
-
-    @Autowired
-    WordEctDetailJson wordEctDetailJson;
 
     @Autowired
     StringRedisTemplate template;
@@ -56,7 +50,6 @@ public class WordEctServiceImpl implements WordEctService {
      */
     @Override
     public Response<?> getWordsByPre(String wordpre) {
-        wordEctJson = new WordEctJson();
         Response<List<WordEct>> response = Response.success();
         //数据库中查找
         List<WordEct> wordEctList = wordEctMapper.getWordsByPre(wordpre);
@@ -75,12 +68,12 @@ public class WordEctServiceImpl implements WordEctService {
      * @return
      */
     @Override
-    public WordEctDetailJson findWordDetail(String word, Integer learner_id) {
-        wordEctDetailJson = new WordEctDetailJson();
+    public Response<?> findWordDetail(String word, Integer learner_id) {
+        Response<WordEctDetail> response = Response.success();
         //先去redis查有没有该单词
         boolean hasWordKey = template.opsForHash().hasKey("words",word);
         //单词详细信息
-        WordEctDetail wordEctDetail;
+        WordEctDetail wordEctDetail = new WordEctDetail();
         //例句
         List<Sentence> sentences = new ArrayList<>();
         //例句id字符串
@@ -129,9 +122,7 @@ public class WordEctServiceImpl implements WordEctService {
             wordEctDetail = wordEctMapper.findWordEctDetail(word,learner_id);
             //数据库中仍找不到
             if(wordEctDetail == null ||wordEctDetail.getId() == null){
-                wordEctDetailJson.create(701,"数据库中找不到该单词");
-
-                return wordEctDetailJson;
+                return Response.result(Constant.Error.WORDECT_NOT_FOUNDED);
             }else {
                 //数据库中查询到了单词
                 //查询例句id字符串
@@ -140,16 +131,12 @@ public class WordEctServiceImpl implements WordEctService {
                 if(senStr != null && !"".equals(senStr)){
                     //需要在数据库中查
                     searchSensInDB = true;
-
                 }
             }
-
         }
-
         //是否需要在数据库中查询例句
         if(searchSensInDB){
             sens = Arrays.asList(senStr.split(","));
-
             //处理例句id字符串
             StringBuilder sb = new StringBuilder();
             sb.append("select id, sentence_en, sentence_cn from sentence where");
@@ -159,16 +146,13 @@ public class WordEctServiceImpl implements WordEctService {
             sb.append("id = 0;");
             sentences = sentencesMapper.findSentences(sb.toString());
         }
-
         //清除无关数据(*)
         wordEctDetail.setSentence_list("");
         //设置例句
         wordEctDetail.setSentences(sentences);
         //将单词详细加入json
-        wordEctDetailJson.setWordEctDetail(wordEctDetail);
-        //成功，返回200
-        wordEctDetailJson.create(200,"success");
-        return wordEctDetailJson;
+        response.setData(wordEctDetail);
+        return response;
     }
 
     /**
@@ -178,10 +162,8 @@ public class WordEctServiceImpl implements WordEctService {
      * @return
      */
     @Override
-    public WordEctJson findWord(String word, Integer learner_id) {
-
-        wordEctJson = new WordEctJson();
-
+    public Response<?> findWord(String word, Integer learner_id) {
+        Response<WordEct> response = Response.success();
         //先去redis查有没有该单词
         boolean hasWordKey = template.opsForHash().hasKey("words",word);
         String wordRedis = "";
@@ -198,8 +180,7 @@ public class WordEctServiceImpl implements WordEctService {
             //数据库中查询
             wordEct = wordEctMapper.findWord(word);
             if(wordEct == null){
-                wordEctJson.create(701,"数据库中找不到该单词");
-                return wordEctJson;
+                return Response.result(Constant.Error.WORDECT_NOT_FOUNDED);
             }
         }
         //查询该单词是否已收藏
@@ -210,11 +191,7 @@ public class WordEctServiceImpl implements WordEctService {
         }else {
             wordEct.setNotebook_word_id(0);
         }
-
-        wordEctJson.setWordEct(wordEct);
-        wordEctJson.create(200,"success");
-
-        return wordEctJson;
+        return response;
     }
 
     /**
@@ -224,11 +201,10 @@ public class WordEctServiceImpl implements WordEctService {
      * @return
      */
     @Override
-    public WordEctDetailJson findWordDetailNoRedis(String word, Integer learnerId) {
-        wordEctDetailJson = new WordEctDetailJson();
+    public Response<?> findWordDetailNoRedis(String word, Integer learnerId) {
+        Response<WordEctDetail> response = Response.success();
         //单词详细信息
         WordEctDetail wordEctDetail = wordEctMapper.findWordEctDetail(word,learnerId);
-
         String senStr = wordEctMapper.findWordSentenceIds(wordEctDetail.getWord());
         if(!"".equals(senStr) && senStr != null){
             List<String > sens = Arrays.asList(senStr.split(","));
@@ -256,19 +232,16 @@ public class WordEctServiceImpl implements WordEctService {
         wordEctDetail.setSentence_list("");
 
         //将单词详细加入json
-        wordEctDetailJson.setWordEctDetail(wordEctDetail);
-        //成功，返回200
-        wordEctDetailJson.create(200,"success");
-        return wordEctDetailJson;
+        response.setData(wordEctDetail);
+        return response;
     }
 
     @Override
-    public WordEctJson findWordNoRedis(String word, Integer learnerId) {
-        wordEctJson = new WordEctJson();
+    public Response<?> findWordNoRedis(String word, Integer learnerId) {
+        Response<WordEct> response = Response.success();
         wordEct = wordEctMapper.findWord(word);
         if(wordEct == null){
-            wordEctJson.create(701,"数据库中找不到该单词");
-            return wordEctJson;
+            return Response.result(Constant.Error.WORDECT_NOT_FOUNDED);
         }
         //查询该单词是否已收藏
         Integer notebookId = notebookMapper.findWordExistNotebooks(wordEct.getWord(),learnerId);
@@ -278,10 +251,7 @@ public class WordEctServiceImpl implements WordEctService {
         }else {
             wordEct.setNotebook_word_id(0);
         }
-
-        wordEctJson.setWordEct(wordEct);
-        wordEctJson.create(200,"success");
-
-        return wordEctJson;
+        response.setData(wordEct);
+        return response;
     }
 }
