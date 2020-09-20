@@ -1,9 +1,7 @@
 package com.ahuiali.word.service.impl;
 
-import com.ahuiali.word.json.BookJson;
-import com.ahuiali.word.json.ChapterJson;
-import com.ahuiali.word.json.JsonBase;
-import com.ahuiali.word.json.ParagraphJson;
+import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.mapper.BookMapper;
 import com.ahuiali.word.pojo.Book;
 import com.ahuiali.word.pojo.Chapter;
@@ -25,18 +23,6 @@ public class BookServiceImpl implements BookService {
     BookMapper bookMapper;
 
     @Autowired
-    BookJson bookJson;
-
-    @Autowired
-    JsonBase jsonBase;
-
-    @Autowired
-    ParagraphJson paragraphJson;
-
-    @Autowired
-    ChapterJson chapterJson;
-
-    @Autowired
     StringRedisTemplate template;
 
     /**
@@ -44,15 +30,14 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public BookJson findHotBooks() {
+    public Response<?> findHotBooks() {
+        Response<List<Book>> response = Response.success();
         List<Book> books = bookMapper.getHotBooks();
-        if(books.size() > 0){
-            bookJson.setBooks(books);
-            bookJson.create(200,"success");
-        }else {
-            bookJson.create(805,"热门书籍为空");
+        if(books.size() <= 0){
+            return Response.result(Constant.Error.BOOK_HOT_EMPTY);
         }
-        return bookJson;
+        response.setData(books);
+        return response;
     }
 
     /**
@@ -62,17 +47,14 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public BookJson getBooksByTag(String tag, PageUtil pageUtil) {
-        bookJson = new BookJson();
+    public Response<?> getBooksByTag(String tag, PageUtil pageUtil) {
+        Response<List<Book>> response = Response.success();
         List<Book> books = bookMapper.getBooksByTag(tag,pageUtil);
-        if(books.size() > 0){
-            bookJson.setBooks(books);
-            bookJson.create(200,"success");
-        }else{
-            bookJson.create(800,"找不到书籍");
+        if(books.size() <= 0){
+            return Response.result(Constant.Error.BOOK_NOT_FOUNDED);
         }
-
-        return bookJson;
+        response.setData(books);
+        return response;
     }
 
     /**
@@ -82,27 +64,20 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public BookJson getBookDetail(Integer index_book, Integer learner_id) {
-
-        //要改！
-
-        bookJson = new BookJson();
-
-        Book book = bookMapper.findBookByIndex(index_book,learner_id);
+    public Response<?> getBookDetail(Integer index_book, Integer learner_id) {
+        Response<Book> response = Response.success();
+        Book book = bookMapper.findBookByIndex(index_book, learner_id);
         if(book == null){
-            bookJson.create(800,"没有该书籍");
-            return bookJson;
+            return Response.result(Constant.Error.BOOK_NOT_FOUNDED);
         }
-        System.out.println(book);
+        // TODO 有空看看这里的注释代码
         //查询该用户有没有将该本书加入书架
 //        String  count = bookMapper.findIsAddThisBook(index_book,learner_id);
         //有则将is_add设置为1
 //        if(count > 0)
 //            bookJson.setIs_add(1);
-        bookJson.setBook(book);
-        bookJson.create(200,"success");
-
-        return bookJson;
+        response.setData(book);
+        return response;
     }
 
     /**
@@ -111,18 +86,14 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public BookJson getMyBooks(Integer learner_id) {
-
-        bookJson = new BookJson();
-
+    public Response<?> getMyBooks(Integer learner_id) {
+        Response<List<Book>> response = Response.success();
         List<Book> books = bookMapper.getMyBooks(learner_id);
-        if(books.size() > 0 ){
-            bookJson.setBooks(books);
-            bookJson.create(200,"success");
-        }else{
-            bookJson.create(801,"用户书架为空");
+        if(books.size() <= 0 ){
+            return Response.result(Constant.Error.BOOKSHELF_EMPTY);
         }
-        return bookJson;
+        response.setData(books);
+        return response;
     }
 
     /**
@@ -131,16 +102,14 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public ChapterJson findParasByChapterIndex(Integer chapter_index) {
-        chapterJson = new ChapterJson();
+    public Response<?> findParasByChapterIndex(Integer chapter_index) {
+        Response<Chapter> response = Response.success();
         Chapter chapter = bookMapper.getParaByChapterIndex(chapter_index);
-        if(chapter != null){
-            chapterJson.setChapter(chapter);
-            chapterJson.create(200,"success");
-        } else{
-            chapterJson.create(807,"章节内容为空");
+        if(chapter == null){
+            return Response.result(Constant.Error.CHAPTER_EMPTY);
         }
-        return chapterJson;
+        response.setData(chapter);
+        return response;
     }
 
     /**
@@ -150,17 +119,14 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public ChapterJson getAllChapterByBookIndex(Integer index_book, PageUtil pageUtil) {
-        ChapterJson chapterJson = new ChapterJson();
+    public Response<?> getAllChapterByBookIndex(Integer index_book, PageUtil pageUtil) {
+        Response<List<Chapter>> response = Response.success();
         List<Chapter> chapters = bookMapper.getAllChapterByBookIndex(index_book,pageUtil);
-        if(chapters.size()>0){
-            chapterJson.setChapters(chapters);
-            chapterJson.create(200,"success");
-        } else{
-            chapterJson.create(806,"书籍章节列表为空");
+        if(chapters.size() <= 0){
+            return Response.result(Constant.Error.CHAPTER_LIST_EMPTY);
         }
-
-        return chapterJson;
+        response.setData(chapters);
+        return response;
     }
 
     /**
@@ -170,16 +136,14 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public JsonBase addBook(Integer index_book, Integer learner_id) {
-        jsonBase = new JsonBase();
+    public Response<?> addBook(Integer index_book, Integer learner_id) {
+        Response<?> response = Response.success();
         String lastest_loc = index_book+"0001_0";
         Integer count = bookMapper.addBook(index_book,learner_id,lastest_loc);
-        if(count > 0){
-            jsonBase.create(200,"success");
-        }else {
-            jsonBase.create(802,"书籍加入书架失败");
+        if(count <= 0){
+            response =  Response.result(Constant.Error.BOOK_ADD_ERROR);
         }
-        return jsonBase;
+        return response;
     }
 
     /**
@@ -189,16 +153,13 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public JsonBase removeBook(Integer learner_id, Integer index_book) {
-        jsonBase = new JsonBase();
-
+    public Response<?> removeBook(Integer learner_id, Integer index_book) {
+        Response<?> response = Response.success();
         Integer count = bookMapper.removeBook(learner_id,index_book);
-        if(count > 0){
-            jsonBase.create(200,"success");
-        }else {
-            jsonBase.create(803,"书籍移出书架失败");
+        if(count <= 0){
+            response =  Response.result(Constant.Error.BOOK_REMOVE_ERROR);
         }
-        return jsonBase;
+        return response;
     }
 
     /**
@@ -209,34 +170,31 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public JsonBase updateBook(Integer learner_id, Integer book_index, String lastest_loc) {
-        jsonBase = new JsonBase();
-
+    public Response<?> updateBook(Integer learner_id, Integer book_index, String lastest_loc) {
+        Response<?> response = Response.success();
         Integer count = bookMapper.updateBook(learner_id,book_index,lastest_loc);
-        if(count > 0){
-            jsonBase.create(200,"success");
-        }else {
-            jsonBase.create(804,"更新书籍最新阅读位置失败");
+        if(count <= 0){
+            response =  Response.result(Constant.Error.BOOK_LOC_UPDATE_ERROR);
         }
-        return jsonBase;
+        return response;
     }
 
 
-
+    /**
+     * 根据段落id查询相应的中文翻译
+     *
+     * @param para_id
+     * @return
+     */
     @Override
-    public ParagraphJson findParaCNById(Integer para_id) {
-        paragraphJson = new ParagraphJson();
-
+    public Response<?> findParaCNById(Integer para_id) {
+        Response<Paragraph> response = Response.success();
         Paragraph paragraph = bookMapper.findParaCNById(para_id);
-
-        if(paragraph != null){
-            paragraphJson.setParagraph(paragraph);
-            paragraphJson.create(200,"success");
-        } else{
-            paragraphJson.create(808,"段落翻译为空");
+        if(paragraph == null){
+            return Response.result(Constant.Error.PARA_CN_EMPTY);
         }
-
-        return paragraphJson;
+        response.setData(paragraph);
+        return response;
     }
 
     /**
@@ -245,16 +203,13 @@ public class BookServiceImpl implements BookService {
      * @return
      */
     @Override
-    public BookJson getBooksByName(String bookName) {
-        bookJson = new BookJson();
-
+    public Response<?> getBooksByName(String bookName) {
+        Response<List<Book>> response = Response.success();
         List<Book> books = bookMapper.getBooksByName(bookName);
-        if(books.size() > 0){
-            bookJson.setBooks(books);
-            bookJson.create(200,"success");
-        }else {
-            bookJson.create(800,"找不到书籍");
+        if(books.size() <= 0){
+            return Response.result(Constant.Error.BOOK_NOT_FOUNDED);
         }
-        return bookJson;
+        response.setData(books);
+        return response;
     }
 }

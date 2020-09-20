@@ -157,16 +157,16 @@
         let val = $(this).children('option:selected').val();
         $(".tags select").css("background","#ff9444");
         $(this).css("background","#ffb04e");
-        if("type" == idType){
+        if("type" === idType){
             type = val;
-        }else if("long" == idType){
+        }else if("long" === idType){
             long = val;
-        }else if("hard" == idType){
+        }else if("hard" === idType){
             hard = val;
         }
         //参数
         let bookType = type + "_" + hard + "_" + long;
-        if(bookType == "0_0_0"){
+        if(bookType === "0_0_0"){
             //就是hotbook咯
             $(".hotbooks").fadeIn(300);
             $(".hotTags").addClass("hotTagsActive");
@@ -186,13 +186,13 @@
             success: function (result) {
                 // console.log(result);
                 $(".hotTags").removeClass("hotTagsActive");
-                if(result.code === 200){
+                if(result.code === "200"){
                     //暂不自增
                     // curr++;
 
                     $(".hotbooks").fadeOut(300);
                     $(".tagBooks").html("");
-                    $.each(result.books,function (i,item) {
+                    $.each(result.data,function (i,item) {
                         // $("#hotbooks").append("<a href='/book/gotoBookDetail?index_book="+ item.index_book+"'>"+item.title+"</a><br>")
 
                         $(".tagBooks").append("<div class=\"book\" >\n" +
@@ -204,7 +204,7 @@
 
                     })
                     $(".tagBooks").fadeIn(300);
-                }else if(result.code == 800){
+                }else if(result.code === "800"){
                     //找不到书籍
                     $(".tagBooks").html("<div class=\"book\" >\n" +
                         "                <a href=\"#\"><img src=\"/img/book/none.png\" ></a>\n" +
@@ -247,12 +247,12 @@
                    success: function (result) {
                        // console.log(result);
                        $(".hotTags").removeClass("hotTagsActive");
-                       if(result.code === 200){
+                       if(result.code === "200"){
 
 
                            $(".hotbooks").fadeOut(300);
                            $(".tagBooks").html("");
-                           $.each(result.books,function (i,item) {
+                           $.each(result.data,function (i,item) {
 
                                $(".tagBooks").append("<div class=\"book\" >\n" +
                                    "                <a href=\"/book/gotoBookDetail?index_book=" + item.index_book + "\"><img src=\""+ item.img+"\" ></a>\n" +
@@ -263,7 +263,7 @@
 
                            })
                            $(".tagBooks").fadeIn(300);
-                       }else if(result.code == 800){
+                       }else if(result.code === "800"){
                            //找不到书籍
                            $(".tagBooks").html("<div class=\"book\" >\n" +
                                "                <a href=\"#\"><img src=\"/img/book/none.png\" ></a>\n" +
@@ -294,8 +294,8 @@
             dataType: "json", //json类型
             success: function (result) {
                 // console.log(result);
-                if(result.code === 200){
-                    $.each(result.books,function (i,item) {
+                if(result.code === "200"){
+                    $.each(result.data,function (i,item) {
                         // $("#hotbooks").append("<a href='/book/gotoBookDetail?index_book="+ item.index_book+"'>"+item.title+"</a><br>")
 
                         $(".hotbooks").append("<div class=\"book\" >\n" +

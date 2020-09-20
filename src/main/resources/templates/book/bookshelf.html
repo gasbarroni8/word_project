@@ -110,8 +110,8 @@
             dataType: "json", //json类型
             success: function (result) {
                 // console.log(result);
-                if(result.code === 200){
-                    $.each(result.books,function (i,item) {
+                if(result.code === "200"){
+                    $.each(result.data,function (i,item) {
                         let a;
 
                         if( item.lastest_loc != "" && item.lastest_loc != null && item.lastest_loc.length != 0){

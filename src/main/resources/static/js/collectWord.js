@@ -41,9 +41,9 @@ $(".collectWordBox").click(function () {
                 url:"/notebook/myNotebookJson",
                 dataType: "json",
                 success:function (result) {
-                    if(result.code == 200){
+                    if(result.code === "200"){
                         console.log(result);
-                        $.each(result.notebooks,function (i,item) {
+                        $.each(result.data, function (i,item) {
                             $(".notebookListBoxLists")
                                 .append("<li content='"+ item.id +"'>" +item.name + "</li>")
 
@@ -84,12 +84,12 @@ $(".collectWordBox").click(function () {
                                 url:"/notebook/addWordEct/"+ notebook_id,
                                 dataType: "json",
                                 success:function (result) {
-                                    if(result.code == 200){
+                                    if(result.code === "200"){
                                         console.log(result)
                                         //收藏成功
                                         $(".collectWordBox").html("已收藏")
                                             .css({"color":"#fdf1da","background-color":"#f27c7c"})
-                                            .attr("content", result.wordEct.id);
+                                            .attr("content", result.data.id);
 
                                         //提示框
                                         $(".tipBox").html("已收藏该单词!")
@@ -98,7 +98,7 @@ $(".collectWordBox").click(function () {
                                         //关闭盒子
                                         closeNotebookBox();
 
-                                    }else if(result.code == 604){
+                                    }else if(result.code === "604"){
                                         //生词本单词收藏失败
                                         //打印
                                         console.log(result);
@@ -113,7 +113,7 @@ $(".collectWordBox").click(function () {
                             })
                         });
 
-                    }else if(result.code == 600){
+                    }else if(result.code === "600"){
                         //生词本单词删除失败
                         //打印
                         console.log(result);
@@ -139,7 +139,7 @@ $(".collectWordBox").click(function () {
             url:url,
             dataType: "json",
             success:function (result) {
-                if(result.code == 200){
+                if(result.code === "200"){
                     //删除成功
                     $(".collectWordBox").html("收藏")
                         .css({"color":"#63615c","background-color":"#bddffa"})
@@ -149,7 +149,7 @@ $(".collectWordBox").click(function () {
                     $(".tipBox").html("已取消收藏该单词!")
                         .show().fadeOut(1000);
 
-                }else if(result.code == 603){
+                }else if(result.code === "603"){
                     //生词本单词删除失败
                     //打印
                     console.log(result);

@@ -1,5 +1,6 @@
 package com.ahuiali.word.service;
 
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.json.BookJson;
 import com.ahuiali.word.json.ChapterJson;
 import com.ahuiali.word.json.JsonBase;
@@ -7,25 +8,25 @@ import com.ahuiali.word.json.ParagraphJson;
 import com.ahuiali.word.common.utils.PageUtil;
 
 public interface BookService {
-    BookJson findHotBooks();
+    Response<?> findHotBooks();
 
-    BookJson getBooksByTag(String tag, PageUtil pageUtil);
+    Response<?> getBooksByTag(String tag, PageUtil pageUtil);
 
-    BookJson getBookDetail(Integer book_index, Integer learner_id);
+    Response<?> getBookDetail(Integer book_index, Integer learner_id);
 
-    BookJson getMyBooks(Integer learner_id);
+    Response<?> getMyBooks(Integer learner_id);
 
-    ChapterJson findParasByChapterIndex(Integer chapter_index);
+    Response<?> findParasByChapterIndex(Integer chapter_index);
 
-    ChapterJson getAllChapterByBookIndex(Integer index_book, PageUtil pageUtil);
+    Response<?> getAllChapterByBookIndex(Integer index_book, PageUtil pageUtil);
 
-    JsonBase addBook(Integer index_book, Integer learner_id);
+    Response<?> addBook(Integer index_book, Integer learner_id);
 
-    JsonBase removeBook(Integer learner_id, Integer index_book);
+    Response<?> removeBook(Integer learner_id, Integer index_book);
 
-    JsonBase updateBook(Integer learner_id, Integer book_index, String lastest_loc);
+    Response<?> updateBook(Integer learner_id, Integer book_index, String lastest_loc);
 
-    ParagraphJson findParaCNById(Integer para_id);
+    Response<?> findParaCNById(Integer para_id);
 
-    BookJson getBooksByName(String bookName);
+    Response<?> getBooksByName(String bookName);
 }

@@ -275,8 +275,8 @@
                 dataType: "json", //json类型
                 success: function (result) {
                     // console.log(result);
-                    if(result.code === 200){
-                        let word = result.wordEct;
+                    if(result.code === "200"){
+                        let word = result.data;
                         //填入相应数据
                         wordName = word.word + "";
                         //搜索框自动填充(可能会耗费一些资源)
@@ -291,11 +291,15 @@
                         //单词收藏处理
                         //wordEctDetail.notebook_id不等于0就说明已经收藏过了
                         //这里的notebook_id其实是notebook_word表的id,只是借用这个属性
+                        console.log(result.data);
                         if(word.notebook_word_id != 0){
                             $(".collectWordBox").html("已收藏")
                                 .css({"color":"#fdf1da","background-color":"#f27c7c"})
                                 .attr("content", word.notebook_word_id);
-
+                        } else {
+                            $(".collectWordBox").html("收藏")
+                                .css({"color":"#63615c","background-color":"#bddffa"})
+                                .attr("content", word.notebook_word_id);
                         }
 
                         //释义处理，因为这个结果返回的释义用\n换行，所以要将其替换为<br>
@@ -365,9 +369,9 @@
             dataType: "json", //json类型
             success: function (result) {
                 // console.log(result);
-                if(result.code === 200){
-                    $(".chapterName").html("<p>" +result.chapter.chapter_name+  "</p>")
-                    $.each(result.chapter.paragraphs,function (i,item) {
+                if(result.code === "200"){
+                    $(".chapterName").html("<p>" +result.data.chapter_name+  "</p>")
+                    $.each(result.data.paragraphs,function (i,item) {
                         if(i == 0){
                             reading_id = item.id;
                         }
@@ -401,9 +405,9 @@
                             dataType: "json", //json类型
                             success: function (result) {
                                 // console.log(result);
-                                if(result.code === 200){
+                                if(result.code === "200"){
                                     // alert(result.paragraph.para_cn);
-                                        $("#sentenceMeaning").html("<p>" + result.paragraph.para_cn +"</p>")
+                                        $("#sentenceMeaning").html("<p>" + result.data.para_cn +"</p>")
                                         $("#sentenceMeaning").fadeIn(200);
                                         $(".functionTab,.topTab,#wordMeaning").fadeOut(200);
                                 }
@@ -451,9 +455,9 @@
                     dataType: "json", //json类型
                     success: function (result) {
                         // console.log(result);
-                        if(result.code === 200){
+                        if(result.code === "200"){
                             curr++;
-                            $.each(result.chapters,function (i,item) {
+                            $.each(result.data, function (i,item) {
                                 //当前目录
                                 if(item.chapter_index == chapter_index){
                                     $("#chaptersUL").append("<li ><a style='color:#269abc' href=\"/book/gotoRead?chapter_index="+ item.chapter_index +"&from="+ from +"\">"+ item.chapter_name +"</a></li>")

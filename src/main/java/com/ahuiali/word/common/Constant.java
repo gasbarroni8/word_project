@@ -52,6 +52,17 @@ public class Constant {
         Result WORD_PRE_NOT_FOUNDED = new Result("700", "该单词模糊查询无结果");
         Result WORDECT_NOT_FOUNDED = new Result("701", "数据库中找不到该单词");
 
+        // 小说模块
+        Result BOOK_NOT_FOUNDED = new Result("800", "找不到书籍");
+        Result BOOKSHELF_EMPTY = new Result("801", "用户书架为空");
+        Result BOOK_ADD_ERROR = new Result("802", "书籍加入书架失败");
+        Result BOOK_REMOVE_ERROR = new Result("803", "书籍移出书架失败");
+        Result BOOK_LOC_UPDATE_ERROR = new Result("804", "更新书籍最新阅读位置失败");
+        Result BOOK_HOT_EMPTY = new Result("805", "热门书籍为空");
+        Result CHAPTER_LIST_EMPTY = new Result("806", "书籍章节列表为空");
+        Result CHAPTER_EMPTY = new Result("807", "章节内容为空");
+        Result PARA_CN_EMPTY = new Result("808", "段落翻译为空");
+
 
 
     }

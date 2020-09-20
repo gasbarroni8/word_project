@@ -159,7 +159,7 @@
     //加入书架/移除
     $(".addBookBtn").click(function () {
        let a = $(".addOrRemoveBook").attr("content");
-       if("add" == a){
+       if("add" === a){
            //添加该书籍
            $.ajax({
                type: "post",
@@ -168,7 +168,7 @@
                url: "/book/addBook/"+index_book,
                dataType: "json", //json类型
                success: function (result) {
-                   if(result.code == 200){
+                   if(result.code === "200"){
                        $('.addOrRemoveBook').html("移除书架");
                        $(".addOrRemoveBook").attr("content","remove");
                        $(".tipBox").html("已加入书架！");
@@ -179,14 +179,13 @@
                    }
 
 
-
                },
                error: function (errmsg) {
                    console.log("Ajax获取服务器数据出错了！" + errmsg);
                }
            })
 
-       }else if("remove" == a){
+       }else if("remove" === a){
            //移除该书籍
            $.ajax({
                type: "post",
@@ -195,7 +194,7 @@
                url: "/book/remove/"+index_book,
                dataType: "json", //json类型
                success: function (result) {
-                   if(result.code == 200){
+                   if(result.code === "200"){
                        $('.addOrRemoveBook').html("加入书架");
                        $(".addOrRemoveBook").attr("content","add");
                        $(".tipBox").html("已从书架移除！");
@@ -204,9 +203,6 @@
                    }else {
                        console.log(result)
                    }
-
-
-
                },
                error: function (errmsg) {
                    console.log("Ajax获取服务器数据出错了！" + errmsg);
@@ -214,6 +210,9 @@
            })
 
        }
+        let href = "/book/gotoRead?chapter_index="+(index_book*10000+1)+"&from=store";
+        $(".gotoRead p").html("立即阅读");
+        $('.gotoRead').attr('href', href);
     });
 
 
@@ -250,9 +249,9 @@
                 dataType: "json", //json类型
                 success: function (result) {
                     // console.log(result);
-                    if(result.code === 200){
+                    if(result.code === "200"){
                         curr++;
-                        $.each(result.chapters,function (i,item) {
+                        $.each(result.data,function (i,item) {
                             // $("#chaptersList").append("<a href='/book/gotoRead?chapter_index="+ item.chapter_index+"'>"+item.chapter_name+"</a><br>")
                             $("#chaptersList")
                                 .append("<li><a href=\"/book/gotoRead?chapter_index="+ item.chapter_index +"&from=store\">"+ item.chapter_name +"</a></li>")
@@ -283,8 +282,8 @@
             success: function (result) {
                 // console.log(result);
 
-                if(result.code == 200){
-                    let book = result.book;
+                if(result.code === "200"){
+                    let book = result.data;
                     let href = "/book/gotoRead?chapter_index="+(book.index_book*10000+1)+"&from=store";
                     //lastest_loc有值说明用户已经加入的
                     // console.log(typeof book.lastest_loc)
@@ -302,8 +301,6 @@
                     $('.summary').html("<P>" +book.summary+  "</P>")
                     // $.each(result)
                 }
-
-
 
             },
             error: function (errmsg) {

@@ -28,8 +28,7 @@ public class NotebookController {
      * @return
      */
     @RequestMapping(value = "/gotoNotebook")
-    public String myNotebook(HttpSession session, Map map){
-
+    public String myNotebook(){
         return "/notebook/notebooks";
     }
 

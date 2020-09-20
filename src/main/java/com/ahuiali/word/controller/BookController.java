@@ -1,9 +1,6 @@
 package com.ahuiali.word.controller;
 
-import com.ahuiali.word.json.BookJson;
-import com.ahuiali.word.json.ChapterJson;
-import com.ahuiali.word.json.JsonBase;
-import com.ahuiali.word.json.ParagraphJson;
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.service.BookService;
 import com.ahuiali.word.common.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +17,6 @@ public class BookController {
 
     @Autowired
     BookService bookService;
-
-    @Autowired
-    BookJson bookJson;
-
-    @Autowired
-    JsonBase jsonBase;
-
-    @Autowired
-    ChapterJson chapterJson;
-
-    @Autowired
-    ParagraphJson paragraphJson;
 
     /**
      * 跳转至书城
@@ -75,9 +60,8 @@ public class BookController {
      * @return
      */
     @RequestMapping(value = "/hotbooks",produces = "application/json;charset=utf-8;")
-    public @ResponseBody BookJson hotbooks(){
-        bookJson = bookService.findHotBooks();
-        return bookJson;
+    public @ResponseBody Response<?> hotbooks(){
+        return bookService.findHotBooks();
     }
 
     /**
@@ -86,9 +70,8 @@ public class BookController {
      * @return
      */
     @RequestMapping(value = "/getCn/{para_id}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody ParagraphJson getCn(@PathVariable("para_id") Integer para_id){
-        paragraphJson = bookService.findParaCNById(para_id);
-        return paragraphJson;
+    public @ResponseBody Response<?> getCn(@PathVariable("para_id") Integer para_id){
+        return bookService.findParaCNById(para_id);
     }
 
     /**
@@ -98,13 +81,10 @@ public class BookController {
      * @return
      */
     @RequestMapping(value = "/tagbooks/{tag}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody BookJson getBooksByTag(@PathVariable("tag") String tag, @RequestBody PageUtil pageUtil){
+    public @ResponseBody Response<?> getBooksByTag(@PathVariable("tag") String tag, @RequestBody PageUtil pageUtil){
         tag = tag.replaceAll("0","%");
-
         pageUtil.renew();
-
-        bookJson = bookService.getBooksByTag(tag,pageUtil);
-        return bookJson;
+        return bookService.getBooksByTag(tag,pageUtil);
     }
 
     /**
@@ -114,9 +94,8 @@ public class BookController {
      * @return
      */
     @RequestMapping(value = "/getBookByName/{bookName}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody BookJson getBooksByName(@PathVariable("bookName") String bookName){
-        bookJson = bookService.getBooksByName(bookName);
-        return bookJson;
+    public @ResponseBody Response<?> getBooksByName(@PathVariable("bookName") String bookName){
+        return bookService.getBooksByName(bookName);
     }
 
     /**
@@ -125,11 +104,10 @@ public class BookController {
      * @return
      */
     @RequestMapping(value = "/bookDetail/{index_book}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody BookJson getBookDetail(@PathVariable("index_book") Integer index_book, HttpSession session){
+    public @ResponseBody Response<?> getBookDetail(@PathVariable("index_book") Integer index_book, HttpSession session){
 
         Integer learner_id = (Integer) session.getAttribute("learnerId");
-        bookJson = bookService.getBookDetail(index_book,learner_id);
-        return bookJson;
+        return bookService.getBookDetail(index_book,learner_id);
     }
 
     /**
@@ -138,11 +116,10 @@ public class BookController {
      * @return
      */
     @RequestMapping(value = "/mybook",produces = "application/json;charset=utf-8;")
-    public @ResponseBody BookJson getMyBooks(HttpSession session){
+    public @ResponseBody Response<?> getMyBooks(HttpSession session){
 
         Integer learner_id = (Integer) session.getAttribute("learnerId");
-        bookJson = bookService.getMyBooks(learner_id);
-        return bookJson;
+        return bookService.getMyBooks(learner_id);
     }
 
 
@@ -153,33 +130,22 @@ public class BookController {
      * @return
      */
     @RequestMapping(value = "/mybook/chapters/{index_book}")
-    public @ResponseBody ChapterJson listChapters(@PathVariable("index_book") Integer index_book,
+    public @ResponseBody Response<?> listChapters(@PathVariable("index_book") Integer index_book,
                                                   PageUtil pageUtil){
-        chapterJson = new ChapterJson();
         pageUtil.renew();
-        chapterJson = bookService.getAllChapterByBookIndex(index_book,pageUtil);
-        return chapterJson;
+        return bookService.getAllChapterByBookIndex(index_book, pageUtil);
     }
 
     /**
      * 用户浏览文章(只有英)
-     * @param
-     *
+     * @param chapter_index
      * @return
      */
     @RequestMapping(value = "/read/{chapter_index}")
-    public @ResponseBody ChapterJson read(@PathVariable("chapter_index") Integer chapter_index){
-        chapterJson = new ChapterJson();
-
-        chapterJson  = bookService.findParasByChapterIndex(chapter_index);
-
-
-
+    public @ResponseBody Response<?> read(@PathVariable("chapter_index") Integer chapter_index){
 //        Integer index_book = chapter_index/10000;
         //获取文章内容
-
-
-        return chapterJson;
+        return bookService.findParasByChapterIndex(chapter_index);
     }
 
 
@@ -190,14 +156,11 @@ public class BookController {
      * @return
      */
     @RequestMapping(value = "/addBook/{index_book}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase addBook(@PathVariable("index_book") Integer index_book,
+    public @ResponseBody Response<?> addBook(@PathVariable("index_book") Integer index_book,
                                           HttpSession session){
 
         Integer learner_id = (Integer) session.getAttribute("learnerId");
-
-        jsonBase = bookService.addBook(index_book,learner_id);
-
-        return jsonBase;
+        return bookService.addBook(index_book,learner_id);
     }
 
     /**
@@ -207,11 +170,10 @@ public class BookController {
      * @return
      */
     @RequestMapping(value = "/remove/{index_book}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase removeBook(@PathVariable("index_book") Integer index_book,
+    public @ResponseBody Response<?> removeBook(@PathVariable("index_book") Integer index_book,
                                          HttpSession session){
         Integer learner_id = (Integer) session.getAttribute("learnerId");
-        jsonBase = bookService.removeBook(learner_id,index_book);
-        return jsonBase;
+        return bookService.removeBook(learner_id,index_book);
     }
 
     /**
@@ -222,14 +184,10 @@ public class BookController {
      * @return
      */
     @RequestMapping(value = "/update/{book_index}/{lastest_loc}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody JsonBase updateBook(@PathVariable("book_index") Integer book_index,
+    public @ResponseBody Response<?> updateBook(@PathVariable("book_index") Integer book_index,
                                              @PathVariable("lastest_loc") String lastest_loc,
                                              HttpSession session){
         Integer learner_id = (Integer) session.getAttribute("learnerId");
-
-        jsonBase = bookService.updateBook(learner_id,book_index,lastest_loc);
-
-
-        return jsonBase;
+        return bookService.updateBook(learner_id,book_index,lastest_loc);
     }
 }
