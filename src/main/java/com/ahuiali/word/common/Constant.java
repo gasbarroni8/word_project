@@ -28,5 +28,9 @@ public class Constant {
         Result UPDATE_PWD_ERROR = new Result("410", "更改密码失败");
         Result BLOCK_WORD = new Result("444", "敏感词汇");
 
+        // 单词模块
+        Result WORDBOOK_EMPTY = new Result("504", "词书单词为空");
+        Result NO_REVIEW_WORD = new Result("507", "没有需要复习的单词");
+
     }
 }

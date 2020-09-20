@@ -1,5 +1,6 @@
 package com.ahuiali.word.controller;
 
+import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.json.JsonBase;
 import com.ahuiali.word.json.WordJson;
 import com.ahuiali.word.json.WordbookJson;
@@ -106,13 +107,11 @@ public class WordBookController {
      * @return
      */
     @RequestMapping(value = "/showWords/{id}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody WordJson showWords(@PathVariable("id") Integer id,
-                                            @RequestBody  PageUtil pageUtil){
+    public @ResponseBody Response<?> showWords(@PathVariable("id") Integer id,
+                       @RequestBody  PageUtil pageUtil){
         //刷新offset
         pageUtil.renew();
-
-        wordJson = wordService.getWords(id,pageUtil);
-        return wordJson;
+        return wordService.getWords(id,pageUtil);
     }
 
     /**
@@ -126,9 +125,7 @@ public class WordBookController {
     public @ResponseBody JsonBase addWordbook(@PathVariable("wordbook_id") Integer wordbook_id, HttpSession session) throws Exception {
         //获取学习者id
         Integer learnerId = (Integer) session.getAttribute("learnerId");
-
         jsonBase = wordbookService.addWordbook(learnerId,wordbook_id);
-
         return jsonBase;
     }
 
@@ -140,12 +137,10 @@ public class WordBookController {
      * @throws Exception
      */
     @RequestMapping(value = "/changeWordbook/{wordbook_id}")
-    public String  changeWordbook(@PathVariable("wordbook_id") Integer wordbook_id, HttpSession session){
+    public String changeWordbook(@PathVariable("wordbook_id") Integer wordbook_id, HttpSession session){
         //获取学习者id
         Integer learnerId = (Integer) session.getAttribute("learnerId");
-
         jsonBase = wordbookService.updateWordbookPlan(learnerId,wordbook_id);
-
         return "redirect:/wordbook/gotoMyWordbooks";
     }
 
@@ -157,12 +152,9 @@ public class WordBookController {
     @RequestMapping(value = "/myWordbooks" , produces = "application/json;charset=utf-8;")
     public @ResponseBody WordbookJson myWordbooks(HttpSession session){
         //获取学习者id
-
        Integer learnerId = (Integer) session.getAttribute("learnerId");
-
         //session中保存我的词书
         wordbookJson = wordbookService.findMyWordbooks(learnerId);
-
         return wordbookJson;
     }
 

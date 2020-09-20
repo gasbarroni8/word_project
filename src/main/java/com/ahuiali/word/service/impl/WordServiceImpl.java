@@ -1,8 +1,12 @@
 package com.ahuiali.word.service.impl;
 
+import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.common.resp.Result;
 import com.ahuiali.word.json.JsonBase;
 import com.ahuiali.word.json.WordJson;
 import com.ahuiali.word.mapper.WordMapper;
+import com.ahuiali.word.pojo.Learner;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.service.WordService;
 import com.ahuiali.word.common.utils.NextTimeUtils;
@@ -29,16 +33,13 @@ public class WordServiceImpl implements WordService {
     JsonBase jsonBase;
 
     @Override
-    public WordJson getWords(int id, PageUtil pageUtil) {
-
-        wordJson = new WordJson();
+    public Response<?> getWords(int id, PageUtil pageUtil) {
+        Response<Word> response = Response.success();
         List<Word> words = wordMapper.getWords(id,pageUtil);
-        if(words.size() > 0){
-            wordJson.create(200,"success",words);
-        }else {
-            wordJson.create(504,"词书单词为空",null);
+        if(words.size() <= 0){
+            response = Response.result(Constant.Error.WORDBOOK_EMPTY);
         }
-        return wordJson;
+        return response;
     }
 
     //获取不同类型单词，未背，记忆中，已掌握
@@ -107,18 +108,15 @@ public class WordServiceImpl implements WordService {
      * @return
      */
     @Override
-    public WordJson getReviewWords(Integer learner_id, Integer wordbook_id, PageUtil pageUtil) {
+    public Response<?> getReviewWords(Integer learner_id, Integer wordbook_id, PageUtil pageUtil) {
         wordJson = new WordJson();
+        Response<Word> response = Response.success();
         List<Word> words = wordMapper.getReviewWords(learner_id,wordbook_id,pageUtil);
-        if(words.size()>0){
-            wordJson.create(200,"success");
-            wordJson.setWords(words);
-        }else {
-            wordJson.create(507,"无需复习");
+        if(words.size() <= 0){
+           response = Response.result(Constant.Error.NO_REVIEW_WORD);
         }
-        return wordJson;
+        return response;
     }
-
     /**
      * 批量插入新词
      * @param wordbook_id
@@ -186,7 +184,6 @@ public class WordServiceImpl implements WordService {
         }else {
             wordJson.create(506,"记忆表单词更新失败");
         }
-
         return wordJson;
     }
 

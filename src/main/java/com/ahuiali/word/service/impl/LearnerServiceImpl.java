@@ -61,16 +61,16 @@ public class LearnerServiceImpl implements LearnerService {
             }
             else if(status == 2){
                 //封禁中
-                response = (Response<Learner>) Response.result(Constant.Error.LEARNER_BLOCKED);
+                response = Response.result(Constant.Error.LEARNER_BLOCKED);
                 return response;
             } else if(status == 0){
                 //审核中
-                response = (Response<Learner>) Response.result(Constant.Error.LEARNER_NON_EMAIL_VERIFY);
+                response = Response.result(Constant.Error.LEARNER_NON_EMAIL_VERIFY);
                 return response;
             }
         }
         //用户不存在直接重新返回
-        response = (Response<Learner>) Response.result(Constant.Error.LEARNER_NO_FOUNDED);
+        response = Response.result(Constant.Error.LEARNER_NO_FOUNDED);
         return response;
     }
 

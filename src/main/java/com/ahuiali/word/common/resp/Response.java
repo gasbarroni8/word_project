@@ -43,8 +43,8 @@ public class Response<T> implements Serializable {
         this.message = result.getMessage();
     }
 
-    public static Response<?> result(Result result) {
-        return new Response<>(result);
+    public static <T> Response<T> result(Result result) {
+        return new Response<T>(result);
     }
 
     public static Response<?> result(Response<?> response, Result result){
