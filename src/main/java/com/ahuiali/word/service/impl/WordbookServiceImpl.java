@@ -169,7 +169,7 @@ public class WordbookServiceImpl implements WordbookService {
         Response<Wordbook> response = Response.success();
         Wordbook wordbook = wordbookMapper.getMemorizingWordbookAndReviewCount(learnerId);
         if(wordbook == null){
-            response = Response.result(Constant.Error.WORDBOOK_NOT_FOUNDED);
+            return Response.result(Constant.Error.WORDBOOK_NOT_FOUNDED);
         }
         response.setData(wordbook);
         return response;

@@ -11,6 +11,8 @@ import java.io.Serializable;
 @Data
 public class Response<T> implements Serializable {
 
+    final static String SUCCESS = "200";
+
     private String code;
     private String message;
 
@@ -51,6 +53,10 @@ public class Response<T> implements Serializable {
         response.setCode(result.getCode());
         response.setMessage(result.getMessage());
         return response;
+    }
+
+    public static Boolean isSuccess(Response<?> response){
+        return  SUCCESS.equals(response.getCode());
     }
 
 }

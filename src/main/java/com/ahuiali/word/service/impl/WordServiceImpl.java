@@ -106,6 +106,12 @@ public class WordServiceImpl implements WordService {
         response.setData(words);
         return response;
     }
+
+    @Override
+    public Response<?> getReviewWords(Integer learner_id, PageUtil pageUtil) {
+        return null;
+    }
+
     /**
      * 批量插入新词
      * @param wordbook_id

@@ -1,7 +1,6 @@
 package com.ahuiali.word.controller;
 
 import com.ahuiali.word.common.resp.Response;
-import com.ahuiali.word.json.WordbookJson;
 import com.ahuiali.word.service.WordbookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,9 +16,6 @@ public class BaseController {
 
     @Autowired
     WordbookService wordbookService;
-
-    @Autowired
-    WordbookJson wordbookJson;
 
     /**
      * 主页

@@ -16,6 +16,8 @@ public interface WordService {
 
     Response<?> getReviewWords(Integer learner_id, Integer wordbook_id, PageUtil pageUtil);
 
+    Response<?> getReviewWords(Integer learner_id, PageUtil pageUtil);
+
     Response<?> insertWords(Integer wordbook_id, Integer learner_id,List<Long> ids);
 
     Response<?> updateWords(List<Word> words);

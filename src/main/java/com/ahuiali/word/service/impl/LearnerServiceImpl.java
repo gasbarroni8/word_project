@@ -71,14 +71,17 @@ public class LearnerServiceImpl implements LearnerService {
 
     @Override
     public Response<?> queryLearnerByEmail(String email) {
-
-        Integer count =learnerMapper.queryLearnerByEmail(email);
-        if(count == 0){
+        Response<Learner> response = Response.success();
+        Learner learner = learnerMapper.queryLearnerByEmail(email);
+        if(learner == null){
             //如果在数据库中找不到该email
             return Response.result(Constant.Error.EMAIL_NO_FOUNDED);
         } else{
             //如果在数据库中找到该email
-            return Response.result(Constant.Error.EMAIL_EXIST);
+            response.setData(learner);
+            response.setCode(Constant.Error.EMAIL_EXIST.getCode());
+            response.setMessage(Constant.Error.EMAIL_EXIST.getMessage());
+            return response;
         }
 
     }

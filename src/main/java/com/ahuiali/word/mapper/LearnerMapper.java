@@ -26,8 +26,8 @@ public interface LearnerMapper {
     Learner queryLearner(Learner learner);
 
     //根据邮箱查询learner
-    @Select("select count(*) from learner where email = #{email} limit 1;")
-    Integer queryLearnerByEmail(String email);
+    @Select("select id from learner where email = #{email} limit 1;")
+    Learner queryLearnerByEmail(String email);
 
     //根据昵称查询learner，返回值无所谓
     @Select("select count(*) from learner where nickname = #{nickname} limit 1;")
