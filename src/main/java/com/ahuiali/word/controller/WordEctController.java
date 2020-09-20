@@ -1,8 +1,6 @@
 package com.ahuiali.word.controller;
 
 import com.ahuiali.word.common.resp.Response;
-import com.ahuiali.word.json.WordEctDetailJson;
-import com.ahuiali.word.json.WordEctJson;
 import com.ahuiali.word.service.WordEctService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,12 +18,6 @@ import javax.servlet.http.HttpSession;
 public class WordEctController {
 
     @Autowired
-    WordEctJson wordEctJson;
-
-    @Autowired
-    WordEctDetailJson wordEctDetailJson;
-
-    @Autowired
     WordEctService wordEctService;
 
     @RequestMapping("")
@@ -40,13 +32,13 @@ public class WordEctController {
 
     /**
      * 通过单词前缀来模糊查询单词，自动提示效果
-     * @param wordpre
+     * @param wordRre
      * @return
      */
     @RequestMapping(value = "/input/{word}",produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> input(@PathVariable("word") String wordpre){
-        return wordEctService.getWordsByPre(wordpre);
+    Response<?> input(@PathVariable("word") String wordRre){
+        return wordEctService.getWordsByPre(wordRre);
     }
 
     /**

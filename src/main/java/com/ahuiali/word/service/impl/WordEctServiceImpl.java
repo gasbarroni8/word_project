@@ -2,8 +2,6 @@ package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.Constant;
 import com.ahuiali.word.common.resp.Response;
-import com.ahuiali.word.json.WordEctDetailJson;
-import com.ahuiali.word.json.WordEctJson;
 import com.ahuiali.word.mapper.NotebookMapper;
 import com.ahuiali.word.mapper.SentencesMapper;
 import com.ahuiali.word.mapper.WordEctMapper;
@@ -35,24 +33,18 @@ public class WordEctServiceImpl implements WordEctService {
     NotebookMapper notebookMapper;
 
     @Autowired
-    WordEctDetail wordEctDetail;
-
-    @Autowired
-    WordEct wordEct;
-
-    @Autowired
     SentencesMapper sentencesMapper;
 
     /**
      * 通过单词前缀来模糊查询单词，自动提示效果
-     * @param wordpre
+     * @param wordRre
      * @return
      */
     @Override
-    public Response<?> getWordsByPre(String wordpre) {
+    public Response<?> getWordsByPre(String wordRre) {
         Response<List<WordEct>> response = Response.success();
         //数据库中查找
-        List<WordEct> wordEctList = wordEctMapper.getWordsByPre(wordpre);
+        List<WordEct> wordEctList = wordEctMapper.getWordsByPre(wordRre);
         //如果大于0说明仍有提示
         if(wordEctList.size() <= 0){
            return Response.result(Constant.Error.WORD_PRE_NOT_FOUNDED);
@@ -164,6 +156,7 @@ public class WordEctServiceImpl implements WordEctService {
     @Override
     public Response<?> findWord(String word, Integer learner_id) {
         Response<WordEct> response = Response.success();
+        WordEct wordEct = new WordEct();
         //先去redis查有没有该单词
         boolean hasWordKey = template.opsForHash().hasKey("words",word);
         String wordRedis = "";
@@ -239,7 +232,7 @@ public class WordEctServiceImpl implements WordEctService {
     @Override
     public Response<?> findWordNoRedis(String word, Integer learnerId) {
         Response<WordEct> response = Response.success();
-        wordEct = wordEctMapper.findWord(word);
+        WordEct wordEct = wordEctMapper.findWord(word);
         if(wordEct == null){
             return Response.result(Constant.Error.WORDECT_NOT_FOUNDED);
         }
