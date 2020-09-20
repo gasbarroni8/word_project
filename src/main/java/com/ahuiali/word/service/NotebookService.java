@@ -10,7 +10,6 @@ import com.ahuiali.word.common.utils.PageUtil;
 
 public interface NotebookService {
 
-
     NotebookJson findAllNotebookByLearnerId(Integer learner_id);
 
     NotebookJson addNotebook(Notebook notebook);

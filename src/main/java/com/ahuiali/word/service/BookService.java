@@ -6,8 +6,6 @@ import com.ahuiali.word.json.JsonBase;
 import com.ahuiali.word.json.ParagraphJson;
 import com.ahuiali.word.common.utils.PageUtil;
 
-
-
 public interface BookService {
     BookJson findHotBooks();
 
@@ -28,7 +26,6 @@ public interface BookService {
     JsonBase updateBook(Integer learner_id, Integer book_index, String lastest_loc);
 
     ParagraphJson findParaCNById(Integer para_id);
-
 
     BookJson getBooksByName(String bookName);
 }

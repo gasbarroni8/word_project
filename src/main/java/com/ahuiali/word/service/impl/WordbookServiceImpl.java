@@ -2,8 +2,6 @@ package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.Constant;
 import com.ahuiali.word.common.resp.Response;
-import com.ahuiali.word.json.JsonBase;
-import com.ahuiali.word.json.WordbookJson;
 import com.ahuiali.word.mapper.WordMapper;
 import com.ahuiali.word.mapper.WordbookMapper;
 import com.ahuiali.word.pojo.Word;

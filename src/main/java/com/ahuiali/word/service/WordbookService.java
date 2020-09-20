@@ -1,8 +1,6 @@
 package com.ahuiali.word.service;
 
 import com.ahuiali.word.common.resp.Response;
-import com.ahuiali.word.json.JsonBase;
-import com.ahuiali.word.json.WordbookJson;
 
 public interface WordbookService {
     Response<?> getWordbooks();

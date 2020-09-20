@@ -3,7 +3,6 @@ package com.ahuiali.word.controller;
 
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.json.WordJson;
-import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.service.WordService;
 import com.ahuiali.word.common.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;

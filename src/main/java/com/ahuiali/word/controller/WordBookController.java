@@ -1,9 +1,6 @@
 package com.ahuiali.word.controller;
 
 import com.ahuiali.word.common.resp.Response;
-import com.ahuiali.word.json.JsonBase;
-import com.ahuiali.word.json.WordJson;
-import com.ahuiali.word.json.WordbookJson;
 
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.service.WordService;

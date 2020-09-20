@@ -2,8 +2,6 @@ package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.Constant;
 import com.ahuiali.word.common.resp.Response;
-import com.ahuiali.word.json.JsonBase;
-import com.ahuiali.word.json.LearnerJson;
 import com.ahuiali.word.mapper.LearnerMapper;
 import com.ahuiali.word.pojo.Learner;
 import com.ahuiali.word.service.LearnerService;
@@ -30,9 +28,6 @@ public class LearnerServiceImpl implements LearnerService {
 
     @Autowired
     JavaMailSender javaMailSender;
-
-    @Autowired
-    LearnerJson learnerJson;
 
     @Override
     public Response<?> addLearn(Learner learner) {
