@@ -18,6 +18,11 @@
 1. 修改NextTimeUtils工具类的方法为static
 2. 修改README.MD
 
+##### 2020/9/19 - 2020/9/20
+1. 修改同一的返回码
+2. 修改阅读页收藏单词的bug
+3. 修改登录页的提示的bug
+
 #### 线上地址:
 www.ahuiali.com
 
