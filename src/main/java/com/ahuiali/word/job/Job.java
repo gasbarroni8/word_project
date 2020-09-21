@@ -54,9 +54,10 @@ public class Job {
 //        System.out.println("fixedRate 每隔3秒" + new Date());
 //    }
 
-    //表示每天7时30分0秒执行
+    /**
+     *     表示每天7时30分0秒执行
+     */
     @Scheduled(cron = "0 0,30 0,7 ? * ? ")
-//    @Scheduled(fixedRate = 113000)
     public void cronJob1() {
         // 查询所有用户*
         // 先给我自己查
