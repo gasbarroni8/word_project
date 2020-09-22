@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="/bootstrap-3.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap-3.3.7/dist/css/bootstrap-switch.min.css">
     <link rel="stylesheet" href="/css/profile.css">
     <!--    底部样式-->
     <link rel="stylesheet" href="/css/footer.css">
 </head>
-<body>
+<body">
 
 <!--导航条-->
 <nav class="navbar navbar-default  hidden-xs" style="margin-bottom: 10px;">
@@ -95,7 +96,17 @@
                 <img src="/img/learner/notice.png" alt="">
             </div>
             <div class=" col-xs-10 col-sm-11 function">
-                <a href="javascript:notice()"><p>消息通知</p></a>
+                <div style="width: 100%;">
+                    <div class="" style="float:left;"><p>开启邮箱提醒</p></div>
+                    <div class="">
+                        <label class="button">
+                            <input type="checkbox" id="isOpenEmailNotice">
+                            <span></span>
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+
             </div>
 
             <div class="col-xs-2 col-sm-1 col-md-1 hidden-xs">
@@ -179,9 +190,17 @@
 <script src="/jq/jquery.min.js"></script>
 <!--模态框 modal.js-->
 <script src="/bootstrap-3.3.7/js/modal.js"></script>
+<script src="/bootstrap-3.3.7/dist/js/bootstrap-switch.min.js"></script>
 
 <script>
 
+    $("#isOpenEmailNotice").click(function () {
+        if ($(this).prop("checked")) {
+            alert("选中");
+        } else {
+            alert("没有选中");
+        }
+    });
 
     //联系我
     function showContact() {
