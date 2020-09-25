@@ -181,10 +181,10 @@
             success: function(result) {
 
                 //如果数据库中不存在该email，则有效，将emailFlag设置为true
-                if(result.code === 407 ){
+                if(result.code === "407" ){
                     emailFlag = true;
                     $(".emailMsg").text("有效邮箱！").css("color","rgb(2, 164, 1)");
-                } else if(result.code === 408){
+                } else if(result.code === "408"){
                     emailFlag = false;
                     $(".emailMsg").text("该邮箱已注册！").css("color","rgba(255, 94, 84, 0.86)");
                 }
@@ -215,14 +215,14 @@
             success: function(result) {
                 // var result = JSON.stringify(result);  // 需解析，否则返回 object
                 //如果数据库中不存在该nickname，则有效，将nicknameFlag设置为true
-                if(result.code === 200){
+                if(result.code === "200"){
                     nicknameFlag = true;
                     $(".nicknameMsg").text("昵称有效！").css("color","rgb(2, 164, 1)");
                     //用*代表敏感词汇，*不能作为昵称，正则过不了
 
-                }else if(result.code === 444){
+                }else if(result.code === "444"){
                     $(".nicknameMsg").text("涉及敏感词汇!请更换昵称！").css("color","rgba(255, 94, 84, 0.86)");
-                }else if(result.code === 401){
+                }else if(result.code === "401"){
                     $(".nicknameMsg").text("该昵称已被占用！").css("color","rgba(255, 94, 84, 0.86)");
                 }
             },

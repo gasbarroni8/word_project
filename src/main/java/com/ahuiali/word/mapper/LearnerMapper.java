@@ -16,7 +16,7 @@ public interface LearnerMapper {
     @Insert("insert into learner(activecode,password,nickname,email,status,created,modified) values" +
             "(#{activecode},#{password},#{nickname},#{email},0,NOW(),NOW())")
     @Options(useGeneratedKeys=true, keyProperty="id")
-    void addLearner(Learner learner);
+    int addLearner(Learner learner);
 
     //根据邮箱和密码查询learner
     @Select("select id, nickname, status from learner where " +

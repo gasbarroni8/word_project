@@ -54,9 +54,10 @@ public class Job {
 //        System.out.println("fixedRate 每隔3秒" + new Date());
 //    }
 
-    //表示每天7时30分0秒执行
-    @Scheduled(cron = "0 0,30 0,7 ? * ? ")
-//    @Scheduled(fixedRate = 113000)
+    /**
+     *     表示每天7时执行
+     */
+    @Scheduled(cron = "0 0 7 * * ? ")
     public void cronJob1() {
         // 查询所有用户*
         // 先给我自己查
@@ -98,7 +99,7 @@ public class Job {
                     }
                     sb.append(word.getWord()).append(" : ").append(wordMeaning).append("<br>");
                 }
-                Response<?> emailResp = sentEmail("1170782807@qq.com", "15900135325@163.com", "您有需要复习的单词", sb.append("</body></html>").toString());
+                Response<?> emailResp = sentEmail("1170782807@qq.com", "1170782807@qq.com", "您有需要复习的单词", sb.append("</body></html>").toString());
                 if (Response.isSuccess(emailResp)){
                     log.info("发送邮箱成功！用户：{}", learner.getEmail());
                 }
