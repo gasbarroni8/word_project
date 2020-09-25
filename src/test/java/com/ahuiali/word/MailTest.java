@@ -6,19 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
+/**
+ * @author ZhengChaoHui
+ * @Date 2020/9/19 1:02
+ */
 @SpringBootTest
-@RunWith(SpringJUnit4ClassRunner.class)
-class WordApplicationTests {
+@RunWith(SpringRunner.class)
+public class MailTest {
 
     @Autowired
     private JavaMailSender javaMailSender;
-
-    @Test
-    void contextLoads() {
-    }
 
     @Test
     public void email(){
