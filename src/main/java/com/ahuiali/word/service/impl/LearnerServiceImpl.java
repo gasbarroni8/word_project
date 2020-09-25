@@ -6,6 +6,7 @@ import com.ahuiali.word.mapper.LearnerMapper;
 import com.ahuiali.word.pojo.Learner;
 import com.ahuiali.word.service.LearnerService;
 import com.ahuiali.word.common.utils.Md5Utils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.mail.javamail.JavaMailSender;
@@ -21,6 +22,7 @@ import javax.mail.internet.MimeMessage;
  */
 @Transactional
 @Service
+@Slf4j
 public class LearnerServiceImpl implements LearnerService {
 
     @Autowired
@@ -31,17 +33,23 @@ public class LearnerServiceImpl implements LearnerService {
 
     @Override
     public Response<?> addLearn(Learner learner) {
+        log.info("添加用户，learner：{}", learner);
         if(!"".equals(learner.getNickname()) && learner.getNickname() != null
                 && !"".equals(learner.getEmail()) && learner.getEmail() != null
                 && !"".equals(learner.getPassword()) && learner.getPassword() != null)
         learnerMapper.addLearner(learner);
-        Response<?> response = Response.success();
-        return response;
+
+        return Response.success();
     }
 
-    //根据邮箱和密码查询用户
+    /**
+     * 根据邮箱和密码查询用户
+     * @param learner1
+     * @return
+     */
     @Override
     public Response<?> queryLearner(Learner learner1) {
+        log.info("根据邮箱和密码查询用户：learner:{}", learner1);
         //md5加密
         learner1.setPassword(Md5Utils.md5(learner1.getPassword()));
         //查询
@@ -69,8 +77,14 @@ public class LearnerServiceImpl implements LearnerService {
         return response;
     }
 
+    /**
+     * 根据邮箱查询用户
+     * @param email
+     * @return
+     */
     @Override
     public Response<?> queryLearnerByEmail(String email) {
+        log.info("根据邮箱查询用户, email:{}", email);
         Response<Learner> response = Response.success();
         Learner learner = learnerMapper.queryLearnerByEmail(email);
         if(learner == null){
@@ -86,14 +100,20 @@ public class LearnerServiceImpl implements LearnerService {
 
     }
 
+    /**
+     * 根据昵称查询用户
+     * @param nickname
+     * @return
+     */
     @Override
     public Response<?> queryLearnerByNickname(String nickname) {
+        log.info("根据昵称查询用户, nickname:{}", nickname);
         Integer count =learnerMapper.queryLearnerByNickname(nickname);
         Response<?> response = Response.success();
         if(count == 0){
             //如果在数据库中找不到该昵称
             //敏感检测
-            if(1 == 1){
+            if(true){
                 return  response;
             }else{
                 return Response.result(Constant.Error.BLOCK_WORD);
@@ -105,9 +125,14 @@ public class LearnerServiceImpl implements LearnerService {
         return response;
     }
 
-    //保存用户，并向用户发送邮箱
+    /**
+     * 保存用户，并向用户发送邮箱
+     * @param learner
+     * @return
+     */
     @Override
     public Response<?> register(Learner learner) {
+        log.info("用户注册，learner:{}", learner);
         //password加密
         learner.setPassword(Md5Utils.md5(learner.getPassword()));
         //生成token，时间戳+邮箱
@@ -123,7 +148,11 @@ public class LearnerServiceImpl implements LearnerService {
         return sentEmail(learner.getEmail(), title, msg);
     }
 
-    //激活用户
+    /**
+     * 激活用户
+     * @param activecode
+     * @return
+     */
     @Override
     public Response<?> confirm(String activecode) {
         Response<?> response = Response.success();
@@ -143,9 +172,14 @@ public class LearnerServiceImpl implements LearnerService {
 
     }
 
-    //重新发送邮箱
+    /**
+     * 重新发送邮箱
+     * @param email
+     * @return
+     */
     @Override
     public Response<?> sentEmailAgain(String email) {
+        log.info("重新发送邮箱, email:{}", email);
         //生成token，时间戳+邮箱
         String token = System.currentTimeMillis() + email;
         //查询邮箱是否存在
@@ -184,6 +218,7 @@ public class LearnerServiceImpl implements LearnerService {
      */
     @Override
     public Response<?> findPassword(String email) {
+        log.info("找回密码, email:{}", email);
         //该邮箱是否存在
         Response<?> response = queryLearnerByEmail(email);
         //邮箱存在
@@ -196,11 +231,12 @@ public class LearnerServiceImpl implements LearnerService {
             //发送邮箱
             response = sentEmail(email,title,"密码默认设置为 ："+newPassword);
             //邮箱发送成功
-            if(response.getCode() == "200"){
+            if(Constant.SUCCESS.getCode().equals(response.getCode())){
                 //当邮箱发送成功才修改密码
                 learnerMapper.updatePassword(email,Md5Utils.md5(newPassword));
                 return response;
-            }else if(response.getCode() == "409"){
+            }else if(Constant.Error.EMAIL_SEND_ERROR.getCode().equals(response.getCode())){
+                log.warn("邮箱发送失败, email:{}", email);
                 //邮箱发送失败
                 response = Response.result(Constant.Error.EMAIL_SEND_ERROR);
                 return response;
@@ -246,8 +282,8 @@ public class LearnerServiceImpl implements LearnerService {
             mimeMessageHelper.setText(msg, true);
             javaMailSender.send(mimeMessage);
         }catch (MessagingException e){
-            e.printStackTrace();
             //出错，邮箱发送失败
+            log.error("邮箱发送失败, error:{}", e.toString());
             return Response.result(Constant.Error.EMAIL_SEND_ERROR);
         }
         //成功，返回200

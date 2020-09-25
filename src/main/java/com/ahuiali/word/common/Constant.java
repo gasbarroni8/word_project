@@ -9,7 +9,7 @@ import com.ahuiali.word.common.resp.Result;
  */
 public class Constant {
 
-    Result SUCCESS = new Result("200", "success");
+    public static Result SUCCESS = new Result("200", "success");
 
     public interface Error {
         // 公共
