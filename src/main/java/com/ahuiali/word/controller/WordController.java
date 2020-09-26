@@ -2,7 +2,6 @@ package com.ahuiali.word.controller;
 
 
 import com.ahuiali.word.common.resp.Response;
-import com.ahuiali.word.json.WordJson;
 import com.ahuiali.word.service.WordService;
 import com.ahuiali.word.common.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * 单词控制器
- *      注意： 背词模块的很多功能都放到WordBook模块了
+ * 注意： 背词模块的很多功能都放到WordBook模块了
  * Created by zhengchaohui on 2019/9/18
  */
 @Controller
@@ -26,30 +25,30 @@ public class WordController {
     @Autowired
     WordService wordService;
 
-    @Autowired
-    WordJson wordJson;
-
-    @RequestMapping(value = "/getWords/",produces = "application/json;charset=utf-8;")
-    public @ResponseBody Response<?> getWords(@RequestBody PageUtil pageUtil){
-        return wordService.getWords(1,pageUtil);
+    @RequestMapping(value = "/getWords/", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> getWords(@RequestBody PageUtil pageUtil) {
+        return wordService.getWords(1, pageUtil);
     }
 
     @RequestMapping(value = {"/goto"})
-    public String gotoMemorize(){
+    public String gotoMemorize() {
         return "/word/memorize";
     }
 
     /**
      * 返回复习词汇
+     *
      * @param wordbook_id
      * @param pageUtil
      * @param session
      * @return
      */
-    @RequestMapping(value = "/getReviewWords/{wordbook_id}" ,produces = "application/json;charset=utf-8;")
-    public @ResponseBody Response<?> getReviewWords(@PathVariable("wordbook_id") Integer wordbook_id,
-                            @RequestBody PageUtil pageUtil,
-                            HttpSession session){
+    @RequestMapping(value = "/getReviewWords/{wordbook_id}", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> getReviewWords(@PathVariable("wordbook_id") Integer wordbook_id,
+                               @RequestBody PageUtil pageUtil,
+                               HttpSession session) {
         Integer learner_id = (Integer) session.getAttribute("learnerId");
         //获取所有需复习单词(分页)
         pageUtil.renew();

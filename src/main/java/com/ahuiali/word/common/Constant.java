@@ -17,8 +17,8 @@ public class Constant {
 
         // 登录模块
         Result NICKNAME_EXIST = new Result("401", "昵称已存在");
-        Result ACTIVE_EXPIRED = new Result("402", "激活过期");
-        Result ACTIVE_INVALID = new Result("403", "激活码无效");
+        Result ACTIVE_EXPIRED = new Result("402", "激活码过期，请重新发送邮箱");
+        Result ACTIVE_INVALID = new Result("403", "激活码无效，请重新注册");
         Result LEARNER_BLOCKED = new Result("404", "用户封禁中");
         Result LEARNER_NON_EMAIL_VERIFY = new Result("405", "用户未完成邮箱验证");
         Result LEARNER_NO_FOUNDED = new Result("406", "找不到用户");

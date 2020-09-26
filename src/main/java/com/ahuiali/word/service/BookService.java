@@ -1,10 +1,6 @@
 package com.ahuiali.word.service;
 
 import com.ahuiali.word.common.resp.Response;
-import com.ahuiali.word.json.BookJson;
-import com.ahuiali.word.json.ChapterJson;
-import com.ahuiali.word.json.JsonBase;
-import com.ahuiali.word.json.ParagraphJson;
 import com.ahuiali.word.common.utils.PageUtil;
 
 public interface BookService {

@@ -5,7 +5,7 @@ import com.ahuiali.word.pojo.Learner;
 
 public interface LearnerService {
 
-    Response<?> addLearn(Learner learner);
+    Response<?> addLearner(Learner learner);
 
     Response<?> queryLearner(Learner learner);
 
