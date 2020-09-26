@@ -32,114 +32,125 @@ public class WordBookController {
 
     //跳转至词库
     @RequestMapping("/gotoWordbook")
-    public String gotoWordbook(){
+    public String gotoWordbook() {
         return "/wordbook/wordbooks";
     }
 
     //跳转至词书页面
     @RequestMapping("/gotoWordbookDetail")
-    public String gotoWordbookDetail(){
+    public String gotoWordbookDetail() {
 
         return "/wordbook/wordbookDetail";
     }
 
     //跳转到我的词书的页面
     @RequestMapping("/gotoMyWordbooks")
-    public String gotoMyWordbooks(){
+    public String gotoMyWordbooks() {
 
         return "/wordbook/myWordbooks";
     }
 
     //跳转到我的某个词书的页面
     @RequestMapping("/gotoMyWordbookDetail")
-    public String gotoMyWordbookDetail(){
+    public String gotoMyWordbookDetail() {
 
         return "/wordbook/myWordbookDetail";
     }
 
     //跳转到复习页面
     @RequestMapping("/gotoReview")
-    public String gotoReview(){
+    public String gotoReview() {
 
         return "/word/review";
     }
 
     /**
      * 获取所有词书
+     *
      * @return
      */
-    @RequestMapping(value = "/",produces = "application/json;charset=utf-8;")
-    public @ResponseBody Response<?> getWordbooks(){
+    @RequestMapping(value = "/", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> getWordbooks() {
         return wordbookService.getWordbooks();
     }
 
     /**
      * 根据词书id返回细节
+     *
      * @param id
      * @param
      * @return
      */
     @RequestMapping(value = "/detail/{id}")
-    public @ResponseBody Response<?> getWordbookDetail(@PathVariable("id") String id,
-                                                        HttpSession session){
+    public @ResponseBody
+    Response<?> getWordbookDetail(@PathVariable("id") String id,
+                                  HttpSession session) {
         //获取学习者id
         Integer learner_id = (Integer) session.getAttribute("learnerId");
-        return wordbookService.getWordbookDetail(Integer.parseInt(id),learner_id);
+        return wordbookService.getWordbookDetail(Integer.parseInt(id), learner_id);
     }
 
 
     /**
      * 返回size个该词书的单词
+     *
      * @param id
      * @return
      */
-    @RequestMapping(value = "/showWords/{id}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody Response<?> showWords(@PathVariable("id") Integer id,
-                       @RequestBody  PageUtil pageUtil){
+    @RequestMapping(value = "/showWords/{id}", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> showWords(@PathVariable("id") Integer id,
+                          @RequestBody PageUtil pageUtil) {
         //刷新offset
         pageUtil.renew();
-        return wordService.getWords(id,pageUtil);
+        return wordService.getWords(id, pageUtil);
     }
 
     /**
      * 为用户添加词书，并将其设置为当前词书
+     *
      * @param wordbook_id
      * @param session
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/addWordbook/{wordbook_id}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody Response<?> addWordbook(@PathVariable("wordbook_id") Integer wordbook_id, HttpSession session) throws Exception {
+    @RequestMapping(value = "/addWordbook/{wordbook_id}", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> addWordbook(@PathVariable("wordbook_id") Integer wordbook_id, HttpSession session) throws Exception {
         //获取学习者id
         Integer learnerId = (Integer) session.getAttribute("learnerId");
-        return wordbookService.addWordbook(learnerId,wordbook_id);
+        return wordbookService.addWordbook(learnerId, wordbook_id);
     }
 
     /**
      * 修改当前计划
+     *
      * @param wordbook_id
      * @param session
      * @return
      * @throws Exception
      */
     @RequestMapping(value = "/changeWordbook/{wordbook_id}")
-    public String changeWordbook(@PathVariable("wordbook_id") Integer wordbook_id, HttpSession session){
+    public String changeWordbook(@PathVariable("wordbook_id") Integer wordbook_id, HttpSession session) {
         //获取学习者id
         Integer learnerId = (Integer) session.getAttribute("learnerId");
         // TODO 这里要加个判断
-        wordbookService.updateWordbookPlan(learnerId,wordbook_id);
+        wordbookService.updateWordbookPlan(learnerId, wordbook_id);
         return "redirect:/wordbook/gotoMyWordbooks";
     }
 
     /**
      * 查询我的词书
+     *
      * @param session
      * @return
      */
-    @RequestMapping(value = "/myWordbooks" , produces = "application/json;charset=utf-8;")
-    public @ResponseBody Response<?> myWordbooks(HttpSession session){
+    @RequestMapping(value = "/myWordbooks", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> myWordbooks(HttpSession session) {
         //获取学习者id
-       Integer learnerId = (Integer) session.getAttribute("learnerId");
+        Integer learnerId = (Integer) session.getAttribute("learnerId");
         //session中保存我的词书
         return wordbookService.findMyWordbooks(learnerId);
     }
@@ -147,64 +158,71 @@ public class WordBookController {
 
     /**
      * 我的词书的单词类型
+     *
      * @param wordbook_id 词书id
-     * @param wordsType 返回单词类型，1为未背，2为记忆中，3为已掌握
-     * @param pageUtil 分页类
-     * @param session 用于获取learner_id
+     * @param wordsType   返回单词类型，1为未背，2为记忆中，3为已掌握
+     * @param pageUtil    分页类
+     * @param session     用于获取learner_id
      * @return
      */
-    @RequestMapping(value = "/myWordbook/words/{wordbook_id}/{wordsType}" , produces = "application/json;charset=utf-8;")
-    public @ResponseBody Response<?> myWordbookWords(
+    @RequestMapping(value = "/myWordbook/words/{wordbook_id}/{wordsType}", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> myWordbookWords(
             @PathVariable("wordbook_id") Integer wordbook_id,
             @PathVariable("wordsType") Integer wordsType,
             @RequestBody PageUtil pageUtil,
-            HttpSession session){
+            HttpSession session) {
         Integer learner_id = (Integer) session.getAttribute("learnerId");
         pageUtil.renew();
-        return wordService.myWordbookWords(wordbook_id,learner_id,pageUtil,wordsType);
+        return wordService.myWordbookWords(wordbook_id, learner_id, pageUtil, wordsType);
     }
 
     /**
-     *  单词类型转移
+     * 单词类型转移
      *
      * @param wordbook_id
-     * @param id 未背->掌握时id为words的id，其余为记忆表的id
-     * @param type 记忆中->掌握 : 1, 未背->掌握 : 2, 掌握->未背 : 3
+     * @param id          未背->掌握时id为words的id，其余为记忆表的id
+     * @param type        记忆中->掌握 : 1, 未背->掌握 : 2, 掌握->未背 : 3
      * @param session
      * @return
      */
     @RequestMapping("/myWordbook/words/wordTypeChange/{wordbook_id}/{id}/{type}")
-    public @ResponseBody Response<?> wordTypeChange(@PathVariable("wordbook_id") Integer wordbook_id,
-                                                 @PathVariable("id") Integer id,
-                                                 @PathVariable("type") Integer type,
-                                                 HttpSession session){
+    public @ResponseBody
+    Response<?> wordTypeChange(@PathVariable("wordbook_id") Integer wordbook_id,
+                               @PathVariable("id") Integer id,
+                               @PathVariable("type") Integer type,
+                               HttpSession session) {
         Integer learner_id = (Integer) session.getAttribute("learnerId");
-        return wordService.wordTypeChange(learner_id,wordbook_id,id,type);
+        return wordService.wordTypeChange(learner_id, wordbook_id, id, type);
     }
 
 
     /**
      * 将新词加入记忆表中
+     *
      * @param wordbook_id
      * @param session
      * @return
      */
-    @RequestMapping(value = "/myWordbook/insert/{wordbook_id}" , produces = "application/json;charset=utf-8;")
-    public @ResponseBody Response<?> insert(@PathVariable("wordbook_id") Integer wordbook_id,
-                                                  @RequestBody List<Long> ids,
-                                                  HttpSession session){
+    @RequestMapping(value = "/myWordbook/insert/{wordbook_id}", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> insert(@PathVariable("wordbook_id") Integer wordbook_id,
+                       @RequestBody List<Long> ids,
+                       HttpSession session) {
         Integer learner_id = (Integer) session.getAttribute("learnerId");
-        return wordService.insertWords(wordbook_id,learner_id,ids);
+        return wordService.insertWords(wordbook_id, learner_id, ids);
     }
 
     /**
      * 更新记忆表的单词
+     *
      * @param
      * @param
      * @return
      */
-    @RequestMapping(value = "/myWordbook/review" , produces = "application/json;charset=utf-8;")
-    public @ResponseBody Response<?> review(@RequestBody List<Word> words){
+    @RequestMapping(value = "/myWordbook/review", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> review(@RequestBody List<Word> words) {
         return wordService.updateWords(words);
     }
 

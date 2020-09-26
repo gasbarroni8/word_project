@@ -21,24 +21,26 @@ public class BaseController {
 
     /**
      * 主页
+     *
      * @return
      */
     @RequestMapping("/")
-    public String gotoIndex(){
+    public String gotoIndex() {
         return "/index";
     }
 
     /**
      * 主页初始化
      * 查询我当前记忆的词书
+     *
      * @param session
      * @return
      */
-    @RequestMapping(value = "/index", produces = "application/json;charset=utf-8;" )
-    public @ResponseBody Response<?> indexInit(HttpSession session){
+    @RequestMapping(value = "/index", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> indexInit(HttpSession session) {
         //获取学习者id
-       Integer learnerId = (Integer) session.getAttribute("learnerId");
-       log.info("用户登入，跳转至index页面，learnerId：{}", learnerId);
-       return wordbookService.getMemorizingWordbookAndReviewCount(learnerId);
+        Integer learnerId = (Integer) session.getAttribute("learnerId");
+        return wordbookService.getMemorizingWordbookAndReviewCount(learnerId);
     }
 }

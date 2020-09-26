@@ -12,12 +12,13 @@ public class InitInterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/learner/**","/static/**","/**.ico");
+                .excludePathPatterns("/learner/**", "/static/**", "/**.ico");
 
     }
 
     /**
      * 配置静态访问资源
+     *
      * @param registry
      */
     @Override

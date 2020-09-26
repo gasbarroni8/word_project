@@ -26,15 +26,15 @@ public class TestController {
     WordEctService wordEctService;
 
 
-    @RequestMapping(value = "/getWord/{word}",produces = "application/json;charset=utf-8;" )
+    @RequestMapping(value = "/getWord/{word}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
     Response<?> demoVue(@PathVariable("word") String word,
-                     HttpSession session){
+                        HttpSession session) {
         return wordEctService.findWordDetail(word, (Integer) session.getAttribute("learnerId"));
     }
 
     @RequestMapping("/test")
-    public String gotoTestView(){
+    public String gotoTestView() {
         return "testVue";
     }
 }

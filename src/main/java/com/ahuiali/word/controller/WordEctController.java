@@ -21,34 +21,37 @@ public class WordEctController {
     WordEctService wordEctService;
 
     @RequestMapping("")
-    public String gotoDetail(){
+    public String gotoDetail() {
         return "/word/wordDetail";
     }
 
     @RequestMapping("/gotoSearch")
-    public String gotoSearch(){
+    public String gotoSearch() {
         return "/word/search";
     }
 
     /**
      * 通过单词前缀来模糊查询单词，自动提示效果
+     *
      * @param wordRre
      * @return
      */
-    @RequestMapping(value = "/input/{word}",produces = "application/json;charset=utf-8;")
+    @RequestMapping(value = "/input/{word}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> input(@PathVariable("word") String wordRre){
+    Response<?> input(@PathVariable("word") String wordRre) {
         return wordEctService.getWordsByPre(wordRre);
     }
 
     /**
      * 查询单词详细信息JSON
+     *
      * @param word
      * @param session
      * @return
      */
-    @RequestMapping(value = "/findWordDetailJson/{word}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody Response<?> findWordDetailJSON(@PathVariable("word") String word, HttpSession session){
+    @RequestMapping(value = "/findWordDetailJson/{word}", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> findWordDetailJSON(@PathVariable("word") String word, HttpSession session) {
 
         Integer learnerId = (Integer) session.getAttribute("learnerId");
         //这个是使用了redis，不过，我服务器老是被攻击，redis老是不行，暂时不用它了
@@ -60,21 +63,24 @@ public class WordEctController {
 
     /**
      * 查询单词详细信息页面
+     *
      * @return
      */
     @RequestMapping(value = "/gotoWordDetail")
-    public String  findWordDetailString(){
+    public String findWordDetailString() {
 
         return "/word/detail";
     }
 
     /**
      * 普通查询，返回基本数据
+     *
      * @param word 单词
      * @return
      */
-    @RequestMapping(value = "/findWord/{word}",produces = "application/json;charset=utf-8;")
-    public @ResponseBody Response<?> findWord(@PathVariable("word") String word,HttpSession session){
+    @RequestMapping(value = "/findWord/{word}", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> findWord(@PathVariable("word") String word, HttpSession session) {
         Integer learnerId = (Integer) session.getAttribute("learnerId");
         //这个是使用了redis，不过，我服务器老是被攻击，redis老是不行，暂时不用它了
         //但至少说明，这个是能用的，而且速度还不错，要怪就怪服务器不行
