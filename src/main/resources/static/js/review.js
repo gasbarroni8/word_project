@@ -129,6 +129,54 @@ window.onload = function (ev) {
         })
     });
 
+    // 点击掌握
+    $(".setOK").click(function () {
+        if (currWord < 1) return;
+        // 异步提交
+        $.ajax({
+            type: "post",
+            async: true,     //异步执行
+            data: data,
+            contentType: "application/json;charset=UTF-8",
+            // id 未背->掌握时id为words的id，其余为记忆表的id
+            // type 记忆中->掌握 : 1, 未背->掌握 : 2, 掌握->未背 : 3
+            url: "/wordbook/myWordbook/words/wordTypeChange/" + wordbook_id + "/" + words[currWord - 1].id + "/1",
+            dataType: "json", //json类型
+            success: function (result) {
+                console.log(result);
+                if (result.code === "200") {
+                    // TODO 以后可以做一些成功动画
+                    // 显示下一个单词
+                    showNextWord()
+                } else if (result.code === "-1") {
+                    // TODO 模块框提醒失败
+                }
+            },
+            error: function (errmsg) {
+                console.log("Ajax获取服务器数据出错了！" + errmsg);
+            }
+        });
+
+    });
+
+    // 显示下一个单词
+    function showNextWord() {
+        //更新顶部待学新词
+        $(".newWordCount").html((15 - currWord));
+        //获取下一个新词
+        let newWord = words[currWord++];
+        //更新相应数据
+        $("#word").html(newWord.word);
+        $("#pron_uk").html(newWord.pron_uk);
+        $("#pron_us").html(newWord.pron_us);
+        $("#meaning").html(newWord.paraphrase);
+        init();
+        //确保回到原先的背词界面
+        $(".w1").show(200);
+        $("#meanBtn").show(200);
+        $(".meaningArea").hide(200);
+        $(".wordDetailBox").hide(200);
+    }
 
     //默认查询，返回15个复习词
     let data = {curr: 1, size: 15};
@@ -146,7 +194,7 @@ window.onload = function (ev) {
             if (result.code === "200") {
                 words = result.data;
 
-                let word = words[0];
+                let word = words[currWord];
                 $("#word").html(word.word);
                 $("#pron_uk").html(word.pron_uk);
                 $("#pron_us").html(word.pron_us);
@@ -169,21 +217,7 @@ window.onload = function (ev) {
     $(".nextWord").click(function () {
         //如果没有背完15个单词
         if (currWord < 15) {
-            //更新顶部待学新词
-            $(".newWordCount").html((15 - currWord));
-            //获取下一个新词
-            let newWord = words[currWord++];
-            //更新相应数据
-            $("#word").html(newWord.word);
-            $("#pron_uk").html(newWord.pron_uk);
-            $("#pron_us").html(newWord.pron_us);
-            $("#meaning").html(newWord.paraphrase);
-            init();
-            //确保回到原先的背词界面
-            $(".w1").show(200);
-            $("#meanBtn").show(200);
-            $(".meaningArea").hide(200);
-            $(".wordDetailBox").hide(200);
+            showNextWord()
         } else {
             wordsData = [];
             for (let i = 0; i < words.length; i++) {
@@ -219,19 +253,6 @@ window.onload = function (ev) {
     })
 };
 
-//获取页面参数
-function getQueryVariable(variable) {
-    let query = window.location.search.substring(1);
-    let vars = query.split("&");
-    for (let i = 0; i < vars.length; i++) {
-        let pair = vars[i].split("=");
-        if (pair[0] == variable) {
-            return pair[1];
-        }
-    }
-    return (false);
-}
-
 //再来一组
 $(".sure").click(function () {
     currWord = 0;
@@ -258,7 +279,7 @@ $(".sure").click(function () {
                 $("#meaning").html(word.paraphrase);
                 $("#again").modal('hide')
 
-            } else if (result.code == 507) {
+            } else if (result.code === "507") {
                 alert("复习完了所有的单词！");
                 window.location.href = "/";
             }
@@ -273,4 +294,17 @@ $(".sure").click(function () {
 
 $(".backIndex").click(function () {
     window.location.href = "/";
-})
+});
+
+//获取页面参数
+function getQueryVariable(variable) {
+    let query = window.location.search.substring(1);
+    let vars = query.split("&");
+    for (let i = 0; i < vars.length; i++) {
+        let pair = vars[i].split("=");
+        if (pair[0] == variable) {
+            return pair[1];
+        }
+    }
+    return (false);
+}

@@ -20,8 +20,14 @@ import java.util.List;
 public class WordServiceImpl implements WordService {
 
     @Autowired
-    WordMapper wordMapper;
+    private WordMapper wordMapper;
 
+    /**
+     * 返回size个该词书的单词
+     * @param id
+     * @param pageUtil
+     * @return
+     */
     @Override
     public Response<?> getWords(int id, PageUtil pageUtil) {
         Response<List<Word>> response = Response.success();

@@ -9,9 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Created by shkstart on 2019/9/18
+ * 单词 mapper
+ * @author ZhengChaoHui
+ * @date 2019/9/18 22:27
  */
-
 @Repository
 @Mapper
 public interface WordMapper {
@@ -31,18 +32,24 @@ public interface WordMapper {
     @Update("update enwords set translation = #{translation} where word_id = #{word_id}")
     void upateWord(Word word);
 
-
-
-
+    /**
+     * 返回size个该词书的单词
+     * @param id
+     * @param pageUtil
+     * @return
+     */
     @Select("select id, word, paraphrase, pron_us, pron_uk from words " +
             "where wordbook_id = #{id} " +
             "limit #{pageUtil.offset},#{pageUtil.size};")
     List<Word> getWords(int id, PageUtil pageUtil);
 
-
- /**
-  * 查询未背单词
-  */
+    /**
+     * 查询未背单词
+     * @param wordbook_id
+     * @param learner_id
+     * @param pageUtil
+     * @return
+     */
     @Select("SELECT id,word,paraphrase,pron_us,pron_uk FROM words " +
             "WHERE wordbook_id = #{wordbook_id} " +
             "AND id NOT IN " +
@@ -52,7 +59,13 @@ public interface WordMapper {
             "LIMIT #{pageUtil.offset},#{pageUtil.size};")
     List<Word> getMyWordbookWords(Integer wordbook_id, Integer learner_id, PageUtil pageUtil);
 
- //查询正在背单词
+    /**
+     * 查询正在背单词
+     * @param wordbook_id
+     * @param learner_id
+     * @param pageUtil
+     * @return
+     */
     @Select("SELECT m.id,m.`memorized_count`,m.`next_time`," +
             "w.`word`,w.`paraphrase`,w.`pron_us`,w.`pron_uk` FROM memorize m  " +
             "INNER JOIN words w ON m.word_id = w.id " +
@@ -63,7 +76,13 @@ public interface WordMapper {
             "LIMIT #{pageUtil.offset},#{pageUtil.size};")
     List<Word> findMemorizingWords(Integer wordbook_id, Integer learner_id, PageUtil pageUtil);
 
-    //查询已掌握单词
+    /**
+     * 查询已掌握单词
+     * @param wordbook_id
+     * @param learner_id
+     * @param pageUtil
+     * @return
+     */
     @Select("SELECT m.id,m.`memorized_count`,w.`word`,w.`paraphrase` FROM memorize m  " +
             "INNER JOIN words w ON m.word_id = w.id " +
             "WHERE m.learner_id = #{learner_id} " +
@@ -72,20 +91,36 @@ public interface WordMapper {
             "LIMIT #{pageUtil.offset},#{pageUtil.size} ;")
     List<Word> findMemorizdWords(Integer wordbook_id, Integer learner_id, PageUtil pageUtil);
 
-    //设置该单词已掌握,记忆中->掌握
-    @Update("update table set  memorize is_get = 1, modified = NOW() where id = #{id}")
+    /**
+     * 设置该单词已掌握,记忆中->掌握
+     * @param id
+     */
+    @Update("update memorize set is_get = 1, modified = NOW() where id = #{id}")
     void setWordIsMemorized(Integer id);
 
-    //往记忆表中加一个单词，并将其设为已掌握。未学->掌握
+    /**
+     * 往记忆表中加一个单词，并将其设为已掌握。未学->掌握
+     * @param learner_id
+     * @param wordbook_id
+     * @param id
+     */
     @Insert("insert into memorize (learner_id,wordbook_id,word_id,memorized_count,is_get,created,modified) " +
             "values (#{learner_id},#{wordbook_id},#{id},0,1,NOW(),NOW())")
     void addWordAndSetMemorized(Integer learner_id, Integer wordbook_id, Integer id);
 
-    //从记忆表中删除某条数据，即重新学习
+    /**
+     * 从记忆表中删除某条数据，即重新学习
+     * @param id
+     */
     @Delete("delete table memorize where id = #{id}")
     void removeMemorizeWord(Integer id);
 
-    //获取复习单词数量
+    /**
+     * 获取复习单词数量
+     * @param learner_id
+     * @param wordbook_id
+     * @return
+     */
     @Select("SELECT count(*) FROM memorize " +
             "WHERE learner_id = #{learner_id} " +
             "AND wordbook_id = #{wordbook_id} " +
@@ -93,7 +128,13 @@ public interface WordMapper {
             "AND NOW() > next_time;")
     Integer getReviewCount(Integer learner_id, Integer wordbook_id);
 
-    //获取复习单词
+    /**
+     * 获取复习单词
+     * @param learner_id
+     * @param wordbook_id
+     * @param pageUtil
+     * @return
+     */
     @Select("SELECT m.`id`,w.word,w.pron_us,w.pron_uk,m.memorized_count,w.paraphrase " +
             "FROM memorize m  INNER JOIN words w ON \n" +
          "(m.`word_id` = w.`id`  \n" +
