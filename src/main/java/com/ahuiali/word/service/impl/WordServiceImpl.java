@@ -86,6 +86,8 @@ public class WordServiceImpl implements WordService {
         } else if(type == 2){
             //未背->掌握，该id是words表的id
             wordMapper.addWordAndSetMemorized(learner_id,wordbook_id,id);
+            // 更新学习数量
+            wordMapper.updateLearnCount(wordbook_id,learner_id, 1);
         } else if(type == 3){
             //掌握->未背 重新学习
             wordMapper.removeMemorizeWord(id);

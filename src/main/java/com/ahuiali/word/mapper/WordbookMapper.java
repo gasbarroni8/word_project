@@ -104,11 +104,11 @@ public interface WordbookMapper {
      * @return
      */
     @Select("SELECT lw.`learned_count`,w.`count`,w.`id`,w.`name`,\n" +
-            "\t(SELECT COUNT(*) FROM memorize \n" +
-            "\t\t  WHERE learner_id = #{learner_id}\n" +
-            "\t\t  AND wordbook_id = w.`id`\n" +
-            "\t\t  AND is_get = 0 \n" +
-            "\t\t  AND NOW() > next_time) AS review_count\n" +
+            "(SELECT COUNT(*) FROM memorize \n" +
+            "  WHERE learner_id = #{learner_id}\n" +
+            "  AND wordbook_id = w.`id`\n" +
+            "  AND is_get = 0 \n" +
+            "  AND NOW() > next_time) AS review_count\n" +
             "        FROM learner_wordbook lw \n" +
             "        INNER JOIN wordbook w\n" +
             "        ON lw.`wordbook_id` = w.`id` \n" +
