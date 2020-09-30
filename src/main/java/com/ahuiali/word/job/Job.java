@@ -75,7 +75,7 @@ public class Job {
             }
             // 查询用户当前计划的复习词汇
             Response<Wordbook> response = (Response<Wordbook>) wordbookService.getMemorizingWordbookAndReviewCount(learner.getId());
-            if (!"200".equals(response.getCode())) {
+            if (!Constant.SUCCESS.getCode().equals(response.getCode())) {
                 continue;
             }
             Wordbook wordbook = response.getData();
@@ -103,7 +103,6 @@ public class Job {
                 if (Response.isSuccess(emailResp)){
                     log.info("发送邮箱成功！用户：{}", learner.getEmail());
                 }
-
             }
         }
         log.info("【邮箱推送功能】结束定时查询");
@@ -121,6 +120,7 @@ public class Job {
             mimeMessageHelper.setText(msg, true);
             javaMailSender.send(mimeMessage);
         }catch (MessagingException e){
+            log.error("【定时推送】邮箱发送失败，接收方：{}", to);
             e.printStackTrace();
             //出错，邮箱发送失败
             return Response.result(Constant.Error.EMAIL_SEND_ERROR);

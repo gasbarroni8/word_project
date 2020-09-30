@@ -7,6 +7,7 @@ import com.ahuiali.word.mapper.WordbookMapper;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.pojo.Wordbook;
 import com.ahuiali.word.service.WordbookService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Transactional
 @Service
+@Slf4j
 public class WordbookServiceImpl implements WordbookService {
 
     @Autowired
@@ -51,6 +53,7 @@ public class WordbookServiceImpl implements WordbookService {
         Wordbook wordbook = wordbookMapper.getWordbookDetailAndIsAdd(id,learner_id);
 
         if(wordbook == null) {
+            log.warn("获取词书细节失败:{}", Constant.Error.WORDBOOK_NOT_FOUNDED.getMessage());
             response = Response.result(Constant.Error.WORDBOOK_NOT_FOUNDED);
         }
         response.setData(wordbook);
@@ -90,6 +93,7 @@ public class WordbookServiceImpl implements WordbookService {
         //新增计划，total为影响条数
         Integer total = wordbookMapper.addWordbook(learnerId,wordbook_id);
         if(total <= 0) {
+            log.warn("为用户添加词书失败: {}, wordbook_id:{}", Constant.Error.ADD_WORDBOOK_ERROR.getMessage(), wordbook_id);
             response = Response.result(Constant.Error.ADD_WORDBOOK_ERROR);
         }
         return response;

@@ -87,7 +87,7 @@ public class WordEctServiceImpl implements WordEctService {
                 //将字符串转为list
                 List<Object> sensList = Arrays.asList(senStr.split(","));
                 //从redis的sentences中获取
-                List<Object> sentencesObject = template.opsForHash().multiGet("sentences",sensList);
+                List<Object> sentencesObject = template.opsForHash().multiGet("sentences", sensList);
 
                 //如果获取的到，说明redis没失效
                 if(sentencesObject != null && sentencesObject.size()!= 0){
