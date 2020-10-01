@@ -50,6 +50,7 @@ public interface WordMapper {
      * @param pageUtil
      * @return
      */
+    // TODO 使用IN的时候，如果IN里面的内容很大，那么效率会低
     @Select("SELECT id,word,paraphrase,pron_us,pron_uk FROM words " +
             "WHERE wordbook_id = #{wordbook_id} " +
             "AND id NOT IN " +
