@@ -253,7 +253,12 @@
                 dataType: "json", //json类型
                 success: function(result) {
                     //提交成功后跳转至登陆页面
-                    window.location.href = "/learner/gotoLogin"
+                    if (result.data.code === "200") {
+                        window.location.href = "/learner/gotoLogin"
+                    } else {
+                        // Toast提示
+                    }
+
                 },
                 error: function(errmsg) {
                     console.log("Ajax获取服务器数据出错了！"+ errmsg);

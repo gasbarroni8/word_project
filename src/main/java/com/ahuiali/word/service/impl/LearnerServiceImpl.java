@@ -13,9 +13,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
 
 /**
  *
@@ -38,13 +40,13 @@ public class LearnerServiceImpl implements LearnerService {
         if (!"".equals(learner.getNickname()) && learner.getNickname() != null
                 && !"".equals(learner.getEmail()) && learner.getEmail() != null
                 && !"".equals(learner.getPassword()) && learner.getPassword() != null) {
-            int userId = learnerMapper.addLearner(learner);
+            int count = learnerMapper.addLearner(learner);
             // 插入失败
-            if (userId <= 0) {
+            if (count <= 0) {
                 response.putResult(Constant.Error.LEARNER_ADD_ERROR, response);
                 return response;
             }
-            response.setData(userId);
+            response.setData(learner.getId());
         }
         return response;
     }
@@ -292,6 +294,18 @@ public class LearnerServiceImpl implements LearnerService {
     }
 
     /**
+     * 查询所有需要邮箱提醒复习的用户
+     * @return
+     */
+    @Override
+    public Response<?> findAllReviewNoticeLearners() {
+        Response<List<Learner>> response = Response.success();
+        List<Learner> learners = learnerMapper.findAllReviewNoticeLearners();
+        response.setData(learners);
+        return response;
+    }
+
+    /**
      * 邮箱类
      *
      * @param email 用户邮箱
@@ -310,6 +324,13 @@ public class LearnerServiceImpl implements LearnerService {
         } catch (MessagingException e) {
             //出错，邮箱发送失败
             log.error("邮箱发送失败, error:{}", e.toString());
+            return Response.result(Constant.Error.EMAIL_SEND_ERROR);
+        } catch (Throwable e) {
+            //出错，邮箱发送失败
+            log.error("邮箱发送失败（大错误类捕获）, error:{}", e.toString());
+            // 回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            log.info("回滚事务，回滚之前添加用户的操作");
             return Response.result(Constant.Error.EMAIL_SEND_ERROR);
         }
         //成功，返回200

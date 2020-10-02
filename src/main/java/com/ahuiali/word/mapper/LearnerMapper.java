@@ -5,6 +5,8 @@ import com.ahuiali.word.pojo.Learner;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by shkstart on 2019/10/20
  */
@@ -54,6 +56,13 @@ public interface LearnerMapper {
      * @return
      */
     @Insert("insert into learner_setting (user_id, email, is_review_notice, created, modified) " +
-            "values (#{id}, #{email), 0, NOW(), NOW()")
+            "values (#{id}, #{email}, 0, NOW(), NOW() )")
     Integer addSetting(Learner learner);
+
+    /**
+     * 查询所有需要邮箱提醒复习的用户
+     * @return
+     */
+    @Select("select user_id as id, email from learner_setting where is_review_notice = 1")
+    List<Learner> findAllReviewNoticeLearners();
 }

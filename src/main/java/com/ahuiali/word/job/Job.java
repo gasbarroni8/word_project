@@ -54,6 +54,10 @@ public class Job {
 //        System.out.println("fixedRate 每隔3秒" + new Date());
 //    }
 
+    public static void main(String[] args) {
+        new Job().cronJob1();
+    }
+
     /**
      *     表示每天7时执行
      */
@@ -62,14 +66,8 @@ public class Job {
         // 查询所有用户*
         // 先给我自己查
         log.info("【邮箱推送功能】开始定时查询");
-        Response<Learner> learner1 = (Response<Learner>) learnerService.queryLearnerByEmail("1170782807@qq.com");
-        Response<Learner> learner2 = (Response<Learner>) learnerService.queryLearnerByEmail("zhenghuihui777@gmail.com");
-        Response<Learner> learner3 = (Response<Learner>) learnerService.queryLearnerByEmail("15900135325@163.com");
-        List<Learner> learners = new ArrayList<>(3);
-        learners.add(learner1.getData());
-        learners.add(learner2.getData());
-        learners.add(learner3.getData());
-        for (Learner learner : learners) {
+        List<Learner> list = (List<Learner>) learnerService.findAllReviewNoticeLearners().getData();
+        for (Learner learner : list) {
             if (learner == null) {
                 continue;
             }
@@ -119,11 +117,14 @@ public class Job {
             mimeMessageHelper.setSubject(title);
             mimeMessageHelper.setText(msg, true);
             javaMailSender.send(mimeMessage);
-        }catch (MessagingException e){
+        } catch (MessagingException e){
             log.error("【定时推送】邮箱发送失败，接收方：{}", to);
             e.printStackTrace();
             //出错，邮箱发送失败
             return Response.result(Constant.Error.EMAIL_SEND_ERROR);
+        } catch (Throwable e) {
+            //出错，邮箱发送失败
+            log.error("邮箱发送失败（大错误类捕获）, error:{}", e.toString());
         }
         //成功，返回200
         return Response.success();
