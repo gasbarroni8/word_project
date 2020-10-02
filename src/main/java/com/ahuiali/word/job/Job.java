@@ -65,7 +65,7 @@ public class Job {
         Response<Learner> learner1 = (Response<Learner>) learnerService.queryLearnerByEmail("1170782807@qq.com");
         Response<Learner> learner2 = (Response<Learner>) learnerService.queryLearnerByEmail("zhenghuihui777@gmail.com");
         Response<Learner> learner3 = (Response<Learner>) learnerService.queryLearnerByEmail("15900135325@163.com");
-        List<Learner> learners = new ArrayList<>(2);
+        List<Learner> learners = new ArrayList<>(3);
         learners.add(learner1.getData());
         learners.add(learner2.getData());
         learners.add(learner3.getData());

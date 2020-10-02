@@ -47,4 +47,13 @@ public interface LearnerMapper {
 
     @Update("update learner set password = #{password}, modified = NOW() where email = #{email}")
     Integer updatePassword(String email, String password);
+
+    /**
+     * 插入setting数据
+     * @param learner
+     * @return
+     */
+    @Insert("insert into learner_setting (user_id, email, is_review_notice, created, modified) " +
+            "values (#{id}, #{email), 0, NOW(), NOW()")
+    Integer addSetting(Learner learner);
 }

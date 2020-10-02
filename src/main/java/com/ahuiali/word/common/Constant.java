@@ -16,6 +16,7 @@ public class Constant {
         Result ARG_ERROR = new Result("-1", "参数错误");
 
         // 登录模块
+        Result LEARNER_ADD_ERROR = new Result("400", "用户添加失败！");
         Result NICKNAME_EXIST = new Result("401", "昵称已存在");
         Result ACTIVE_EXPIRED = new Result("402", "激活码过期，请重新发送邮箱");
         Result ACTIVE_INVALID = new Result("403", "激活码无效，请重新注册");

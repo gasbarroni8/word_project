@@ -34,12 +34,19 @@ public class LearnerServiceImpl implements LearnerService {
     @Override
     public Response<?> addLearner(Learner learner) {
         log.info("添加用户，learner：{}", learner);
+        Response<Integer> response = Response.success();
         if (!"".equals(learner.getNickname()) && learner.getNickname() != null
                 && !"".equals(learner.getEmail()) && learner.getEmail() != null
-                && !"".equals(learner.getPassword()) && learner.getPassword() != null)
-            learnerMapper.addLearner(learner);
-
-        return Response.success();
+                && !"".equals(learner.getPassword()) && learner.getPassword() != null) {
+            int userId = learnerMapper.addLearner(learner);
+            // 插入失败
+            if (userId <= 0) {
+                response.putResult(Constant.Error.LEARNER_ADD_ERROR, response);
+                return response;
+            }
+            response.setData(userId);
+        }
+        return response;
     }
 
     /**
@@ -142,10 +149,18 @@ public class LearnerServiceImpl implements LearnerService {
         String token = System.currentTimeMillis() + learner.getEmail();
         //设置激活码
         learner.setActivecode(token);
-        Response<?> response = addLearner(learner);
         //添加用户
+        Response<?> response = addLearner(learner);
+
         if (!Constant.SUCCESS.getCode().equals(response.getCode())) {
             return response;
+        }
+        // 插入用户的setting数据
+        learner.setId((Integer) response.getData());
+        // 插入用户的setting失败
+        if (learnerMapper.addSetting(learner) <= 0) {
+            // 打印日志即可
+            log.error("插入用户的setting失败, 用户数据：id:{}, email:{}", learner.getId(), learner.getEmail());
         }
         //发送邮箱
         String title = "注册检测（背词系统）";
@@ -168,7 +183,7 @@ public class LearnerServiceImpl implements LearnerService {
             response = Response.result(response, Constant.Error.ACTIVE_EXPIRED);
         } else {
             if (learnerMapper.haveActive(activecode) != null) {
-                //将用户状态设置为可用
+                // 将用户状态设置为可用
                 learnerMapper.confirmLearner(activecode);
             } else {
                 //找不到激活码,说明无效
