@@ -9,6 +9,18 @@ import com.ahuiali.word.common.resp.Result;
  */
 public class Constant {
 
+    public final static Integer ZERO = 0;
+
+    /**
+     * 邮箱类
+     */
+    public final static String EMAIL_FORM = "1170782807@qq.com";
+    public final static String FIND_PWD_TITLE = "找回密码";
+    public final static String FIND_PWD_MSG = "密码默认设置为：%s";
+
+    public final static String REGISTER_TITLE = "注册检测（背词系统）";
+    public final static String REGISTER_MSG = "<html><body><a href='http://119.23.219.54:80/learner/register/confirm/%s'>点击即可确认身份！</a></body></html>";
+
     public static Result SUCCESS = new Result("200", "success");
 
     public interface Error {

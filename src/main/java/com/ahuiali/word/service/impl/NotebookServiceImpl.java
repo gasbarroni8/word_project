@@ -34,7 +34,7 @@ public class NotebookServiceImpl  implements NotebookService {
         //根据id查询所有生词本
         List<Notebook> notebooks = notebookMapper.findAllNotebookByLearnerId(learner_id);
         //大于0则返回
-        if(notebooks.size() <= 0){
+        if(notebooks.size() <= Constant.ZERO){
             return Response.result(Constant.Error.NOTEBOOK_ADD_ERROR);
         }
         response.setData(notebooks);
@@ -50,8 +50,8 @@ public class NotebookServiceImpl  implements NotebookService {
     public Response<?> addNotebook(Notebook notebook) {
         Response<?> response = Response.success();
         //返回影响条数
-        Integer total = notebookMapper.addNotebook(notebook);
-        if(total <= 0){
+        int total = notebookMapper.addNotebook(notebook);
+        if(total <= Constant.ZERO){
             response = Response.result(Constant.Error.NOTEBOOK_ADD_ERROR);
         }
         return response;
@@ -67,8 +67,8 @@ public class NotebookServiceImpl  implements NotebookService {
     @Transactional(rollbackFor=Exception.class)
     public Response<?> removeNotebook(Integer id) {
         Response<?> response = Response.success();
-        Integer total = notebookMapper.removeNotebook(id);
-        if(total > 0){
+        int total = notebookMapper.removeNotebook(id);
+        if(total > Constant.ZERO){
             //删除生词本成功
             //删除生词本的所有单词
             // TODO 之后要用队列
@@ -90,7 +90,7 @@ public class NotebookServiceImpl  implements NotebookService {
         Response<?> response = Response.success();
         Integer notebook_id = notebookMapper.findIdByNotebookWordId(id);
         Integer total = notebookMapper.removeWord(id);
-        if(total > 0){
+        if(total > Constant.ZERO){
             //大于0说明删除成功
             //生词本单词数量减一
             notebookMapper.notebookCountMinus(notebook_id);
@@ -111,7 +111,7 @@ public class NotebookServiceImpl  implements NotebookService {
     public Response<?> addWord(Integer notebook_id, String word) {
         Response<?> response = Response.success();
         Integer total = notebookMapper.addWord(notebook_id,word);
-        if(total <= 0){
+        if(total <= Constant.ZERO){
             response = Response.result(Constant.Error.NOTEBOOK_WORD_ADD_ERROR);
         }
         return response;
@@ -131,7 +131,7 @@ public class NotebookServiceImpl  implements NotebookService {
         Notebook notebook = new Notebook();
         notebook.setWords(words);
         //不为空返回200
-        if(words.size() <= 0){
+        if(words.size() <= Constant.ZERO){
             return Response.result(Constant.Error.NOTEBOOK_WORD_EMPTY);
         }
         response.setData(notebook);
@@ -148,7 +148,7 @@ public class NotebookServiceImpl  implements NotebookService {
     public Response<?> editNotebook(String name, Integer learner_id) {
         Response<?> response = Response.success();
         Integer count = notebookMapper.editNotebookName(name,learner_id);
-        if(count <= 0){
+        if(count <= Constant.ZERO){
             response = Response.result(Constant.Error.NOTEBOOK_UPDATE_ERROR);
         }
         return response;

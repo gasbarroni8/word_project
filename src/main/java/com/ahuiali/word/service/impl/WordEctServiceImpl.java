@@ -46,7 +46,7 @@ public class WordEctServiceImpl implements WordEctService {
         //数据库中查找
         List<WordEct> wordEctList = wordEctMapper.getWordsByPre(wordRre);
         //如果大于0说明仍有提示
-        if(wordEctList.size() <= 0){
+        if(wordEctList.size() <= Constant.ZERO){
            return Response.result(Constant.Error.WORD_PRE_NOT_FOUNDED);
         }
         response.setData(wordEctList);
@@ -104,7 +104,7 @@ public class WordEctServiceImpl implements WordEctService {
                 //查询该单词是否已经被该用户收藏
                 Integer notebook_id = notebookMapper.findWordExistNotebooks(wordEctDetail.getWord(),learner_id);
                 //已收藏
-                if(notebook_id != null && notebook_id > 0){
+                if(notebook_id != null && notebook_id > Constant.ZERO){
                     wordEctDetail.setNotebook_word_id(notebook_id);
                 }
 
@@ -177,10 +177,10 @@ public class WordEctServiceImpl implements WordEctService {
         //查询该单词是否已收藏
         Integer notebook_id = notebookMapper.findWordExistNotebooks(wordEct.getWord(),learner_id);
         //已收藏
-        if(notebook_id != null && notebook_id > 0){
+        if(notebook_id != null && notebook_id > Constant.ZERO){
             wordEct.setNotebook_word_id(notebook_id);
         }else {
-            wordEct.setNotebook_word_id(0);
+            wordEct.setNotebook_word_id(Constant.ZERO);
         }
         return response;
     }
@@ -237,10 +237,10 @@ public class WordEctServiceImpl implements WordEctService {
         //查询该单词是否已收藏
         Integer notebookId = notebookMapper.findWordExistNotebooks(wordEct.getWord(),learnerId);
         //已收藏
-        if(notebookId != null && notebookId > 0){
+        if(notebookId != null && notebookId > Constant.ZERO){
             wordEct.setNotebook_word_id(notebookId);
         }else {
-            wordEct.setNotebook_word_id(0);
+            wordEct.setNotebook_word_id(Constant.ZERO);
         }
         response.setData(wordEct);
         return response;

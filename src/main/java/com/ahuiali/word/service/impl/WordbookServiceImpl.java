@@ -92,7 +92,7 @@ public class WordbookServiceImpl implements WordbookService {
         wordbookMapper.removePlan(learnerId);
         //新增计划，total为影响条数
         Integer total = wordbookMapper.addWordbook(learnerId,wordbook_id);
-        if(total <= 0) {
+        if(total <= Constant.ZERO) {
             log.warn("为用户添加词书失败: {}, wordbook_id:{}", Constant.Error.ADD_WORDBOOK_ERROR.getMessage(), wordbook_id);
             response = Response.result(Constant.Error.ADD_WORDBOOK_ERROR);
         }
@@ -110,7 +110,7 @@ public class WordbookServiceImpl implements WordbookService {
         //查询我的词书
         List<Wordbook> myWordbooks = wordbookMapper.findMyWordbooks(learnerId);
         //如果没有词书，则返回502
-        if(myWordbooks.size() <= 0){
+        if(myWordbooks.size() <= Constant.ZERO){
             response = Response.result(Constant.Error.LEARNER_NOT_WORDBOOK);
         }
         response.setData(myWordbooks);

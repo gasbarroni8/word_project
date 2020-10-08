@@ -1,6 +1,7 @@
 package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.enums.StatusEnum;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.mapper.LearnerMapper;
 import com.ahuiali.word.pojo.Learner;
@@ -8,7 +9,6 @@ import com.ahuiali.word.service.LearnerService;
 import com.ahuiali.word.common.utils.Md5Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class LearnerServiceImpl implements LearnerService {
                 && !"".equals(learner.getPassword()) && learner.getPassword() != null) {
             int count = learnerMapper.addLearner(learner);
             // 插入失败
-            if (count <= 0) {
+            if (count <= Constant.ZERO) {
                 response.putResult(Constant.Error.LEARNER_ADD_ERROR, response);
                 return response;
             }
@@ -67,15 +67,15 @@ public class LearnerServiceImpl implements LearnerService {
         Response<Learner> response = Response.success();
         //该用户存在时
         if (learner != null) {
-            Integer status = learner.getStatus();
-            if (status == 1) {
+            int status = learner.getStatus();
+            if (status == StatusEnum.NORMAL.getStatus()) {
                 response.setData(learner);
                 return response;
-            } else if (status == 2) {
+            } else if (status == StatusEnum.BLOCKED.getStatus()) {
                 //封禁中
                 response = Response.result(Constant.Error.LEARNER_BLOCKED);
                 return response;
-            } else if (status == 0) {
+            } else if (status == StatusEnum.NOT_ACTIVE.getStatus()) {
                 //审核中
                 response = Response.result(Constant.Error.LEARNER_NON_EMAIL_VERIFY);
                 return response;
@@ -121,7 +121,7 @@ public class LearnerServiceImpl implements LearnerService {
         log.info("根据昵称查询用户, nickname:{}", nickname);
         Integer count = learnerMapper.queryLearnerByNickname(nickname);
         Response<?> response = Response.success();
-        if (count == 0) {
+        if (count <= Constant.ZERO) {
             //如果在数据库中找不到该昵称
             //敏感检测
             if (true) {
@@ -131,7 +131,7 @@ public class LearnerServiceImpl implements LearnerService {
             }
         } else {
             //如果在数据库中找到该昵称
-            response = Response.result(response, Constant.Error.NICKNAME_EXIST);
+            response.putResult(Constant.Error.NICKNAME_EXIST);
         }
         return response;
     }
@@ -165,28 +165,25 @@ public class LearnerServiceImpl implements LearnerService {
             log.error("插入用户的setting失败, 用户数据：id:{}, email:{}", learner.getId(), learner.getEmail());
         }
         //发送邮箱
-        String title = "注册检测（背词系统）";
-        String msg = "<html><body><a href='http://119.23.219.54:80/learner/register/confirm/" +
-                token + "'>点击即可确认身份！</a></body></html>";
-        return sentEmail(learner.getEmail(), title, msg);
+        return sentEmail(learner.getEmail(), Constant.REGISTER_TITLE, String.format(Constant.REGISTER_MSG, token));
     }
 
     /**
      * 激活用户
      *
-     * @param activecode
+     * @param activeCode
      * @return
      */
     @Override
-    public Response<?> confirm(String activecode) {
+    public Response<?> confirm(String activeCode) {
         Response<?> response = Response.success();
         //30分钟失效
-        if ((System.currentTimeMillis() - Long.parseLong(activecode.substring(0, 13))) / (1000 * 60) > 30) {
+        if ((System.currentTimeMillis() - Long.parseLong(activeCode.substring(0, 13))) / (1000 * 60) > 30) {
             response = Response.result(response, Constant.Error.ACTIVE_EXPIRED);
         } else {
-            if (learnerMapper.haveActive(activecode) != null) {
+            if (learnerMapper.haveActive(activeCode) != null) {
                 // 将用户状态设置为可用
-                learnerMapper.confirmLearner(activecode);
+                learnerMapper.confirmLearner(activeCode);
             } else {
                 //找不到激活码,说明无效
                 response = Response.result(response, Constant.Error.ACTIVE_INVALID);
@@ -248,14 +245,13 @@ public class LearnerServiceImpl implements LearnerService {
         //该邮箱是否存在
         Response<?> response = queryLearnerByEmail(email);
         //邮箱存在
-        if (response.getCode() == "408") {
-            String title = "找回密码";
+        if (response.getCode().equals("408")) {
             //设置新密码（MD5不可解密，故只能自动设置一个新的密码，然后返回，用户可根据该密码登陆，然后再修改）
 //            String newPassword = learnerJson.getLearner().getPassword().substring(0,7);
             // TODO 可修改为随机字符串
             String newPassword = "12345678";
             //发送邮箱
-            response = sentEmail(email, title, "密码默认设置为 ：" + newPassword);
+            response = sentEmail(email, Constant.FIND_PWD_TITLE, String.format(Constant.FIND_PWD_MSG, newPassword));
             //邮箱发送成功
             if (Constant.SUCCESS.getCode().equals(response.getCode())) {
                 //当邮箱发送成功才修改密码
@@ -264,14 +260,14 @@ public class LearnerServiceImpl implements LearnerService {
             } else if (Constant.Error.EMAIL_SEND_ERROR.getCode().equals(response.getCode())) {
                 log.warn("邮箱发送失败, email:{}", email);
                 //邮箱发送失败
-                response = Response.result(Constant.Error.EMAIL_SEND_ERROR);
+                response.putResult(Constant.Error.EMAIL_SEND_ERROR);
                 return response;
             }
 
         }
 
         //不存在邮箱
-        response = Response.result(response, Constant.Error.EMAIL_NO_FOUNDED);
+        response.putResult(Constant.Error.EMAIL_NO_FOUNDED);
         return response;
 
     }
@@ -286,7 +282,7 @@ public class LearnerServiceImpl implements LearnerService {
     @Override
     public Response<?> updatePassword(String email, String newPassword) {
         Integer count = learnerMapper.updatePassword(email, newPassword);
-        if (count > 0) {
+        if (count > Constant.ZERO) {
             return Response.success();
         } else {
             return Response.result(Constant.Error.UPDATE_PWD_ERROR);
@@ -316,7 +312,7 @@ public class LearnerServiceImpl implements LearnerService {
             // MimeMessage可以显示html效果
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setFrom("1170782807@qq.com");
+            mimeMessageHelper.setFrom(Constant.EMAIL_FORM);
             mimeMessageHelper.setTo(email);
             mimeMessageHelper.setSubject(title);
             mimeMessageHelper.setText(msg, true);

@@ -60,6 +60,11 @@ public class Response<T> implements Serializable {
         response.setMessage(result.getMessage());
     }
 
+    public void putResult(Result result) {
+        this.setCode(result.getCode());
+        this.setMessage(result.getMessage());
+    }
+
     public static Boolean isSuccess(Response<?> response){
         return  SUCCESS.equals(response.getCode());
     }

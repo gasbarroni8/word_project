@@ -10,9 +10,9 @@ import java.util.List;
 public interface WordService {
     Response<?> getWords(int id, PageUtil pageUtil);
 
-    Response<?> myWordbookWords(Integer wordbook_id, Integer learnerId, PageUtil pageUtil, Integer wordsType);
+    Response<?> myWordbookWords(Integer wordbook_id, Integer learnerId, PageUtil pageUtil, int wordsType);
 
-    Response<?> wordTypeChange(Integer learner_id, Integer wordbook_id, Integer id, Integer type);
+    Response<?> wordTypeChange(Integer learner_id, Integer wordbook_id, Integer id, int type);
 
     Response<?> getReviewWords(Integer learner_id, Integer wordbook_id, PageUtil pageUtil);
 
