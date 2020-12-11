@@ -33,7 +33,7 @@ public class LearnerServiceImpl implements LearnerService {
     @Autowired
     JavaMailSender javaMailSender;
 
-    @Override
+
     public Response<?> addLearner(Learner learner) {
         log.info("添加用户，learner：{}", learner);
         Response<Integer> response = Response.success();

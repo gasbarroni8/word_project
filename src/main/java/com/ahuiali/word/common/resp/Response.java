@@ -55,7 +55,7 @@ public class Response<T> implements Serializable {
         return response;
     }
 
-    public <T> void putResult(Result result, Response<T> response) {
+    public void putResult(Result result, Response<T> response) {
         response.setCode(result.getCode());
         response.setMessage(result.getMessage());
     }

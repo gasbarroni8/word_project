@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface LearnerService {
 
-    Response<?> addLearner(Learner learner);
-
     Response<?> queryLearner(Learner learner);
 
     Response<?> queryLearnerByEmail(String email);
