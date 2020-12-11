@@ -37,6 +37,7 @@ public class WordEctServiceImpl implements WordEctService {
 
     /**
      * 通过单词前缀来模糊查询单词，自动提示效果
+     *
      * @param wordRre
      * @return
      */
@@ -46,8 +47,8 @@ public class WordEctServiceImpl implements WordEctService {
         //数据库中查找
         List<WordEct> wordEctList = wordEctMapper.getWordsByPre(wordRre);
         //如果大于0说明仍有提示
-        if(wordEctList.size() <= Constant.ZERO){
-           return Response.result(Constant.Error.WORD_PRE_NOT_FOUNDED);
+        if (wordEctList.size() <= Constant.ZERO) {
+            return Response.result(Constant.Error.WORD_PRE_NOT_FOUNDED);
         }
         response.setData(wordEctList);
         return response;
@@ -55,15 +56,16 @@ public class WordEctServiceImpl implements WordEctService {
 
     /**
      * 查找单词详细信息
-     * @param word 单词
-     * @param learner_id 用户id
+     *
+     * @param word      单词
+     * @param learnerId 用户id
      * @return
      */
     @Override
-    public Response<?> findWordDetail(String word, Integer learner_id) {
+    public Response<?> findWordDetail(String word, Integer learnerId) {
         Response<WordEctDetail> response = Response.success();
         //先去redis查有没有该单词
-        boolean hasWordKey = template.opsForHash().hasKey("words",word);
+        boolean hasWordKey = template.opsForHash().hasKey("words", word);
         //单词详细信息
         WordEctDetail wordEctDetail = new WordEctDetail();
         //例句
@@ -75,59 +77,61 @@ public class WordEctServiceImpl implements WordEctService {
         //是否需要在数据库中查询
         boolean searchSensInDB = false;
         //如果redis中有该单词
-        if(hasWordKey){
+        if (hasWordKey) {
             //获取该单词的信息
-            String wordJsonStr = (String) template.opsForHash().get("words",word);
+            String wordJsonStr = (String) template.opsForHash().get("words", word);
             //转码
-            wordEctDetail =  JSON.parseObject(wordJsonStr,WordEctDetail.class);
+            wordEctDetail = JSON.parseObject(wordJsonStr, WordEctDetail.class);
+            // TODO NPE
             //获取例句id数组字符串
             senStr = wordEctDetail.getSentence_list();
             //查询例句
-            if(senStr != null && !"".equals(senStr)){
+            if (senStr != null && !"".equals(senStr)) {
                 //将字符串转为list
                 List<Object> sensList = Arrays.asList(senStr.split(","));
                 //从redis的sentences中获取
                 List<Object> sentencesObject = template.opsForHash().multiGet("sentences", sensList);
 
                 //如果获取的到，说明redis没失效
-                if(sentencesObject != null && sentencesObject.size()!= 0){
+                if (sentencesObject.size() != 0) {
                     //转码（应该还可以优化）
-                    for(Object s : sentencesObject){
-                        Sentence sentence = JSON.parseObject(s.toString(),Sentence.class);;
+                    for (Object s : sentencesObject) {
+                        Sentence sentence = JSON.parseObject(s.toString(), Sentence.class);
+                        ;
                         sentences.add(sentence);
                     }
-                }else {
+                } else {
                     //去数据库中查
                     searchSensInDB = true;
                 }
                 wordEctDetail.setSentences(sentences);
                 //查询该单词是否已经被该用户收藏
-                Integer notebook_id = notebookMapper.findWordExistNotebooks(wordEctDetail.getWord(),learner_id);
+                Integer notebook_id = notebookMapper.findWordExistNotebooks(wordEctDetail.getWord(), learnerId);
                 //已收藏
-                if(notebook_id != null && notebook_id > Constant.ZERO){
+                if (notebook_id != null && notebook_id > Constant.ZERO) {
                     wordEctDetail.setNotebook_word_id(notebook_id);
                 }
 
             }
-        }else {
+        } else {
             //否则全部数据去数据库中查询
-            wordEctDetail = wordEctMapper.findWordEctDetail(word,learner_id);
+            wordEctDetail = wordEctMapper.findWordEctDetail(word, learnerId);
             //数据库中仍找不到
-            if(wordEctDetail == null ||wordEctDetail.getId() == null){
+            if (wordEctDetail == null || wordEctDetail.getId() == null) {
                 return Response.result(Constant.Error.WORDECT_NOT_FOUNDED);
-            }else {
+            } else {
                 //数据库中查询到了单词
                 //查询例句id字符串
                 senStr = wordEctMapper.findWordSentenceIds(wordEctDetail.getWord());
                 //如果查询到例句id字符串
-                if(senStr != null && !"".equals(senStr)){
+                if (senStr != null && !"".equals(senStr)) {
                     //需要在数据库中查
                     searchSensInDB = true;
                 }
             }
         }
         //是否需要在数据库中查询例句
-        if(searchSensInDB){
+        if (searchSensInDB) {
             sens = Arrays.asList(senStr.split(","));
             //处理例句id字符串
             StringBuilder sb = new StringBuilder();
@@ -149,37 +153,38 @@ public class WordEctServiceImpl implements WordEctService {
 
     /**
      * 查询单词（释义音标）
-     * @param word 单词
-     * @param learner_id 用户id
+     *
+     * @param word      单词
+     * @param learnerId 用户id
      * @return
      */
     @Override
-    public Response<?> findWord(String word, Integer learner_id) {
+    public Response<?> findWord(String word, Integer learnerId) {
         Response<WordEct> response = Response.success();
         WordEct wordEct = new WordEct();
         //先去redis查有没有该单词
-        boolean hasWordKey = template.opsForHash().hasKey("words",word);
+        boolean hasWordKey = template.opsForHash().hasKey("words", word);
         //如果redis中能找到
-        if(hasWordKey){
+        if (hasWordKey) {
             //获取该单词的信息
-            String wordJsonStr = (String) template.opsForHash().get("words","word");
-            if(!"".equals(wordJsonStr) && wordJsonStr != null){
+            String wordJsonStr = (String) template.opsForHash().get("words", "word");
+            if (!"".equals(wordJsonStr) && wordJsonStr != null) {
                 //将json转换为单词对象
-                wordEct =  JSON.parseObject(wordJsonStr,WordEct.class);
+                wordEct = JSON.parseObject(wordJsonStr, WordEct.class);
             }
         } else {
             //数据库中查询
             wordEct = wordEctMapper.findWord(word);
-            if(wordEct == null){
+            if (wordEct == null) {
                 return Response.result(Constant.Error.WORDECT_NOT_FOUNDED);
             }
         }
         //查询该单词是否已收藏
-        Integer notebook_id = notebookMapper.findWordExistNotebooks(wordEct.getWord(),learner_id);
+        Integer notebook_id = notebookMapper.findWordExistNotebooks(wordEct.getWord(), learnerId);
         //已收藏
-        if(notebook_id != null && notebook_id > Constant.ZERO){
+        if (notebook_id != null && notebook_id > Constant.ZERO) {
             wordEct.setNotebook_word_id(notebook_id);
-        }else {
+        } else {
             wordEct.setNotebook_word_id(Constant.ZERO);
         }
         return response;
@@ -187,6 +192,7 @@ public class WordEctServiceImpl implements WordEctService {
 
     /**
      * 查找单词详细信息（非redis）
+     *
      * @param word
      * @param learnerId
      * @return
@@ -195,10 +201,10 @@ public class WordEctServiceImpl implements WordEctService {
     public Response<?> findWordDetailNoRedis(String word, Integer learnerId) {
         Response<WordEctDetail> response = Response.success();
         //单词详细信息
-        WordEctDetail wordEctDetail = wordEctMapper.findWordEctDetail(word,learnerId);
+        WordEctDetail wordEctDetail = wordEctMapper.findWordEctDetail(word, learnerId);
         String senStr = wordEctMapper.findWordSentenceIds(wordEctDetail.getWord());
-        if(!"".equals(senStr) && senStr != null){
-            List<String > sens = Arrays.asList(senStr.split(","));
+        if (!"".equals(senStr) && senStr != null) {
+            List<String> sens = Arrays.asList(senStr.split(","));
 
             //处理例句id字符串
             StringBuilder sb = new StringBuilder();
@@ -213,9 +219,9 @@ public class WordEctServiceImpl implements WordEctService {
         }
 
         //查询该单词是否已经被该用户收藏
-        Integer notebook_id = notebookMapper.findWordExistNotebooks(wordEctDetail.getWord(),learnerId);
+        Integer notebook_id = notebookMapper.findWordExistNotebooks(wordEctDetail.getWord(), learnerId);
         //已收藏
-        if(notebook_id != null && notebook_id > 0){
+        if (notebook_id != null && notebook_id > 0) {
             wordEctDetail.setNotebook_word_id(notebook_id);
         }
 
@@ -231,15 +237,15 @@ public class WordEctServiceImpl implements WordEctService {
     public Response<?> findWordNoRedis(String word, Integer learnerId) {
         Response<WordEct> response = Response.success();
         WordEct wordEct = wordEctMapper.findWord(word);
-        if(wordEct == null){
+        if (wordEct == null) {
             return Response.result(Constant.Error.WORDECT_NOT_FOUNDED);
         }
         //查询该单词是否已收藏
-        Integer notebookId = notebookMapper.findWordExistNotebooks(wordEct.getWord(),learnerId);
+        Integer notebookId = notebookMapper.findWordExistNotebooks(wordEct.getWord(), learnerId);
         //已收藏
-        if(notebookId != null && notebookId > Constant.ZERO){
+        if (notebookId != null && notebookId > Constant.ZERO) {
             wordEct.setNotebook_word_id(notebookId);
-        }else {
+        } else {
             wordEct.setNotebook_word_id(Constant.ZERO);
         }
         response.setData(wordEct);

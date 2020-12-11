@@ -66,14 +66,14 @@ public class BookServiceImpl implements BookService {
     /**
      * 获取书籍详情
      *
-     * @param index_book 书籍号
-     * @param learner_id 用户id
+     * @param indexBook 书籍号
+     * @param learnerId 用户id
      * @return
      */
     @Override
-    public Response<?> getBookDetail(Integer index_book, Integer learner_id) {
+    public Response<?> getBookDetail(Integer indexBook, Integer learnerId) {
         Response<Book> response = Response.success();
-        Book book = bookMapper.findBookByIndex(index_book, learner_id);
+        Book book = bookMapper.findBookByIndex(indexBook, learnerId);
         if (book == null) {
             return Response.result(Constant.Error.BOOK_NOT_FOUNDED);
         }
@@ -90,13 +90,13 @@ public class BookServiceImpl implements BookService {
     /**
      * 获取用户书架，不需要分页
      *
-     * @param learner_id
+     * @param learnerId
      * @return
      */
     @Override
-    public Response<?> getMyBooks(Integer learner_id) {
+    public Response<?> getMyBooks(Integer learnerId) {
         Response<List<Book>> response = Response.success();
-        List<Book> books = bookMapper.getMyBooks(learner_id);
+        List<Book> books = bookMapper.getMyBooks(learnerId);
         if (books.size() <= ZERO) {
             return Response.result(Constant.Error.BOOKSHELF_EMPTY);
         }
@@ -107,13 +107,13 @@ public class BookServiceImpl implements BookService {
     /**
      * 根据章节号返回该章节内容
      *
-     * @param chapter_index
+     * @param chapterIndex
      * @return
      */
     @Override
-    public Response<?> findParasByChapterIndex(Integer chapter_index) {
+    public Response<?> findParasByChapterIndex(Integer chapterIndex) {
         Response<Chapter> response = Response.success();
-        Chapter chapter = bookMapper.getParaByChapterIndex(chapter_index);
+        Chapter chapter = bookMapper.getParaByChapterIndex(chapterIndex);
         if (chapter == null) {
             return Response.result(Constant.Error.CHAPTER_EMPTY);
         }
@@ -124,14 +124,14 @@ public class BookServiceImpl implements BookService {
     /**
      * 根据书号获取其所有的章节名称
      *
-     * @param index_book
+     * @param indexBook
      * @param pageUtil
      * @return
      */
     @Override
-    public Response<?> getAllChapterByBookIndex(Integer index_book, PageUtil pageUtil) {
+    public Response<?> getAllChapterByBookIndex(Integer indexBook, PageUtil pageUtil) {
         Response<List<Chapter>> response = Response.success();
-        List<Chapter> chapters = bookMapper.getAllChapterByBookIndex(index_book, pageUtil);
+        List<Chapter> chapters = bookMapper.getAllChapterByBookIndex(indexBook, pageUtil);
         if (chapters.size() <= ZERO) {
             return Response.result(Constant.Error.CHAPTER_LIST_EMPTY);
         }
@@ -142,15 +142,15 @@ public class BookServiceImpl implements BookService {
     /**
      * 加入书架
      *
-     * @param index_book 书号
-     * @param learner_id 用户id
+     * @param indexBook 书号
+     * @param learnerId 用户id
      * @return
      */
     @Override
-    public Response<?> addBook(Integer index_book, Integer learner_id) {
+    public Response<?> addBook(Integer indexBook, Integer learnerId) {
         Response<?> response = Response.success();
-        String lastest_loc = index_book + INIT_LOC;
-        Integer count = bookMapper.addBook(index_book, learner_id, lastest_loc);
+        String lastest_loc = indexBook + INIT_LOC;
+        Integer count = bookMapper.addBook(indexBook, learnerId, lastest_loc);
         if (count <= ZERO) {
             response = Response.result(Constant.Error.BOOK_ADD_ERROR);
         }
@@ -160,14 +160,14 @@ public class BookServiceImpl implements BookService {
     /**
      * 从书架中删除书本
      *
-     * @param learner_id
-     * @param index_book
+     * @param learnerId
+     * @param indexBook
      * @return
      */
     @Override
-    public Response<?> removeBook(Integer learner_id, Integer index_book) {
+    public Response<?> removeBook(Integer learnerId, Integer indexBook) {
         Response<?> response = Response.success();
-        Integer count = bookMapper.removeBook(learner_id, index_book);
+        Integer count = bookMapper.removeBook(learnerId, indexBook);
         if (count <= ZERO) {
             response = Response.result(Constant.Error.BOOK_REMOVE_ERROR);
         }
@@ -177,15 +177,15 @@ public class BookServiceImpl implements BookService {
     /**
      * 更新最新阅读位置
      *
-     * @param learner_id
-     * @param book_index
-     * @param lastest_loc
+     * @param learnerId
+     * @param bookIndex
+     * @param lastestLoc
      * @return
      */
     @Override
-    public Response<?> updateBook(Integer learner_id, Integer book_index, String lastest_loc) {
+    public Response<?> updateBook(Integer learnerId, Integer bookIndex, String lastestLoc) {
         Response<?> response = Response.success();
-        Integer count = bookMapper.updateBook(learner_id, book_index, lastest_loc);
+        Integer count = bookMapper.updateBook(learnerId, bookIndex, lastestLoc);
         if (count <= ZERO) {
             response = Response.result(Constant.Error.BOOK_LOC_UPDATE_ERROR);
         }
@@ -196,13 +196,13 @@ public class BookServiceImpl implements BookService {
     /**
      * 根据段落id查询相应的中文翻译
      *
-     * @param para_id
+     * @param paraId
      * @return
      */
     @Override
-    public Response<?> findParaCNById(Integer para_id) {
+    public Response<?> findParaCNById(Integer paraId) {
         Response<Paragraph> response = Response.success();
-        Paragraph paragraph = bookMapper.findParaCNById(para_id);
+        Paragraph paragraph = bookMapper.findParaCNById(paraId);
         if (paragraph == null) {
             return Response.result(Constant.Error.PARA_CN_EMPTY);
         }

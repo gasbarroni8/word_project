@@ -28,13 +28,14 @@ public class WordbookServiceImpl implements WordbookService {
 
     /**
      * 查询所有词书
+     *
      * @return
      */
     @Override
     public Response<?> getWordbooks() {
         Response<List<Wordbook>> response = Response.success();
         List<Wordbook> wordbooks = wordbookMapper.findAllWordbook();
-        if(wordbooks == null){
+        if (wordbooks == null) {
             response = Response.result(Constant.Error.WORDBOOK_NOT_FOUNDED);
         }
         response.setData(wordbooks);
@@ -43,16 +44,17 @@ public class WordbookServiceImpl implements WordbookService {
 
     /**
      * 获取词书细节
+     *
      * @param id
-     * @param learner_id
+     * @param learnerId
      * @return
      */
     @Override
-    public Response<?> getWordbookDetail(Integer id, Integer learner_id) {
+    public Response<?> getWordbookDetail(Integer id, Integer learnerId) {
         Response<Wordbook> response = Response.success();
-        Wordbook wordbook = wordbookMapper.getWordbookDetailAndIsAdd(id,learner_id);
+        Wordbook wordbook = wordbookMapper.getWordbookDetailAndIsAdd(id, learnerId);
 
-        if(wordbook == null) {
+        if (wordbook == null) {
             log.warn("获取词书细节失败:{}", Constant.Error.WORDBOOK_NOT_FOUNDED.getMessage());
             response = Response.result(Constant.Error.WORDBOOK_NOT_FOUNDED);
         }
@@ -61,7 +63,8 @@ public class WordbookServiceImpl implements WordbookService {
     }
 
     /**
-     *  获取词书单词
+     * 获取词书单词
+     *
      * @param id
      * @param curr
      * @param size
@@ -70,7 +73,7 @@ public class WordbookServiceImpl implements WordbookService {
     @Override
     public Response<?> getWords(Integer id, int curr, int size) {
         Response<Wordbook> response = Response.success();
-        List<Word> words = wordbookMapper.getWords(id,(curr-1)*size,size);
+        List<Word> words = wordbookMapper.getWords(id, (curr - 1) * size, size);
         Wordbook wordbook = new Wordbook();
         wordbook.setWords(words);
         response.setData(wordbook);
@@ -80,20 +83,21 @@ public class WordbookServiceImpl implements WordbookService {
     /**
      * 为用户添加词书
      * 这里要开启事务，但是还不太了解事务，所以以后再完善
+     *
      * @param learnerId
-     * @param wordbook_id
+     * @param wordbookId
      * @return
      */
 //    @Transactional(rollbackFor=Exception.class)
     @Override
-    public Response<?> addWordbook(Integer learnerId, Integer wordbook_id){
+    public Response<?> addWordbook(Integer learnerId, Integer wordbookId) {
         Response<?> response = Response.success();
         //将原先计划去掉
         wordbookMapper.removePlan(learnerId);
         //新增计划，total为影响条数
-        Integer total = wordbookMapper.addWordbook(learnerId,wordbook_id);
-        if(total <= Constant.ZERO) {
-            log.warn("为用户添加词书失败: {}, wordbook_id:{}", Constant.Error.ADD_WORDBOOK_ERROR.getMessage(), wordbook_id);
+        Integer total = wordbookMapper.addWordbook(learnerId, wordbookId);
+        if (total <= Constant.ZERO) {
+            log.warn("为用户添加词书失败: {}, wordbook_id:{}", Constant.Error.ADD_WORDBOOK_ERROR.getMessage(), wordbookId);
             response = Response.result(Constant.Error.ADD_WORDBOOK_ERROR);
         }
         return response;
@@ -101,6 +105,7 @@ public class WordbookServiceImpl implements WordbookService {
 
     /**
      * 查询我的词书
+     *
      * @param learnerId
      * @return
      */
@@ -110,7 +115,7 @@ public class WordbookServiceImpl implements WordbookService {
         //查询我的词书
         List<Wordbook> myWordbooks = wordbookMapper.findMyWordbooks(learnerId);
         //如果没有词书，则返回502
-        if(myWordbooks.size() <= Constant.ZERO){
+        if (myWordbooks.size() <= Constant.ZERO) {
             response = Response.result(Constant.Error.LEARNER_NOT_WORDBOOK);
         }
         response.setData(myWordbooks);
@@ -119,25 +124,27 @@ public class WordbookServiceImpl implements WordbookService {
 
     /**
      * 更新背词计划
+     *
      * @param learnerId
-     * @param wordbook_id
+     * @param wordbookId
      * @return
      */
     @Override
-    public Response<?> updateWordbookPlan(Integer learnerId, Integer wordbook_id) {
+    public Response<?> updateWordbookPlan(Integer learnerId, Integer wordbookId) {
         Response<?> response = new Response<>();
         //将原先计划去掉
         wordbookMapper.removePlan(learnerId);
         //修改计划
-        Integer total = wordbookMapper.updateWordbookPlan(learnerId,wordbook_id);
-        if(total < 1) {
+        Integer total = wordbookMapper.updateWordbookPlan(learnerId, wordbookId);
+        if (total < 1) {
             response = Response.result(Constant.Error.SET_NEW_WORDBOOK_PLAN_ERROR);
         }
         return response;
     }
 
     /**
-     *查看用户当前的计划
+     * 查看用户当前的计划
+     *
      * @param learnerId
      * @return
      */
@@ -145,7 +152,7 @@ public class WordbookServiceImpl implements WordbookService {
     public Response<?> myMemorizingWordbook(Integer learnerId) {
         Response<Wordbook> response = Response.success();
         Wordbook wordbook = wordbookMapper.findMemorizingWordbook(learnerId);
-        if(wordbook == null){
+        if (wordbook == null) {
             response = Response.result(Constant.Error.WORDBOOK_NOT_FOUNDED);
         }
         response.setData(wordbook);
@@ -154,17 +161,19 @@ public class WordbookServiceImpl implements WordbookService {
 
     /**
      * 查询复习单词数目
+     *
      * @param learnerId
-     * @param wordbook_id
+     * @param wordbookId
      * @return
      */
     @Override
-    public Integer findReviewCount(Integer learnerId, Integer wordbook_id) {
-        return wordMapper.getReviewCount(learnerId,wordbook_id);
+    public Integer findReviewCount(Integer learnerId, Integer wordbookId) {
+        return wordMapper.getReviewCount(learnerId, wordbookId);
     }
 
     /**
-     *查看用户当前的计划并返回复习单词数量
+     * 查看用户当前的计划并返回复习单词数量
+     *
      * @param learnerId
      * @return
      */
@@ -172,7 +181,7 @@ public class WordbookServiceImpl implements WordbookService {
     public Response<?> getMemorizingWordbookAndReviewCount(Integer learnerId) {
         Response<Wordbook> response = Response.success();
         Wordbook wordbook = wordbookMapper.getMemorizingWordbookAndReviewCount(learnerId);
-        if(wordbook == null){
+        if (wordbook == null) {
             return Response.result(Constant.Error.WORDBOOK_NOT_FOUNDED);
         }
         response.setData(wordbook);

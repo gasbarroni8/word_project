@@ -207,18 +207,18 @@ public class LearnerServiceImpl implements LearnerService {
         //查询邮箱是否存在
         Response<?> response = queryLearnerByEmail(email);
         //如果存在该邮箱,408表示邮箱已存在
-        if (response.getCode() == "408") {
+        if ("408".equals(response.getCode())) {
             //发送邮箱
             String title = "注册检测（背词系统）";
             String msg = "<html><body><a href='http://119.23.219.54:80/learner/register/confirm/" +
                     token + "'>点击即可确认身份！</a></body></html>";
             response = sentEmail(email, title, msg);
             //邮箱发送成功
-            if (response.getCode() == "200") {
+            if ("200".equals(response.getCode())) {
                 //设置激活码
                 learnerMapper.setActivecodeByEmail(email, token);
                 return response;
-            } else if (response.getCode() == "409") {
+            } else if ("409".equals(response.getCode())) {
                 //邮箱发送失败
                 response = Response.result(response, Constant.Error.EMAIL_SEND_ERROR);
                 return response;
@@ -245,7 +245,7 @@ public class LearnerServiceImpl implements LearnerService {
         //该邮箱是否存在
         Response<?> response = queryLearnerByEmail(email);
         //邮箱存在
-        if (response.getCode().equals("408")) {
+        if ("408".equals(response.getCode())) {
             //设置新密码（MD5不可解密，故只能自动设置一个新的密码，然后返回，用户可根据该密码登陆，然后再修改）
 //            String newPassword = learnerJson.getLearner().getPassword().substring(0,7);
             // TODO 可修改为随机字符串
@@ -291,6 +291,7 @@ public class LearnerServiceImpl implements LearnerService {
 
     /**
      * 查询所有需要邮箱提醒复习的用户
+     *
      * @return
      */
     @Override
