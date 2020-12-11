@@ -10,6 +10,7 @@ import com.ahuiali.word.common.resp.Result;
 public class Constant {
 
     public final static Integer ZERO = 0;
+    public final static String LEARNER_ID = "learnerId";
 
     /**
      * 邮箱类

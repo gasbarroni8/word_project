@@ -1,5 +1,6 @@
 package com.ahuiali.word.controller;
 
+import com.ahuiali.word.common.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.service.BookService;
 import com.ahuiali.word.common.utils.PageUtil;
@@ -119,7 +120,7 @@ public class BookController {
     public @ResponseBody
     Response<?> getBookDetail(@PathVariable("index_book") Integer index_book, HttpSession session) {
 
-        Integer learner_id = (Integer) session.getAttribute("learnerId");
+        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
         return bookService.getBookDetail(index_book, learner_id);
     }
 
@@ -133,7 +134,7 @@ public class BookController {
     public @ResponseBody
     Response<?> getMyBooks(HttpSession session) {
 
-        Integer learner_id = (Integer) session.getAttribute("learnerId");
+        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
         return bookService.getMyBooks(learner_id);
     }
 
@@ -180,7 +181,7 @@ public class BookController {
     Response<?> addBook(@PathVariable("index_book") Integer index_book,
                         HttpSession session) {
 
-        Integer learner_id = (Integer) session.getAttribute("learnerId");
+        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
         return bookService.addBook(index_book, learner_id);
     }
 
@@ -195,7 +196,7 @@ public class BookController {
     public @ResponseBody
     Response<?> removeBook(@PathVariable("index_book") Integer index_book,
                            HttpSession session) {
-        Integer learner_id = (Integer) session.getAttribute("learnerId");
+        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
         return bookService.removeBook(learner_id, index_book);
     }
 
@@ -212,7 +213,7 @@ public class BookController {
     Response<?> updateBook(@PathVariable("book_index") Integer book_index,
                            @PathVariable("lastest_loc") String lastest_loc,
                            HttpSession session) {
-        Integer learner_id = (Integer) session.getAttribute("learnerId");
+        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
         return bookService.updateBook(learner_id, book_index, lastest_loc);
     }
 }

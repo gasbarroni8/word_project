@@ -1,5 +1,6 @@
 package com.ahuiali.word.controller;
 
+import com.ahuiali.word.common.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.service.WordEctService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class WordEctController {
     public @ResponseBody
     Response<?> findWordDetailJSON(@PathVariable("word") String word, HttpSession session) {
 
-        Integer learnerId = (Integer) session.getAttribute("learnerId");
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
         //这个是使用了redis，不过，我服务器老是被攻击，redis老是不行，暂时不用它了
         //但至少说明，这个是能用的，而且速度还不错，要怪就怪服务器不行
 //        wordEctDetailJson = wordEctService.findWordDetail(word,learnerId);
@@ -81,7 +82,7 @@ public class WordEctController {
     @RequestMapping(value = "/findWord/{word}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
     Response<?> findWord(@PathVariable("word") String word, HttpSession session) {
-        Integer learnerId = (Integer) session.getAttribute("learnerId");
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
         //这个是使用了redis，不过，我服务器老是被攻击，redis老是不行，暂时不用它了
         //但至少说明，这个是能用的，而且速度还不错，要怪就怪服务器不行
 //        wordEctJson = wordEctService.findWord(word,learnerId);

@@ -104,7 +104,7 @@ public class LearnerController {
         //根据邮箱和密码查询
         Response<Learner> response = (Response<Learner>) learnerService.queryLearner(learner);
         if ("200".equals(response.getCode())) {
-            session.setAttribute("learnerId", response.getData().getId());
+            session.setAttribute(Constant.LEARNER_ID, response.getData().getId());
             //七天有效
             if (isRemember == 1) {
                 session.setMaxInactiveInterval(7 * 24 * 60);
@@ -189,7 +189,7 @@ public class LearnerController {
      */
     @RequestMapping("/loginOut")
     public String loginOut(HttpSession session) {
-        session.removeAttribute("learnerId");
+        session.removeAttribute(Constant.LEARNER_ID);
         return "/learner/login";
     }
 }

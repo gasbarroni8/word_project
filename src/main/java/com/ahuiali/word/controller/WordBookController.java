@@ -1,5 +1,6 @@
 package com.ahuiali.word.controller;
 
+import com.ahuiali.word.common.Constant;
 import com.ahuiali.word.common.resp.Response;
 
 import com.ahuiali.word.pojo.Word;
@@ -134,7 +135,7 @@ public class WordBookController {
     @RequestMapping(value = "/changeWordbook/{wordbook_id}")
     public String changeWordbook(@PathVariable("wordbook_id") Integer wordbook_id, HttpSession session) {
         //获取学习者id
-        Integer learnerId = (Integer) session.getAttribute("learnerId");
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
         // TODO 这里要加个判断
         wordbookService.updateWordbookPlan(learnerId, wordbook_id);
         return "redirect:/wordbook/gotoMyWordbooks";
@@ -150,7 +151,7 @@ public class WordBookController {
     public @ResponseBody
     Response<?> myWordbooks(HttpSession session) {
         //获取学习者id
-        Integer learnerId = (Integer) session.getAttribute("learnerId");
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
         //session中保存我的词书
         return wordbookService.findMyWordbooks(learnerId);
     }
@@ -172,7 +173,7 @@ public class WordBookController {
             @PathVariable("wordsType") Integer wordsType,
             @RequestBody PageUtil pageUtil,
             HttpSession session) {
-        Integer learner_id = (Integer) session.getAttribute("learnerId");
+        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
         pageUtil.renew();
         return wordService.myWordbookWords(wordbook_id, learner_id, pageUtil, wordsType);
     }
@@ -192,7 +193,7 @@ public class WordBookController {
                                @PathVariable("id") Integer id,
                                @PathVariable("type") Integer type,
                                HttpSession session) {
-        Integer learner_id = (Integer) session.getAttribute("learnerId");
+        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
         return wordService.wordTypeChange(learner_id, wordbook_id, id, type);
     }
 

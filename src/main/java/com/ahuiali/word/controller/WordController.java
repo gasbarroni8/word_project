@@ -1,6 +1,7 @@
 package com.ahuiali.word.controller;
 
 
+import com.ahuiali.word.common.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.service.WordService;
 import com.ahuiali.word.common.utils.PageUtil;
@@ -49,7 +50,7 @@ public class WordController {
     Response<?> getReviewWords(@PathVariable("wordbook_id") Integer wordbook_id,
                                @RequestBody PageUtil pageUtil,
                                HttpSession session) {
-        Integer learner_id = (Integer) session.getAttribute("learnerId");
+        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
         //获取所有需复习单词(分页)
         pageUtil.renew();
         return wordService.getReviewWords(learner_id, wordbook_id, pageUtil);

@@ -1,5 +1,6 @@
 package com.ahuiali.word.controller;
 
+import com.ahuiali.word.common.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.WordEct;
@@ -42,7 +43,7 @@ public class NotebookController {
     public @ResponseBody
     Response<?> myNotebookJSON(HttpSession session) {
         //获取学习者id
-        Integer learner_id = (Integer) session.getAttribute("learnerId");
+        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
         return notebookService.findAllNotebookByLearnerId(learner_id);
     }
 
@@ -72,7 +73,7 @@ public class NotebookController {
     public String addNotebook(HttpSession session,
                               @RequestParam(value = "notebookName", required = false) String name) {
         //获取学习者id
-        Integer learnerId = (Integer) session.getAttribute("learnerId");
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
         Notebook notebook = new Notebook();
         notebook.setLearner_id(learnerId);
         notebook.setName(name.trim());

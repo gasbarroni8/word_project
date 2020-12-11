@@ -1,5 +1,6 @@
 package com.ahuiali.word.controller;
 
+import com.ahuiali.word.common.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.service.WordbookService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class BaseController {
     public @ResponseBody
     Response<?> indexInit(HttpSession session) {
         //获取学习者id
-        Integer learnerId = (Integer) session.getAttribute("learnerId");
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
         return wordbookService.getMemorizingWordbookAndReviewCount(learnerId);
     }
 }
