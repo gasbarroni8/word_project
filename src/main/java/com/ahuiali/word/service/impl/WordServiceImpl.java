@@ -1,6 +1,6 @@
 package com.ahuiali.word.service.impl;
 
-import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.enums.WordTypeChangeEnum;
 import com.ahuiali.word.common.enums.WordTypeEnum;
 import com.ahuiali.word.common.resp.Response;

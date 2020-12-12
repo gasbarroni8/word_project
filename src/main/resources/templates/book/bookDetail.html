@@ -254,7 +254,7 @@
                         $.each(result.data,function (i,item) {
                             // $("#chaptersList").append("<a href='/book/gotoRead?chapter_index="+ item.chapter_index+"'>"+item.chapter_name+"</a><br>")
                             $("#chaptersList")
-                                .append("<li><a href=\"/book/gotoRead?chapter_index="+ item.chapter_index +"&from=store\">"+ item.chapter_name +"</a></li>")
+                                .append("<li><a href=\"/book/gotoRead?chapter_index="+ item.chapterIndex +"&from=store\">"+ item.chapterName +"</a></li>")
                         })
                     }
                 },
@@ -284,14 +284,14 @@
 
                 if(result.code === "200"){
                     let book = result.data;
-                    let href = "/book/gotoRead?chapter_index="+(book.index_book*10000+1)+"&from=store";
+                    let href = "/book/gotoRead?chapter_index="+(book.indexBook*10000+1)+"&from=store";
                     //lastest_loc有值说明用户已经加入的
                     // console.log(typeof book.lastest_loc)
-                    if(book.lastest_loc != null && book.lastest_loc != "" && book.lastest_loc != undefined){
+                    if(book.lastestLoc != null && book.lastestLoc !== "" && book.lastestLoc !== undefined){
                         $('.addOrRemoveBook').html("移除书架");
                         $(".addOrRemoveBook").attr("content","remove");
                         $(".gotoRead p").html("继续阅读");
-                        href = "/book/gotoRead?last_loc=" + book.lastest_loc+"&from=shelf";
+                        href = "/book/gotoRead?last_loc=" + book.lastestLoc+"&from=shelf";
                     }
 
                     $('.gotoRead').attr('href',href);

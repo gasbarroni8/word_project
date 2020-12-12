@@ -1,4 +1,4 @@
-package com.ahuiali.word.common;
+package com.ahuiali.word.common.constant;
 
 import com.ahuiali.word.common.resp.Result;
 

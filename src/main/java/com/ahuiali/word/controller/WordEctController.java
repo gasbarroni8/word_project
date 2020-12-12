@@ -1,6 +1,6 @@
 package com.ahuiali.word.controller;
 
-import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.service.WordEctService;
 import org.springframework.beans.factory.annotation.Autowired;

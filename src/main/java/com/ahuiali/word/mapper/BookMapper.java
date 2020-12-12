@@ -4,6 +4,7 @@ import com.ahuiali.word.pojo.Book;
 import com.ahuiali.word.pojo.Chapter;
 import com.ahuiali.word.pojo.Paragraph;
 import com.ahuiali.word.common.utils.PageUtil;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface BookMapper {
+public interface BookMapper extends BaseMapper<Book> {
 
     @Select("SELECT id,title,img,author,tag,summary,index_book,is_hot FROM book;")
     List<Book> getAllBooks();
@@ -27,7 +28,7 @@ public interface BookMapper {
             "limit #{pageUtil.offset},#{pageUtil.size};")
     List<Chapter> getAllChapterByBookIndex(Integer book_index, PageUtil pageUtil);
 
-    @Select("select id,title,index_book, img from book where is_hot = 1;")
+    @Select("select id, title, index_book as indexBook, img from book where is_hot = 1;")
     List<Book> getHotBooks();
 
     /**
@@ -62,7 +63,7 @@ public interface BookMapper {
     Book findBookByIndex(Integer index_book,Integer learner_id);
 
     //查询我的书籍,结果按照时间排序，最新排在最前
-    @Select("SELECT lb.`lastest_loc`,b.`title`,b.`tag`,b.`title`,b.`author`,b.`img`,b.`index_book`\n" +
+    @Select("SELECT lb.`lastest_loc` as lastestLoc,b.`title`,b.`tag`,b.`title`,b.`author`,b.`img`,b.`index_book` as indexBook\n" +
             "FROM learner_book lb \n" +
             "INNER JOIN book b \n" +
             "ON (lb.`learner_id` = #{learner_id} AND lb.`book_index` = b.`index_book`) ORDER BY lb.`modified` DESC;")
@@ -76,15 +77,15 @@ public interface BookMapper {
     @Select("SELECT id, chapter_name, chapter_index FROM book_chapter WHERE chapter_index = #{chapter_index};")
     @Results({
             @Result(id=true,property="id",column="id"),
-            @Result(property="chapter_name",column="chapter_name"),
-            @Result(property="chapter_index",column="chapter_index"),
+            @Result(property="chapterName",column="chapter_name"),
+            @Result(property="chapterIndex",column="chapter_index"),
             @Result(property="paragraphs",column="chapter_index",javaType=List.class,
                     many=@Many(select="com.ahuiali.word.mapper.BookMapper.getAllParasByChapterIndex"))
     })
     Chapter getParaByChapterIndex(Integer chapter_index);
 
     //查询某章节的所有英语段落
-    @Select("select id,para_en from chapter_paragraph where chapter_index = #{chapter_index};")
+    @Select("select id, para_en as paraEn from chapter_paragraph where chapter_index = #{chapter_index};")
     List<Paragraph> getAllParasByChapterIndex(Integer chapter_index);
 
     @Insert("insert into learner_book (learner_id,book_index,lastest_loc,created,modified) \n" +

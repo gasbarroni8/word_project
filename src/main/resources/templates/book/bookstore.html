@@ -196,7 +196,7 @@
                         // $("#hotbooks").append("<a href='/book/gotoBookDetail?index_book="+ item.index_book+"'>"+item.title+"</a><br>")
 
                         $(".tagBooks").append("<div class=\"book\" >\n" +
-                            "                <a href=\"/book/gotoBookDetail?index_book=" + item.index_book + "\"><img src=\""+ item.img+"\" ></a>\n" +
+                            "                <a href=\"/book/gotoBookDetail?index_book=" + item.indexBook + "\"><img src=\""+ item.img+"\" ></a>\n" +
                             "                <div class=\"bookNameBox\">\n" +
                             "                    <p class=\"bookName\">"+ item.title+"</p>\n" +
                             "                </div>\n" +
@@ -234,7 +234,7 @@
                return;
 
            }
-           if(!("" == bookName) && !(bookName == undefined)){
+           if(!("" === bookName) && !(bookName === undefined)){
                //发送请求
                let url = "/book/getBookByName/"+bookName;
 
@@ -255,7 +255,7 @@
                            $.each(result.data,function (i,item) {
 
                                $(".tagBooks").append("<div class=\"book\" >\n" +
-                                   "                <a href=\"/book/gotoBookDetail?index_book=" + item.index_book + "\"><img src=\""+ item.img+"\" ></a>\n" +
+                                   "                <a href=\"/book/gotoBookDetail?index_book=" + item.indexBook + "\"><img src=\""+ item.img+"\" ></a>\n" +
                                    "                <div class=\"bookNameBox\">\n" +
                                    "                    <p class=\"bookName\">"+ item.title+"</p>\n" +
                                    "                </div>\n" +
@@ -299,7 +299,7 @@
                         // $("#hotbooks").append("<a href='/book/gotoBookDetail?index_book="+ item.index_book+"'>"+item.title+"</a><br>")
 
                         $(".hotbooks").append("<div class=\"book\" >\n" +
-                            "                <a href=\"/book/gotoBookDetail?index_book=" + item.index_book + "\"><img src=\""+ item.img+"\" ></a>\n" +
+                            "                <a href=\"/book/gotoBookDetail?index_book=" + item.indexBook + "\"><img src=\""+ item.img+"\" ></a>\n" +
                             "                <div class=\"bookNameBox\">\n" +
                             "                    <p class=\"bookName\">"+ item.title+"</p>\n" +
                             "                </div>\n" +

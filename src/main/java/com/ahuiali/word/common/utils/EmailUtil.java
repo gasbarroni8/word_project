@@ -1,6 +1,6 @@
 package com.ahuiali.word.common.utils;
 
-import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;

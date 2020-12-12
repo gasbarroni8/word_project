@@ -1,6 +1,6 @@
 package com.ahuiali.word.job;
 
-import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.common.utils.PageUtil;
 import com.ahuiali.word.pojo.Learner;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

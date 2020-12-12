@@ -1,6 +1,6 @@
 package com.ahuiali.word.controller;
 
-import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.WordEct;
@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-
-import java.util.Map;
 
 /**
  * @author ahui

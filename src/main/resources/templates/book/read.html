@@ -370,13 +370,13 @@
             success: function (result) {
                 // console.log(result);
                 if(result.code === "200"){
-                    $(".chapterName").html("<p>" +result.data.chapter_name+  "</p>")
+                    $(".chapterName").html("<p>" +result.data.chapterName+  "</p>")
                     $.each(result.data.paragraphs,function (i,item) {
                         if(i == 0){
                             reading_id = item.id;
                         }
                         //释义处理，因为这个结果返回的释义用\n换行，所以要将其替换为<br>
-                        let para_en = item.para_en;
+                        let para_en = item.paraEn;
                         let en = para_en.replace(/([A-z]+)/gi,'<span>$1</span>');
                         $("#content")
                             .append("<p  content='"+item.id+"'>" + en + "<button class='showMeaning' name='"+item.id +"'>译</button></p>")
@@ -407,7 +407,7 @@
                                 // console.log(result);
                                 if(result.code === "200"){
                                     // alert(result.paragraph.para_cn);
-                                        $("#sentenceMeaning").html("<p>" + result.data.para_cn +"</p>")
+                                        $("#sentenceMeaning").html("<p>" + result.data.paraCn +"</p>")
                                         $("#sentenceMeaning").fadeIn(200);
                                         $(".functionTab,.topTab,#wordMeaning").fadeOut(200);
                                 }
@@ -459,10 +459,10 @@
                             curr++;
                             $.each(result.data, function (i,item) {
                                 //当前目录
-                                if(item.chapter_index == chapter_index){
-                                    $("#chaptersUL").append("<li ><a style='color:#269abc' href=\"/book/gotoRead?chapter_index="+ item.chapter_index +"&from="+ from +"\">"+ item.chapter_name +"</a></li>")
+                                if(item.chapterIndex == chapter_index){
+                                    $("#chaptersUL").append("<li ><a style='color:#269abc' href=\"/book/gotoRead?chapter_index="+ item.chapterIndex +"&from="+ from +"\">"+ item.chapterName +"</a></li>")
                                 }else{
-                                    $("#chaptersUL").append("<li><a href=\"/book/gotoRead?chapter_index="+ item.chapter_index +"&from="+ from +"\">"+ item.chapter_name +"</a></li>");
+                                    $("#chaptersUL").append("<li><a href=\"/book/gotoRead?chapter_index="+ item.chapterIndex +"&from="+ from +"\">"+ item.chapter_name +"</a></li>");
                                 }
                             })
                         }

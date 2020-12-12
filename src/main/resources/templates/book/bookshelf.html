@@ -114,11 +114,11 @@
                     $.each(result.data,function (i,item) {
                         let a;
 
-                        if( item.lastest_loc != "" && item.lastest_loc != null && item.lastest_loc.length != 0){
+                        if( item.lastestLoc != "" && item.lastestLoc != null && item.lastestLoc.length != 0){
 
-                            a = "/book/gotoRead?last_loc="+item.lastest_loc+"&from=shelf";
+                            a = "/book/gotoRead?last_loc="+item.lastestLoc+"&from=shelf";
                         }else{
-                            a = "/book/gotoRead?chapter_index="+(item.index_book*10000+1)+"&from=shelf";
+                            a = "/book/gotoRead?chapter_index="+(item.indexBook*10000+1)+"&from=shelf";
                         }
 
                         // $("#mybook").append("<a href='"+ a +"'>"+item.title+"</a><br>")

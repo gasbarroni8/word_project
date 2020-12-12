@@ -4,6 +4,8 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
+import java.util.UUID;
+
 /**
  * ChinaDailyProcessor
  * 爬取中国日报英文版新闻
@@ -24,7 +26,10 @@ public class ChinaDailyProcessor implements PageProcessor {
      */
     @Override
     public void process(Page page) {
-
+        // 查询已爬取过的网页
+        // 如果不是已经爬取的网页，则加入
+        // 保存数据
+        // 加入新的页面
     }
 
     @Override

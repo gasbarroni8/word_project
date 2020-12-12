@@ -1,5 +1,6 @@
 package com.ahuiali.word.spider;
 
+import com.ahuiali.word.spider.processor.CCTVProcessor;
 import com.ahuiali.word.spider.processor.ChinaDailyProcessor;
 import us.codecraft.webmagic.Spider;
 
@@ -17,6 +18,18 @@ public class SpiderLaunch {
     public static void startSpiderChinaDaily() {
         // 异步启动
         Spider.create(new ChinaDailyProcessor())
+                .addUrl("")
+                .addPipeline(null)
+                .thread(5)
+                .runAsync();
+    }
+
+    /**
+     * 爬取CCTV英文版新闻
+     */
+    public static void startSpiderCCTV() {
+        // 异步启动
+        Spider.create(new CCTVProcessor())
                 .addUrl("")
                 .addPipeline(null)
                 .thread(5)

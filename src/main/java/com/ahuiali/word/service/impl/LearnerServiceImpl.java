@@ -1,6 +1,6 @@
 package com.ahuiali.word.service.impl;
 
-import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.enums.StatusEnum;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.mapper.LearnerMapper;

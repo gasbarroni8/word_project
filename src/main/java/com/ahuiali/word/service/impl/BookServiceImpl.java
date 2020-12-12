@@ -1,6 +1,6 @@
 package com.ahuiali.word.service.impl;
 
-import com.ahuiali.word.common.Constant;
+import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.mapper.BookMapper;
 import com.ahuiali.word.pojo.Book;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.ahuiali.word.common.Constant.ZERO;
+import static com.ahuiali.word.common.constant.Constant.ZERO;
 
 @Transactional
 @Service
