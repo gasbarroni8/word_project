@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * @author ahui
+ * @author ZhengChaoHui
  */
 @Service
 public class NotebookServiceImpl implements NotebookService {
@@ -26,8 +26,8 @@ public class NotebookServiceImpl implements NotebookService {
     /**
      * 根据用户id查询所有生词本
      *
-     * @param learnerId
-     * @return
+     * @param learnerId 用户id
+     * @return resp
      */
     @Override
     public Response<?> findAllNotebookByLearnerId(Integer learnerId) {
@@ -46,7 +46,7 @@ public class NotebookServiceImpl implements NotebookService {
      * 添加生词本
      *
      * @param notebook 生词本
-     * @return
+     * @return resp
      */
     @Override
     public Response<?> addNotebook(Notebook notebook) {
@@ -63,8 +63,8 @@ public class NotebookServiceImpl implements NotebookService {
      * 根据生词本id删除生词本
      * 开启事务
      *
-     * @param id
-     * @return
+     * @param id 生词本id
+     * @return resp
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -87,7 +87,7 @@ public class NotebookServiceImpl implements NotebookService {
      * 删除生词本的某个单词
      *
      * @param id 生词本-单词表的id
-     * @return
+     * @return resp
      */
     @Override
     public Response<?> removeWord(Integer id) {
@@ -110,7 +110,7 @@ public class NotebookServiceImpl implements NotebookService {
      *
      * @param notebookId 生词本id
      * @param word       单词
-     * @return jsonbase
+     * @return resp
      */
     @Override
     public Response<?> addWord(Integer notebookId, String word) {
@@ -125,9 +125,9 @@ public class NotebookServiceImpl implements NotebookService {
     /**
      * 查询某生词本的单词，分页
      *
-     * @param notebookId
-     * @param pageUtil
-     * @return
+     * @param notebookId 生词本id
+     * @param pageUtil   分页
+     * @return resp
      */
     @Override
     public Response<?> listWord(Integer notebookId, PageUtil pageUtil) {
@@ -147,9 +147,9 @@ public class NotebookServiceImpl implements NotebookService {
     /**
      * 修改生词本名称
      *
-     * @param name
-     * @param learnerId
-     * @return
+     * @param name      生词本新名字
+     * @param learnerId 用户id
+     * @return resp
      */
     @Override
     public Response<?> editNotebook(String name, Integer learnerId) {

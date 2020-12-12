@@ -38,8 +38,8 @@ public class WordEctServiceImpl implements WordEctService {
     /**
      * 通过单词前缀来模糊查询单词，自动提示效果
      *
-     * @param wordRre
-     * @return
+     * @param wordRre 单词前缀
+     * @return resp
      */
     @Override
     public Response<?> getWordsByPre(String wordRre) {
@@ -59,7 +59,7 @@ public class WordEctServiceImpl implements WordEctService {
      *
      * @param word      单词
      * @param learnerId 用户id
-     * @return
+     * @return resp
      */
     @Override
     public Response<?> findWordDetail(String word, Integer learnerId) {
@@ -84,6 +84,10 @@ public class WordEctServiceImpl implements WordEctService {
             wordEctDetail = JSON.parseObject(wordJsonStr, WordEctDetail.class);
             // TODO NPE
             //获取例句id数组字符串
+            if (wordEctDetail == null) {
+                response.putResult(Constant.Error.SYSTEM_ERROR);
+                return response;
+            }
             senStr = wordEctDetail.getSentence_list();
             //查询例句
             if (senStr != null && !"".equals(senStr)) {
@@ -156,7 +160,7 @@ public class WordEctServiceImpl implements WordEctService {
      *
      * @param word      单词
      * @param learnerId 用户id
-     * @return
+     * @return resp
      */
     @Override
     public Response<?> findWord(String word, Integer learnerId) {
@@ -193,9 +197,9 @@ public class WordEctServiceImpl implements WordEctService {
     /**
      * 查找单词详细信息（非redis）
      *
-     * @param word
-     * @param learnerId
-     * @return
+     * @param word      单词
+     * @param learnerId 用户id
+     * @return resp
      */
     @Override
     public Response<?> findWordDetailNoRedis(String word, Integer learnerId) {

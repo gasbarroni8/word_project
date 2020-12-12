@@ -27,14 +27,14 @@ public class WordServiceImpl implements WordService {
     /**
      * 返回size个该词书的单词
      *
-     * @param id
-     * @param pageUtil
-     * @return
+     * @param wordBookId 词书id
+     * @param pageUtil   分页
+     * @return resp
      */
     @Override
-    public Response<?> getWords(int id, PageUtil pageUtil) {
+    public Response<?> getWords(int wordBookId, PageUtil pageUtil) {
         Response<List<Word>> response = Response.success();
-        List<Word> words = wordMapper.getWords(id, pageUtil);
+        List<Word> words = wordMapper.getWords(wordBookId, pageUtil);
         if (words.size() <= Constant.ZERO) {
             return Response.result(Constant.Error.WORDBOOK_EMPTY);
         }
@@ -45,11 +45,11 @@ public class WordServiceImpl implements WordService {
     /**
      * 获取不同类型单词，未背，记忆中，已掌握
      *
-     * @param wordbookId
-     * @param learnerId
-     * @param pageUtil
-     * @param wordsType
-     * @return
+     * @param wordbookId 词书id
+     * @param learnerId  用户id
+     * @param pageUtil   分页
+     * @param wordsType  单词类型
+     * @return resp
      */
     @Override
     public Response<?> myWordbookWords(Integer wordbookId, Integer learnerId, PageUtil pageUtil, int wordsType) {
@@ -75,11 +75,11 @@ public class WordServiceImpl implements WordService {
     /**
      * 单词类型转移
      *
-     * @param wordbookId
+     * @param wordbookId 词书id
      * @param id         未背->掌握时id为words的id，其余为记忆表的id
      * @param type       记忆中->掌握 : 1, 未背->掌握 : 2, 掌握->未背 : 3
      * @param learnerId  用户id
-     * @return
+     * @return resp
      */
     @Override
     public Response<?> wordTypeChange(Integer learnerId, Integer wordbookId, Integer id, int type) {
@@ -104,10 +104,10 @@ public class WordServiceImpl implements WordService {
     /**
      * 获取需要复习的单词，30一组
      *
-     * @param learnerId
-     * @param wordbookId
-     * @param pageUtil
-     * @return
+     * @param learnerId  用户id
+     * @param wordbookId 词书id
+     * @param pageUtil   分页
+     * @return resp
      */
     @Override
     public Response<?> getReviewWords(Integer learnerId, Integer wordbookId, PageUtil pageUtil) {
@@ -123,10 +123,10 @@ public class WordServiceImpl implements WordService {
     /**
      * 批量插入新词
      *
-     * @param wordbookId
-     * @param learnerId
-     * @param ids
-     * @return
+     * @param wordbookId 词书id
+     * @param learnerId  用户id
+     * @param ids        批量
+     * @return resp
      */
     @Override
     public Response<?> insertWords(Integer wordbookId, Integer learnerId, List<Long> ids) {
@@ -154,7 +154,7 @@ public class WordServiceImpl implements WordService {
     /**
      * 更新
      *
-     * @param words
+     * @param words 单词s
      * @return
      */
     @Override

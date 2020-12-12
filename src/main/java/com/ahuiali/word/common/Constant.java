@@ -27,6 +27,7 @@ public class Constant {
     public interface Error {
         // 公共
         Result ARG_ERROR = new Result("-1", "参数错误");
+        Result SYSTEM_ERROR = new Result("100", "系统错误");
 
         // 登录模块
         Result LEARNER_ADD_ERROR = new Result("400", "用户添加失败！");

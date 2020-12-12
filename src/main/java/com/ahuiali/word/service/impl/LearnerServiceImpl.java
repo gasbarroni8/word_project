@@ -33,7 +33,12 @@ public class LearnerServiceImpl implements LearnerService {
     @Autowired
     JavaMailSender javaMailSender;
 
-
+    /**
+     * 添加用户
+     *
+     * @param learner 用户
+     * @return resp
+     */
     public Response<?> addLearner(Learner learner) {
         log.info("添加用户，learner：{}", learner);
         Response<Integer> response = Response.success();
@@ -54,8 +59,8 @@ public class LearnerServiceImpl implements LearnerService {
     /**
      * 根据邮箱和密码查询用户
      *
-     * @param learner1
-     * @return
+     * @param learner1 用户
+     * @return resp
      */
     @Override
     public Response<?> queryLearner(Learner learner1) {
@@ -89,8 +94,8 @@ public class LearnerServiceImpl implements LearnerService {
     /**
      * 根据邮箱查询用户
      *
-     * @param email
-     * @return
+     * @param email 邮箱
+     * @return resp
      */
     @Override
     public Response<?> queryLearnerByEmail(String email) {
@@ -113,8 +118,8 @@ public class LearnerServiceImpl implements LearnerService {
     /**
      * 根据昵称查询用户
      *
-     * @param nickname
-     * @return
+     * @param nickname 昵称
+     * @return resp
      */
     @Override
     public Response<?> queryLearnerByNickname(String nickname) {
@@ -139,8 +144,8 @@ public class LearnerServiceImpl implements LearnerService {
     /**
      * 保存用户，并向用户发送邮箱
      *
-     * @param learner
-     * @return
+     * @param learner 用户
+     * @return resp
      */
     @Override
     public Response<?> register(Learner learner) {
@@ -196,8 +201,8 @@ public class LearnerServiceImpl implements LearnerService {
     /**
      * 重新发送邮箱
      *
-     * @param email
-     * @return
+     * @param email 邮箱
+     * @return resp
      */
     @Override
     public Response<?> sentEmailAgain(String email) {
@@ -236,8 +241,8 @@ public class LearnerServiceImpl implements LearnerService {
     /**
      * 找回密码
      *
-     * @param email
-     * @return
+     * @param email 邮箱
+     * @return resp
      */
     @Override
     public Response<?> findPassword(String email) {
@@ -275,8 +280,8 @@ public class LearnerServiceImpl implements LearnerService {
     /**
      * 修改密码
      *
-     * @param email
-     * @param newPassword
+     * @param email       邮箱
+     * @param newPassword 新密码
      * @return
      */
     @Override
@@ -292,7 +297,7 @@ public class LearnerServiceImpl implements LearnerService {
     /**
      * 查询所有需要邮箱提醒复习的用户
      *
-     * @return
+     * @return resp
      */
     @Override
     public Response<?> findAllReviewNoticeLearners() {
@@ -306,7 +311,7 @@ public class LearnerServiceImpl implements LearnerService {
      * 邮箱类
      *
      * @param email 用户邮箱
-     * @return
+     * @return resp
      */
     public Response<?> sentEmail(String email, String title, String msg) {
         try {

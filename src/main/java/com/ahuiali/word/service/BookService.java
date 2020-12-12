@@ -8,19 +8,19 @@ public interface BookService {
 
     Response<?> getBooksByTag(String tag, PageUtil pageUtil);
 
-    Response<?> getBookDetail(Integer book_index, Integer learner_id);
+    Response<?> getBookDetail(Integer bookIndex, Integer learnerId);
 
-    Response<?> getMyBooks(Integer learner_id);
+    Response<?> getMyBooks(Integer learnerId);
 
     Response<?> findParasByChapterIndex(Integer chapter_index);
 
     Response<?> getAllChapterByBookIndex(Integer index_book, PageUtil pageUtil);
 
-    Response<?> addBook(Integer index_book, Integer learner_id);
+    Response<?> addBook(Integer index_book, Integer learnerId);
 
-    Response<?> removeBook(Integer learner_id, Integer index_book);
+    Response<?> removeBook(Integer learnerId, Integer index_book);
 
-    Response<?> updateBook(Integer learner_id, Integer book_index, String lastest_loc);
+    Response<?> updateBook(Integer learnerId, Integer book_index, String lastest_loc);
 
     Response<?> findParaCNById(Integer para_id);
 

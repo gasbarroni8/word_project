@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Transactional
 @Service
 @Slf4j
 public class WordbookServiceImpl implements WordbookService {
@@ -82,13 +81,12 @@ public class WordbookServiceImpl implements WordbookService {
 
     /**
      * 为用户添加词书
-     * 这里要开启事务，但是还不太了解事务，所以以后再完善
      *
      * @param learnerId
      * @param wordbookId
      * @return
      */
-//    @Transactional(rollbackFor=Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Response<?> addWordbook(Integer learnerId, Integer wordbookId) {
         Response<?> response = Response.success();
@@ -106,8 +104,8 @@ public class WordbookServiceImpl implements WordbookService {
     /**
      * 查询我的词书
      *
-     * @param learnerId
-     * @return
+     * @param learnerId 用户id
+     * @return response
      */
     @Override
     public Response<?> findMyWordbooks(Integer learnerId) {
@@ -125,11 +123,12 @@ public class WordbookServiceImpl implements WordbookService {
     /**
      * 更新背词计划
      *
-     * @param learnerId
-     * @param wordbookId
-     * @return
+     * @param learnerId  用户id
+     * @param wordbookId 词书id
+     * @return response
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Response<?> updateWordbookPlan(Integer learnerId, Integer wordbookId) {
         Response<?> response = new Response<>();
         //将原先计划去掉
@@ -145,8 +144,8 @@ public class WordbookServiceImpl implements WordbookService {
     /**
      * 查看用户当前的计划
      *
-     * @param learnerId
-     * @return
+     * @param learnerId 用户id
+     * @return resp
      */
     @Override
     public Response<?> myMemorizingWordbook(Integer learnerId) {
@@ -162,9 +161,9 @@ public class WordbookServiceImpl implements WordbookService {
     /**
      * 查询复习单词数目
      *
-     * @param learnerId
-     * @param wordbookId
-     * @return
+     * @param learnerId  用户id
+     * @param wordbookId 词书id
+     * @return resp
      */
     @Override
     public Integer findReviewCount(Integer learnerId, Integer wordbookId) {
@@ -174,8 +173,8 @@ public class WordbookServiceImpl implements WordbookService {
     /**
      * 查看用户当前的计划并返回复习单词数量
      *
-     * @param learnerId
-     * @return
+     * @param learnerId 用户id
+     * @return resp
      */
     @Override
     public Response<?> getMemorizingWordbookAndReviewCount(Integer learnerId) {

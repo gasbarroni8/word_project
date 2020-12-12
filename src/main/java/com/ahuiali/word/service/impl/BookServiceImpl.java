@@ -32,7 +32,7 @@ public class BookServiceImpl implements BookService {
     /**
      * 查询热门书籍
      *
-     * @return
+     * @return resp
      */
     @Override
     public Response<?> findHotBooks() {
@@ -48,8 +48,8 @@ public class BookServiceImpl implements BookService {
     /**
      * 分类查询书籍
      *
-     * @param tag
-     * @param pageUtil
+     * @param tag 类别
+     * @param pageUtil 分页
      * @return
      */
     @Override
@@ -66,14 +66,14 @@ public class BookServiceImpl implements BookService {
     /**
      * 获取书籍详情
      *
-     * @param indexBook 书籍号
+     * @param bookIndex 书籍号
      * @param learnerId 用户id
-     * @return
+     * @return resp
      */
     @Override
-    public Response<?> getBookDetail(Integer indexBook, Integer learnerId) {
+    public Response<?> getBookDetail(Integer bookIndex, Integer learnerId) {
         Response<Book> response = Response.success();
-        Book book = bookMapper.findBookByIndex(indexBook, learnerId);
+        Book book = bookMapper.findBookByIndex(bookIndex, learnerId);
         if (book == null) {
             return Response.result(Constant.Error.BOOK_NOT_FOUNDED);
         }
@@ -90,8 +90,8 @@ public class BookServiceImpl implements BookService {
     /**
      * 获取用户书架，不需要分页
      *
-     * @param learnerId
-     * @return
+     * @param learnerId 用户id
+     * @return resp
      */
     @Override
     public Response<?> getMyBooks(Integer learnerId) {
@@ -107,8 +107,8 @@ public class BookServiceImpl implements BookService {
     /**
      * 根据章节号返回该章节内容
      *
-     * @param chapterIndex
-     * @return
+     * @param chapterIndex 章节号
+     * @return resp
      */
     @Override
     public Response<?> findParasByChapterIndex(Integer chapterIndex) {
@@ -124,9 +124,9 @@ public class BookServiceImpl implements BookService {
     /**
      * 根据书号获取其所有的章节名称
      *
-     * @param indexBook
-     * @param pageUtil
-     * @return
+     * @param indexBook 小说号
+     * @param pageUtil 分页
+     * @return resp
      */
     @Override
     public Response<?> getAllChapterByBookIndex(Integer indexBook, PageUtil pageUtil) {
@@ -144,7 +144,7 @@ public class BookServiceImpl implements BookService {
      *
      * @param indexBook 书号
      * @param learnerId 用户id
-     * @return
+     * @return resp
      */
     @Override
     public Response<?> addBook(Integer indexBook, Integer learnerId) {
@@ -160,9 +160,9 @@ public class BookServiceImpl implements BookService {
     /**
      * 从书架中删除书本
      *
-     * @param learnerId
-     * @param indexBook
-     * @return
+     * @param learnerId 用户id
+     * @param indexBook 书号
+     * @return resp
      */
     @Override
     public Response<?> removeBook(Integer learnerId, Integer indexBook) {
@@ -177,10 +177,10 @@ public class BookServiceImpl implements BookService {
     /**
      * 更新最新阅读位置
      *
-     * @param learnerId
-     * @param bookIndex
-     * @param lastestLoc
-     * @return
+     * @param learnerId 用户id
+     * @param bookIndex 书号
+     * @param lastestLoc 最新位置
+     * @return resp
      */
     @Override
     public Response<?> updateBook(Integer learnerId, Integer bookIndex, String lastestLoc) {
@@ -196,8 +196,8 @@ public class BookServiceImpl implements BookService {
     /**
      * 根据段落id查询相应的中文翻译
      *
-     * @param paraId
-     * @return
+     * @param paraId 段落号
+     * @return resp
      */
     @Override
     public Response<?> findParaCNById(Integer paraId) {
@@ -213,8 +213,8 @@ public class BookServiceImpl implements BookService {
     /**
      * 根据书名查询书籍
      *
-     * @param bookName
-     * @return
+     * @param bookName 书名
+     * @return resp
      */
     @Override
     public Response<?> getBooksByName(String bookName) {
