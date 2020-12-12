@@ -73,13 +73,13 @@ public class BookController {
     /**
      * 根据段落id获取释义
      *
-     * @param para_id
+     * @param paraId
      * @return
      */
-    @RequestMapping(value = "/getCn/{para_id}", produces = "application/json;charset=utf-8;")
+    @RequestMapping(value = "/getCn/{paraId}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> getCn(@PathVariable("para_id") Integer para_id) {
-        return bookService.findParaCNById(para_id);
+    Response<?> getCn(@PathVariable("paraId") Integer paraId) {
+        return bookService.findParaCNById(paraId);
     }
 
     /**
@@ -113,15 +113,15 @@ public class BookController {
     /**
      * 查询书籍详情
      *
-     * @param index_book
+     * @param indexBook
      * @return
      */
-    @RequestMapping(value = "/bookDetail/{index_book}", produces = "application/json;charset=utf-8;")
+    @RequestMapping(value = "/bookDetail/{indexBook}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> getBookDetail(@PathVariable("index_book") Integer index_book, HttpSession session) {
+    Response<?> getBookDetail(@PathVariable("indexBook") Integer indexBook, HttpSession session) {
 
         Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
-        return bookService.getBookDetail(index_book, learner_id);
+        return bookService.getBookDetail(indexBook, learner_id);
     }
 
     /**
@@ -142,78 +142,78 @@ public class BookController {
     /**
      * 根据书籍号查询所有章节
      *
-     * @param index_book
+     * @param indexBook
      * @param pageUtil
      * @return
      */
-    @RequestMapping(value = "/mybook/chapters/{index_book}")
+    @RequestMapping(value = "/mybook/chapters/{indexBook}")
     public @ResponseBody
-    Response<?> listChapters(@PathVariable("index_book") Integer index_book,
+    Response<?> listChapters(@PathVariable("indexBook") Integer indexBook,
                              PageUtil pageUtil) {
         pageUtil.renew();
-        return bookService.getAllChapterByBookIndex(index_book, pageUtil);
+        return bookService.getAllChapterByBookIndex(indexBook, pageUtil);
     }
 
     /**
      * 用户浏览文章(只有英)
      *
-     * @param chapter_index
+     * @param chapterIndex
      * @return
      */
     @RequestMapping(value = "/read/{chapter_index}")
     public @ResponseBody
-    Response<?> read(@PathVariable("chapter_index") Integer chapter_index) {
+    Response<?> read(@PathVariable("chapter_index") Integer chapterIndex) {
 //        Integer index_book = chapter_index/10000;
         //获取文章内容
-        return bookService.findParasByChapterIndex(chapter_index);
+        return bookService.findParasByChapterIndex(chapterIndex);
     }
 
 
     /**
      * 加入书架
      *
-     * @param index_book
+     * @param indexBook
      * @param session
      * @return
      */
     @RequestMapping(value = "/addBook/{index_book}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> addBook(@PathVariable("index_book") Integer index_book,
+    Response<?> addBook(@PathVariable("index_book") Integer indexBook,
                         HttpSession session) {
 
-        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
-        return bookService.addBook(index_book, learner_id);
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
+        return bookService.addBook(indexBook, learnerId);
     }
 
     /**
      * 从书架中删除书本
      *
-     * @param index_book
+     * @param indexBook
      * @param session
      * @return
      */
     @RequestMapping(value = "/remove/{index_book}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> removeBook(@PathVariable("index_book") Integer index_book,
+    Response<?> removeBook(@PathVariable("index_book") Integer indexBook,
                            HttpSession session) {
         Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
-        return bookService.removeBook(learner_id, index_book);
+        return bookService.removeBook(learner_id, indexBook);
     }
 
     /**
      * 更新最新阅读位置
      *
-     * @param book_index
-     * @param lastest_loc
+     * @param bookIndex
+     * @param lastestLoc
      * @param session
      * @return
      */
     @RequestMapping(value = "/update/{book_index}/{lastest_loc}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> updateBook(@PathVariable("book_index") Integer book_index,
-                           @PathVariable("lastest_loc") String lastest_loc,
+    Response<?> updateBook(@PathVariable("book_index") Integer bookIndex,
+                           @PathVariable("lastest_loc") String lastestLoc,
                            HttpSession session) {
         Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
-        return bookService.updateBook(learner_id, book_index, lastest_loc);
+        return bookService.updateBook(learner_id, bookIndex, lastestLoc);
     }
 }

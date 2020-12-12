@@ -30,8 +30,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      */
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory factory) {
-        RedisCacheManager cacheManager = RedisCacheManager.create(factory);
-        return cacheManager;
+        return RedisCacheManager.create(factory);
     }
 
     /**

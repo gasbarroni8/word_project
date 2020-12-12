@@ -50,12 +50,12 @@ public class NotebookController {
     /**
      * 修改生词本
      *
-     * @param session
+     * @param name
+     * @param id
      * @return
      */
     @RequestMapping(value = "/editNotebook")
-    public String editNotebook(HttpSession session,
-                               @RequestParam(value = "notebookName", required = false) String name,
+    public String editNotebook(@RequestParam(value = "notebookName", required = false) String name,
                                @RequestParam(value = "id", required = false) Integer id) {
         notebookService.editNotebook(name.trim(), id);
         //重定向
@@ -67,6 +67,7 @@ public class NotebookController {
      * 新增生词本
      *
      * @param session
+     * @param name
      * @return
      */
     @RequestMapping(value = "/addNotebook")
@@ -116,14 +117,14 @@ public class NotebookController {
      * 为生词本添加单词2
      *
      * @param wordect     单词实体
-     * @param notebook_id 生词本id
+     * @param notebookId 生词本id
      * @return
      */
-    @RequestMapping(value = "/addWordEct/{notebook_id}", produces = "application/json;charset=utf-8;")
+    @RequestMapping(value = "/addWordEct/{notebookId}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
     Response<?> addWord(@RequestBody WordEct wordect,
-                        @PathVariable("notebook_id") Integer notebook_id) {
-        return notebookService.addWordEct(notebook_id, wordect);
+                        @PathVariable("notebookId") Integer notebookId) {
+        return notebookService.addWordEct(notebookId, wordect);
     }
 
     /**
@@ -142,15 +143,15 @@ public class NotebookController {
     /**
      * 列出该生词本的单词（分页）
      *
-     * @param notebook_id
+     * @param notebookId
      * @param pageUtil
      * @return
      */
-    @RequestMapping(value = "/listWords/{notebook_id}")
+    @RequestMapping(value = "/listWords/{notebookId}")
     public @ResponseBody
-    Response<?> listWords(@PathVariable("notebook_id") Integer notebook_id, @RequestBody PageUtil pageUtil) {
+    Response<?> listWords(@PathVariable("notebookId") Integer notebookId, @RequestBody PageUtil pageUtil) {
         pageUtil.renew();
-        return notebookService.listWord(notebook_id, pageUtil);
+        return notebookService.listWord(notebookId, pageUtil);
     }
 
     /**

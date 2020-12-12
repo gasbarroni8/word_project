@@ -61,7 +61,6 @@ public class WordEctController {
         return wordEctService.findWordDetailNoRedis(word, learnerId);
     }
 
-
     /**
      * 查询单词详细信息页面
      *

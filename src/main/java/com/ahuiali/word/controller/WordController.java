@@ -40,20 +40,20 @@ public class WordController {
     /**
      * 返回复习词汇
      *
-     * @param wordbook_id
+     * @param wordbookId
      * @param pageUtil
      * @param session
      * @return
      */
-    @RequestMapping(value = "/getReviewWords/{wordbook_id}", produces = "application/json;charset=utf-8;")
+    @RequestMapping(value = "/getReviewWords/{wordbookId}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> getReviewWords(@PathVariable("wordbook_id") Integer wordbook_id,
+    Response<?> getReviewWords(@PathVariable("wordbookId") Integer wordbookId,
                                @RequestBody PageUtil pageUtil,
                                HttpSession session) {
         Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
         //获取所有需复习单词(分页)
         pageUtil.renew();
-        return wordService.getReviewWords(learner_id, wordbook_id, pageUtil);
+        return wordService.getReviewWords(learner_id, wordbookId, pageUtil);
     }
 
 }
