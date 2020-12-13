@@ -1,10 +1,12 @@
 package com.ahuiali.word.pojo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Article
@@ -14,7 +16,7 @@ import lombok.Data;
  */
 @Data
 @TableName(value = "article")
-public class Article {
+public class Article implements Serializable {
 
     /**
      * 文章id（UUID）
@@ -24,16 +26,35 @@ public class Article {
     /**
      * 标题
      */
+    @JSONField(name = "title")
+    @TableField(value = "title")
     private String title;
 
     /**
      * 链接
      */
-    private String link;
+    @JSONField(name = "url")
+    @TableField(value = "url")
+    private String url;
+
+    /**
+     * 文章日期
+     */
+    @JSONField(name = "focus_date")
+    @TableField(value = "date")
+    private Date date;
+
+    /**
+     * 描述
+     */
+    @JSONField(name = "desc")
+    @TableField(value = "description")
+    private String description;
 
     /**
      * 图片url
      */
-    @TableField(value = "img_url")
-    private String imgUrl;
+    @JSONField(name = "image")
+    @TableField(value = "image")
+    private String image;
 }

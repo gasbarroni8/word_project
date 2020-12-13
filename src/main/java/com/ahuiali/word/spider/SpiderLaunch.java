@@ -1,7 +1,11 @@
 package com.ahuiali.word.spider;
 
+import com.ahuiali.word.common.constant.UrlConstant;
+import com.ahuiali.word.spider.pipeline.CCTVSqlPipeline;
 import com.ahuiali.word.spider.processor.CCTVProcessor;
 import com.ahuiali.word.spider.processor.ChinaDailyProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
 
 /**
@@ -10,14 +14,21 @@ import us.codecraft.webmagic.Spider;
  * @author ZhengChaoHui
  * @date 2020/12/11 23:16
  */
+@Component
 public class SpiderLaunch {
+
+    @Autowired
+    private CCTVSqlPipeline cctvSqlPipeline;
+
+    @Autowired
+    private CCTVProcessor cctvProcessor;
 
     /**
      * 爬取中国日报英文版新闻
      */
-    public static void startSpiderChinaDaily() {
+    public void startSpiderChinaDaily() {
         // 异步启动
-        Spider.create(new ChinaDailyProcessor())
+        Spider.create(null)
                 .addUrl("")
                 .addPipeline(null)
                 .thread(5)
@@ -27,12 +38,16 @@ public class SpiderLaunch {
     /**
      * 爬取CCTV英文版新闻
      */
-    public static void startSpiderCCTV() {
+    public void startSpiderCCTV() {
         // 异步启动
-        Spider.create(new CCTVProcessor())
-                .addUrl("")
-                .addPipeline(null)
+        Spider.create(cctvProcessor)
+                .addUrl(UrlConstant.CCTV_REQUEST_LIST_URL)
+                .addPipeline(cctvSqlPipeline)
                 .thread(5)
-                .runAsync();
+                .run();
+    }
+
+    public static void main(String[] args) {
+//        startSpiderCCTV();
     }
 }
