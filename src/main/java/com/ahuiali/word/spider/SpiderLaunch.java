@@ -36,21 +36,21 @@ public class SpiderLaunch {
      * 爬取中国日报英文版新闻
      */
     public void startSpiderChinaDaily() {
-//        for (String chinaDailyUrl : CHINA_DAILY_URLS) {
-//            // 异步启动
-//            Spider.create(chinaDailyProcessor)
-//                    .addUrl(chinaDailyUrl)
-//                    .addPipeline(chinaDailySqlPipeline)
-//                    .thread(5)
-//                    .run();
-//        }
+        for (String chinaDailyUrl : CHINA_DAILY_URLS) {
+            // 异步启动
+            Spider.create(chinaDailyProcessor)
+                    .addUrl(chinaDailyUrl)
+                    .addPipeline(chinaDailySqlPipeline)
+                    .thread(5)
+                    .run();
+        }
 
         // 测试
-        Spider.create(chinaDailyProcessor)
-                .addUrl("https://www.chinadaily.com.cn/china/governmentandpolicy")
-                .addPipeline(chinaDailySqlPipeline)
-                .thread(5)
-                .run();
+//        Spider.create(chinaDailyProcessor)
+//                .addUrl("https://www.chinadaily.com.cn/china/governmentandpolicy")
+//                .addPipeline(chinaDailySqlPipeline)
+//                .thread(5)
+//                .run();
 
     }
 

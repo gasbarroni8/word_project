@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+
 
 import static com.ahuiali.word.common.constant.SpiderConstant.*;
 import static com.ahuiali.word.common.constant.UrlConstant.CHINA_DAILY_URLS;
@@ -61,10 +61,13 @@ public class ChinaDailyProcessor implements PageProcessor {
             });
             page.putField(UNVISITED_URL, newUrls);
             // 加入新链接
-            page.addTargetRequests(newUrls.get(0));
+            page.addTargetRequests(newUrls);
         } else {
+            // TODO 分页爬虫问题暂不弄
             // 内容
-
+            List<String> contents = page.getHtml().xpath("//div[@id=\"content\"]/p/text()").all();
+            page.putField(KEY, CONTENT);
+            page.putField(PARAGRAPH, contents);
         }
     }
 

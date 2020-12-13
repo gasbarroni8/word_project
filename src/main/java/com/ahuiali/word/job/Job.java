@@ -9,6 +9,7 @@ import com.ahuiali.word.pojo.Wordbook;
 import com.ahuiali.word.service.LearnerService;
 import com.ahuiali.word.service.WordService;
 import com.ahuiali.word.service.WordbookService;
+import com.ahuiali.word.spider.SpiderLaunch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,11 +42,16 @@ public class Job {
 
     @Autowired
     private JavaMailSender javaMailSender;
-//    //表示方法执行完成后5秒
-//    @Scheduled(fixedDelay = 5000)
-//    public void fixedDelayJob() throws InterruptedException {
-//        System.out.println("fixedDelay 每隔5秒" + new Date());
-//    }
+
+    @Autowired
+    private SpiderLaunch spiderLaunch;
+
+    //表示方法执行完成后5秒
+    @Scheduled(fixedDelay = 1000 * 60)
+    public void fixedDelayJob() throws InterruptedException {
+        spiderLaunch.startSpiderCCTV();
+        System.out.println("fixedDelay 每隔5秒" + new Date());
+    }
 //
 //    //表示每隔3秒
 //    @Scheduled(fixedRate = 3000)

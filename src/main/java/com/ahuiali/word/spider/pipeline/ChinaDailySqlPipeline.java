@@ -3,6 +3,8 @@ package com.ahuiali.word.spider.pipeline;
 import com.ahuiali.word.common.constant.RedisKeyConstant;
 import com.ahuiali.word.common.utils.UrlUtil;
 import com.ahuiali.word.pojo.Article;
+import com.ahuiali.word.pojo.ArticleParagraph;
+import com.ahuiali.word.service.ArticleParagraphService;
 import com.ahuiali.word.service.ArticleService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,9 @@ public class ChinaDailySqlPipeline implements Pipeline {
     private ArticleService articleService;
 
     @Autowired
+    private ArticleParagraphService articleParagraphService;
+
+    @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     @Override
@@ -63,15 +68,36 @@ public class ChinaDailySqlPipeline implements Pipeline {
                     } catch (ParseException ex) {
                         log.error("文章日期转换失败！error:{}", ex.toString());
                     }
-                    article.setImage(HTTPS + html.xpath("//span[@class=\"tw3_01_2_p\"]/a/img/@src").get());
+                    String image = html.xpath("//span[@class=\"tw3_01_2_p\"]/a/img/@src").get();
+                    if (image != null && !"".equals(image)) {
+                        article.setImage(HTTPS + image);
+                    }
                     articlesList.add(article);
                 }
             });
-//            articleService.saveOrUpdateBatch(articlesList);
-//            redisTemplate.opsForList().leftPushAll(String.format(RedisKeyConstant.SPIDER_LINK_VISITED, CHINA_DAILY), unVisitedUrls);
+            articleService.saveOrUpdateBatch(articlesList);
+            redisTemplate.opsForList().leftPushAll(String.format(RedisKeyConstant.SPIDER_LINK_VISITED, CHINA_DAILY), unVisitedUrls);
 
         } else if (CONTENT.equals(resultItems.get(KEY))) {
-
+            // 从url中截取id
+            String id = UrlUtil.urlToId(resultItems.getRequest().getUrl().trim());
+            // 文章内容
+            List<String> paragraphs = resultItems.get(PARAGRAPH);
+            List<ArticleParagraph> articleParagraphs = new ArrayList<>(paragraphs.size());
+            int no = 0;
+            for (String paragraph : paragraphs) {
+                if ("".equals(paragraph.trim())) {
+                    continue;
+                }
+                no++;
+                ArticleParagraph articleParagraph = new ArticleParagraph();
+                articleParagraph.setNo(no);
+                articleParagraph.setPara(paragraph);
+                articleParagraph.setArticleId(id);
+                articleParagraphs.add(articleParagraph);
+            }
+            articleParagraphService.saveOrUpdateBatch(articleParagraphs);
         }
     }
+
 }
