@@ -44,7 +44,7 @@ public class SpiderLaunch {
                 .addUrl(UrlConstant.CCTV_REQUEST_LIST_URL)
                 .addPipeline(cctvSqlPipeline)
                 .thread(5)
-                .run();
+                .runAsync();
     }
 
     public static void main(String[] args) {

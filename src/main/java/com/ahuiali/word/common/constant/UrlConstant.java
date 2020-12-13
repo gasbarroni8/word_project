@@ -12,7 +12,11 @@ public class UrlConstant {
      * cctv网站
      */
     public final static String CCTV_URL = "https://english.cctv.com/news/";
-    public final static String CCTV_REQUEST_LIST_URL = "https://api.cntv.cn/NewArticle/getArticleListByPageId?serviceId=pcenglish&id=PAGE1394789601117162&p=1&n=10";
+    public final static String CCTV_PAGE = "1";
+    public final static String CCTV_PAGE_SIZE = "10";
+    public final static String CCTV_ID = "PAGE1394789601117162";
+    public final static String CCTV_REQUEST_LIST_URL = "https://api.cntv.cn/NewArticle/getArticleListByPageId?serviceId=pcenglish&id="
+            + CCTV_ID + "&p=" + CCTV_PAGE + "&n=" + CCTV_PAGE_SIZE;
 
     /**
      * 中国日报网站
