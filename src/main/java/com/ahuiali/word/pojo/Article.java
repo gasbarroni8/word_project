@@ -38,6 +38,12 @@ public class Article implements Serializable {
     private String url;
 
     /**
+     * 来源
+     */
+    @TableField(value = "source")
+    private String source;
+
+    /**
      * 文章日期
      */
     @JSONField(name = "focus_date")

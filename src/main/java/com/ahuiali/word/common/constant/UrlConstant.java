@@ -21,5 +21,17 @@ public class UrlConstant {
     /**
      * 中国日报网站
      */
-    public final static String CHINA_DAILY_URL = "";
+    public final static String[] CHINA_DAILY_URLS =
+            {
+                    "https://www.chinadaily.com.cn/china/governmentandpolicy",
+                    "https://www.chinadaily.com.cn/china/59b8d010a3108c54ed7dfc25",
+                    "https://www.chinadaily.com.cn/china/society",
+                    "https://www.chinadaily.com.cn/business/tech",
+                    "https://www.chinadaily.com.cn/culture/books",
+                    "https://www.chinadaily.com.cn/culture/art",
+                    "https://www.chinadaily.com.cn/sports/soccer",
+                    "https://www.chinadaily.com.cn/world/europe",
+                    "https://www.chinadaily.com.cn/world/america",
+                    "https://www.chinadaily.com.cn/travel/aroundworld"
+            };
 }

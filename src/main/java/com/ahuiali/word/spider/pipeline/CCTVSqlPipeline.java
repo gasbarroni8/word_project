@@ -1,6 +1,7 @@
 package com.ahuiali.word.spider.pipeline;
 
 import com.ahuiali.word.common.constant.RedisKeyConstant;
+import com.ahuiali.word.common.utils.UrlUtil;
 import com.ahuiali.word.mapper.ArticleMapper;
 import com.ahuiali.word.pojo.Article;
 import com.ahuiali.word.pojo.ArticleParagraph;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import sun.net.util.URLUtil;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
@@ -39,7 +41,6 @@ public class CCTVSqlPipeline implements Pipeline {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-
     @Override
     public void process(ResultItems resultItems, Task task) {
         if (LIST.equals(resultItems.get(KEY))) {
@@ -47,6 +48,8 @@ public class CCTVSqlPipeline implements Pipeline {
             List<String> unVisitedUrls = resultItems.get(UNVISITED_URL);
             articles.forEach(e -> {
                 if (unVisitedUrls.contains(e.getUrl())) {
+                    // 来源为CCTV
+                    e.setSource(CCTV);
                     articleMapper.insert(e);
                     redisTemplate.opsForList()
                             .leftPush(String.format(RedisKeyConstant.SPIDER_LINK_VISITED, CCTV), e.getUrl());
@@ -54,8 +57,7 @@ public class CCTVSqlPipeline implements Pipeline {
             });
         } else if (CONTENT.equals(resultItems.get(KEY))) {
             // 从url中截取id
-            String[] split = resultItems.getRequest().getUrl().trim().split(URL_SPLIT);
-            String id = split[split.length - 1].substring(0, split[split.length - 1].indexOf(DOT));
+            String id = UrlUtil.urlToId(resultItems.getRequest().getUrl().trim());
             // 文章内容
             List<String> paragraphs = resultItems.get(PARAGRAPH);
             List<ArticleParagraph> articleParagraphs = new ArrayList<>(paragraphs.size());

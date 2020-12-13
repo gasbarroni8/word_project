@@ -2,11 +2,14 @@ package com.ahuiali.word.spider;
 
 import com.ahuiali.word.common.constant.UrlConstant;
 import com.ahuiali.word.spider.pipeline.CCTVSqlPipeline;
+import com.ahuiali.word.spider.pipeline.ChinaDailySqlPipeline;
 import com.ahuiali.word.spider.processor.CCTVProcessor;
 import com.ahuiali.word.spider.processor.ChinaDailyProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
+
+import static com.ahuiali.word.common.constant.UrlConstant.CHINA_DAILY_URLS;
 
 /**
  * SpiderLaunch
@@ -21,18 +24,34 @@ public class SpiderLaunch {
     private CCTVSqlPipeline cctvSqlPipeline;
 
     @Autowired
+    private ChinaDailySqlPipeline chinaDailySqlPipeline;
+
+    @Autowired
     private CCTVProcessor cctvProcessor;
+
+    @Autowired
+    private ChinaDailyProcessor chinaDailyProcessor;
 
     /**
      * 爬取中国日报英文版新闻
      */
     public void startSpiderChinaDaily() {
-        // 异步启动
-        Spider.create(null)
-                .addUrl("")
-                .addPipeline(null)
+//        for (String chinaDailyUrl : CHINA_DAILY_URLS) {
+//            // 异步启动
+//            Spider.create(chinaDailyProcessor)
+//                    .addUrl(chinaDailyUrl)
+//                    .addPipeline(chinaDailySqlPipeline)
+//                    .thread(5)
+//                    .run();
+//        }
+
+        // 测试
+        Spider.create(chinaDailyProcessor)
+                .addUrl("https://www.chinadaily.com.cn/china/governmentandpolicy")
+                .addPipeline(chinaDailySqlPipeline)
                 .thread(5)
-                .runAsync();
+                .run();
+
     }
 
     /**
