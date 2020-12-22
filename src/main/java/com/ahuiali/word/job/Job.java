@@ -46,12 +46,33 @@ public class Job {
     @Autowired
     private SpiderLaunch spiderLaunch;
 
-    //表示方法执行完成后5秒
-    @Scheduled(fixedDelay = 1000 * 60)
-    public void fixedDelayJob() throws InterruptedException {
+    //表示方法执行完成后一分钟
+//    @Scheduled(fixedDelay = 1000 * 60)
+//    public void fixedDelayJob() throws InterruptedException {
+//        spiderLaunch.startSpiderCCTV();
+//        System.out.println("fixedDelay 每隔5秒" + new Date());
+//    }
+
+    /**
+     * 六小时运行一次
+     * 爬取CCTV
+     */
+    @Scheduled(cron = "0 0 0/6 * * ? ")
+    public void startSpiderCCTV() {
+        log.info("开始爬取CCTV，date:{}", new Date());
         spiderLaunch.startSpiderCCTV();
-        System.out.println("fixedDelay 每隔5秒" + new Date());
+   }
+
+    /**
+     * 每天6、9、15、21点爬取
+     * 爬取CCTV
+     */
+    @Scheduled(cron = "0 0 6,9,15,21 * * ? ")
+    public void startSpiderChinaDaliy() {
+        log.info("开始爬取ChinaDaily，date:{}", new Date());
+        spiderLaunch.startSpiderChinaDaily();
     }
+
 //
 //    //表示每隔3秒
 //    @Scheduled(fixedRate = 3000)

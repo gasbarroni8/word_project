@@ -3,7 +3,6 @@ package com.ahuiali.word.service;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.pojo.Learner;
 
-import java.util.List;
 
 public interface LearnerService {
 
@@ -23,5 +22,5 @@ public interface LearnerService {
 
     Response<?> updatePassword(String email, String password);
 
-    Response<?> findAllReviewNoticeLearners();
+    Response<Learner> findAllReviewNoticeLearners();
 }
