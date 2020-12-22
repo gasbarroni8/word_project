@@ -24,8 +24,9 @@ import java.util.List;
 
 /**
  * 定时任务类
+ *
  * @author ZhengChaoHui
- * @Date 2020/9/20 14:16
+ * @date 2020/9/20 14:16
  */
 @Component
 @Slf4j
@@ -35,23 +36,16 @@ public class Job {
     private LearnerService learnerService;
 
     @Autowired
-    WordService wordService;
+    private WordService wordService;
 
     @Autowired
-    WordbookService wordbookService;
+    private WordbookService wordbookService;
 
     @Autowired
     private JavaMailSender javaMailSender;
 
     @Autowired
     private SpiderLaunch spiderLaunch;
-
-    //表示方法执行完成后一分钟
-//    @Scheduled(fixedDelay = 1000 * 60)
-//    public void fixedDelayJob() throws InterruptedException {
-//        spiderLaunch.startSpiderCCTV();
-//        System.out.println("fixedDelay 每隔5秒" + new Date());
-//    }
 
     /**
      * 六小时运行一次
@@ -61,7 +55,7 @@ public class Job {
     public void startSpiderCCTV() {
         log.info("开始爬取CCTV，date:{}", new Date());
         spiderLaunch.startSpiderCCTV();
-   }
+    }
 
     /**
      * 每天6、9、15、21点爬取
@@ -73,20 +67,12 @@ public class Job {
         spiderLaunch.startSpiderChinaDaily();
     }
 
-//
-//    //表示每隔3秒
-//    @Scheduled(fixedRate = 3000)
-//    public void fixedRateJob() {
-//
-//        System.out.println("fixedRate 每隔3秒" + new Date());
-//    }
-
     public static void main(String[] args) {
         new Job().cronJob1();
     }
 
     /**
-     *     表示每天7时执行
+     * 表示每天7时执行
      */
     @Scheduled(cron = "0 0 7 * * ? ")
     public void cronJob1() {
@@ -125,7 +111,7 @@ public class Job {
                     sb.append(word.getWord()).append(" : ").append(wordMeaning).append("<br>");
                 }
                 Response<?> emailResp = sentEmail("1170782807@qq.com", "1170782807@qq.com", "您有需要复习的单词", sb.append("</body></html>").toString());
-                if (Response.isSuccess(emailResp)){
+                if (Response.isSuccess(emailResp)) {
                     log.info("发送邮箱成功！用户：{}", learner.getEmail());
                 }
             }
@@ -134,8 +120,8 @@ public class Job {
     }
 
 
-    public Response<?> sentEmail(String from, String to,String title, String msg){
-        try{
+    public Response<?> sentEmail(String from, String to, String title, String msg) {
+        try {
             // MimeMessage可以显示html效果
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
@@ -144,7 +130,7 @@ public class Job {
             mimeMessageHelper.setSubject(title);
             mimeMessageHelper.setText(msg, true);
             javaMailSender.send(mimeMessage);
-        } catch (MessagingException e){
+        } catch (MessagingException e) {
             log.error("【定时推送】邮箱发送失败，接收方：{}", to);
             e.printStackTrace();
             //出错，邮箱发送失败

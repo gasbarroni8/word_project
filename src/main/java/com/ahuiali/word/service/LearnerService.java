@@ -22,5 +22,5 @@ public interface LearnerService {
 
     Response<?> updatePassword(String email, String password);
 
-    Response<Learner> findAllReviewNoticeLearners();
+    Response<?> findAllReviewNoticeLearners();
 }

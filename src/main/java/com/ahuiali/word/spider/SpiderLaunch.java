@@ -14,6 +14,7 @@ import static com.ahuiali.word.common.constant.UrlConstant.CHINA_DAILY_URLS;
 /**
  * SpiderLaunch
  * 爬虫启动类
+ *
  * @author ZhengChaoHui
  * @date 2020/12/11 23:16
  */
@@ -42,16 +43,8 @@ public class SpiderLaunch {
                     .addUrl(chinaDailyUrl)
                     .addPipeline(chinaDailySqlPipeline)
                     .thread(5)
-                    .run();
+                    .runAsync();
         }
-
-        // 测试
-//        Spider.create(chinaDailyProcessor)
-//                .addUrl("https://www.chinadaily.com.cn/china/governmentandpolicy")
-//                .addPipeline(chinaDailySqlPipeline)
-//                .thread(5)
-//                .run();
-
     }
 
     /**
@@ -64,9 +57,5 @@ public class SpiderLaunch {
                 .addPipeline(cctvSqlPipeline)
                 .thread(5)
                 .runAsync();
-    }
-
-    public static void main(String[] args) {
-//        startSpiderCCTV();
     }
 }
