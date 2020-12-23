@@ -117,9 +117,11 @@ public class LearnerController {
      *
      * @return
      */
+    @CrossOrigin
     @RequestMapping("/gotoLogin")
-    public String gotoLogin() {
-        return "/learner/login";
+    public @ResponseBody
+    Response<?> gotoLogin() {
+        return new Response<Object>(Constant.Error.UN_LOGIN);
     }
 
     /**

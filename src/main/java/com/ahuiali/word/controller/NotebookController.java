@@ -74,7 +74,7 @@ public class NotebookController {
         //获取学习者id
         Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
         Notebook notebook = new Notebook();
-        notebook.setLearner_id(learnerId);
+        notebook.setLearnerId(learnerId);
         notebook.setName(name.trim());
         notebookService.addNotebook(notebook);
 

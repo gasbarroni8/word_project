@@ -64,9 +64,9 @@ public class BookController {
      * @param
      * @return
      */
-    @RequestMapping(value = "/hotbooks", produces = "application/json;charset=utf-8;")
+    @RequestMapping(value = "/hot", produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> hotbooks() {
+    Response<?> hot() {
         return bookService.findHotBooks();
     }
 
@@ -116,7 +116,7 @@ public class BookController {
      * @param indexBook
      * @return
      */
-    @RequestMapping(value = "/bookDetail/{indexBook}", produces = "application/json;charset=utf-8;")
+    @RequestMapping(value = "/detail/{indexBook}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
     Response<?> getBookDetail(@PathVariable("indexBook") Integer indexBook, HttpSession session) {
 
@@ -130,7 +130,7 @@ public class BookController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "/mybook", produces = "application/json;charset=utf-8;")
+    @RequestMapping(value = "/shelf", produces = "application/json;charset=utf-8;")
     public @ResponseBody
     Response<?> getMyBooks(HttpSession session) {
 
@@ -146,7 +146,7 @@ public class BookController {
      * @param pageUtil
      * @return
      */
-    @RequestMapping(value = "/mybook/chapters/{indexBook}")
+    @RequestMapping(value = "/shelf/chapters/{indexBook}")
     public @ResponseBody
     Response<?> listChapters(@PathVariable("indexBook") Integer indexBook,
                              PageUtil pageUtil) {
@@ -160,9 +160,9 @@ public class BookController {
      * @param chapterIndex
      * @return
      */
-    @RequestMapping(value = "/read/{chapter_index}")
+    @RequestMapping(value = "/read/{chapterIndex}")
     public @ResponseBody
-    Response<?> read(@PathVariable("chapter_index") Integer chapterIndex) {
+    Response<?> read(@PathVariable("chapterIndex") Integer chapterIndex) {
 //        Integer index_book = chapter_index/10000;
         //获取文章内容
         return bookService.findParasByChapterIndex(chapterIndex);

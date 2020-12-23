@@ -51,7 +51,7 @@ public class Job {
      * 六小时运行一次
      * 爬取CCTV
      */
-    @Scheduled(cron = "0 0 0/6 * * ? ")
+//    @Scheduled(cron = "0 0 0/6 * * ? ")
     public void startSpiderCCTV() {
         log.info("开始爬取CCTV，date:{}", new Date());
         spiderLaunch.startSpiderCCTV();
@@ -61,8 +61,8 @@ public class Job {
      * 每天6、9、15、21点爬取
      * 爬取CCTV
      */
-    @Scheduled(cron = "0 0 6,9,15,21 * * ? ")
-    public void startSpiderChinaDaliy() {
+//    @Scheduled(cron = "0 0 6,9,15,21 * * ? ")
+    public void startSpiderChinaDaily() {
         log.info("开始爬取ChinaDaily，date:{}", new Date());
         spiderLaunch.startSpiderChinaDaily();
     }
@@ -90,7 +90,7 @@ public class Job {
                 continue;
             }
             Wordbook wordbook = response.getData();
-            if (wordbook.getReview_count() > 0) {
+            if (wordbook.getReviewCount() > 0) {
                 // 查询总数
                 Integer count = wordbookService.findReviewCount(learner.getId(), wordbook.getId());
                 // 查询单词（最多30）

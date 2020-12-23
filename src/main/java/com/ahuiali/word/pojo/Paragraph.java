@@ -1,22 +1,29 @@
 package com.ahuiali.word.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
+@TableName(value = "chapter_paragraph")
 public class Paragraph implements Serializable {
 
     private Integer id;
 
+    @TableField(value = "para_en")
     private String paraEn;
 
-    private String para_cn;
+    @TableField(value = "para_cn")
+    private String paraCn;
 
-    private Integer chapter_index;
+    @TableField(value = "chapter_index")
+    private Integer chapterIndex;
 
-    private Integer para_index;
+    @TableField(value = "para_index")
+    private Integer paraIndex;
 
     private Date created;
 
