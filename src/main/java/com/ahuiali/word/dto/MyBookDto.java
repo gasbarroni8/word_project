@@ -1,6 +1,7 @@
 package com.ahuiali.word.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * MyBookDto
@@ -8,8 +9,12 @@ import lombok.Data;
  * @author ZhengChaoHui
  * @date 2020/12/24 1:08
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class MyBookDto extends BookDto {
 
+    /**
+     * 上次阅读位置
+     */
     private String lastestLoc;
 }

@@ -115,16 +115,20 @@ public interface BookMapper extends BaseMapper<Book> {
             "where learner_id = #{learner_id} and book_index = #{book_index};")
     Integer updateBook(Integer learner_id, Integer book_index, String lastest_loc);
 
-    //根据段落id查询段落翻译
-    @Select("SELECT para_cn FROM chapter_paragraph WHERE id = #{para_id};")
-    Paragraph findParaCNById(Integer para_id);
+    /**
+     * 根据段落id查询段落翻译
+     * @param paraId 段落id
+     * @return Paragraph
+     */
+    @Select("SELECT para_cn FROM chapter_paragraph WHERE id = #{paraId};")
+    Paragraph findParaCNById(Integer paraId);
 
     /**
      * 根据书名查询书籍
      *
-     * @param bookName
-     * @return
+     * @param bookName 书名
+     * @return list
      */
-    @Select("select id,title,index_book, img from book where title like concat('%',#{bookName},'%');")
-    List<Book> getBooksByName(String bookName);
+    @Select("select id, title, index_book as indexBook, img from book where title like concat('%',#{bookName},'%');")
+    List<BookDto> getBooksByName(String bookName);
 }

@@ -220,8 +220,8 @@ public class BookServiceImpl implements BookService {
      */
     @Override
     public Response<?> getBooksByName(String bookName) {
-        Response<List<Book>> response = Response.success();
-        List<Book> books = bookMapper.getBooksByName(bookName);
+        Response<List<BookDto>> response = Response.success();
+        List<BookDto> books = bookMapper.getBooksByName(bookName);
         if (books.size() <= ZERO) {
             return Response.result(Constant.Error.BOOK_NOT_FOUNDED);
         }

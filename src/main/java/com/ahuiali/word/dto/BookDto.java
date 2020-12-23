@@ -12,9 +12,18 @@ import lombok.Data;
 public class BookDto {
     private Integer id;
 
+    /**
+     * 标题
+     */
     private String title;
 
+    /**
+     * 封面
+     */
     private String img;
 
+    /**
+     * 书籍号
+     */
     private Integer indexBook;
 }
