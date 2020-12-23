@@ -23,5 +23,4 @@ public class Chapter implements Serializable {
 
     private List<Paragraph> paragraphs;
 
-
 }

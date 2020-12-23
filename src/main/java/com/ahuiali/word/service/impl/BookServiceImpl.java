@@ -2,6 +2,8 @@ package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.dto.BookDto;
+import com.ahuiali.word.dto.MyBookDto;
 import com.ahuiali.word.mapper.BookMapper;
 import com.ahuiali.word.pojo.Book;
 import com.ahuiali.word.pojo.Chapter;
@@ -36,8 +38,8 @@ public class BookServiceImpl implements BookService {
      */
     @Override
     public Response<?> findHotBooks() {
-        Response<List<Book>> response = Response.success();
-        List<Book> books = bookMapper.getHotBooks();
+        Response<List<BookDto>> response = Response.success();
+        List<BookDto> books = bookMapper.getHotBooks();
         if (books.size() <= 0) {
             return Response.result(Constant.Error.BOOK_HOT_EMPTY);
         }
@@ -54,8 +56,8 @@ public class BookServiceImpl implements BookService {
      */
     @Override
     public Response<?> getBooksByTag(String tag, PageUtil pageUtil) {
-        Response<List<Book>> response = Response.success();
-        List<Book> books = bookMapper.getBooksByTag(tag, pageUtil);
+        Response<List<BookDto>> response = Response.success();
+        List<BookDto> books = bookMapper.getBooksByTag(tag, pageUtil);
         if (books.size() <= 0) {
             return Response.result(Constant.Error.BOOK_NOT_FOUNDED);
         }
@@ -95,8 +97,8 @@ public class BookServiceImpl implements BookService {
      */
     @Override
     public Response<?> getMyBooks(Integer learnerId) {
-        Response<List<Book>> response = Response.success();
-        List<Book> books = bookMapper.getMyBooks(learnerId);
+        Response<List<MyBookDto>> response = Response.success();
+        List<MyBookDto> books = bookMapper.getMyBooks(learnerId);
         if (books.size() <= ZERO) {
             return Response.result(Constant.Error.BOOKSHELF_EMPTY);
         }

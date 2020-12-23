@@ -1,5 +1,7 @@
 package com.ahuiali.word.mapper;
 
+import com.ahuiali.word.dto.BookDto;
+import com.ahuiali.word.dto.MyBookDto;
 import com.ahuiali.word.pojo.Book;
 import com.ahuiali.word.pojo.Chapter;
 import com.ahuiali.word.pojo.Paragraph;
@@ -19,6 +21,7 @@ public interface BookMapper extends BaseMapper<Book> {
 
     /**
      * 根据书籍号查询所有章节
+     *
      * @param book_index
      * @param pageUtil
      * @return
@@ -28,22 +31,26 @@ public interface BookMapper extends BaseMapper<Book> {
             "limit #{pageUtil.offset},#{pageUtil.size};")
     List<Chapter> getAllChapterByBookIndex(Integer book_index, PageUtil pageUtil);
 
+    /**
+     * 获取热门书籍
+     *
+     * @return list
+     */
     @Select("select id, title, index_book as indexBook, img from book where is_hot = 1;")
-    List<Book> getHotBooks();
+    List<BookDto> getHotBooks();
 
     /**
      * 根据分类找书籍
-     * @param tag 分类
+     *
+     * @param tag      分类
      * @param pageUtil 分页
      * @return
      */
-    @Select("select id,title,index_book,img from book where tag like #{tag} " +
+    @Select("select id,title,index_book as indexBook,img from book where tag like #{tag} " +
             "LIMIT #{pageUtil.offset},#{pageUtil.size};")
-    List<Book> getBooksByTag(String tag, PageUtil pageUtil);
+    List<BookDto> getBooksByTag(String tag, PageUtil pageUtil);
 
     /**
-     *
-     *
      * @param book_index
      * @param learner_id
      * @return
@@ -53,36 +60,45 @@ public interface BookMapper extends BaseMapper<Book> {
 
     /**
      * 根据书籍号查询，并且返回是否加入
-     * @param index_book
-     * @param learner_id
-     * @return
+     *
+     * @param indexBook 书籍号
+     * @param learnerId 用户id
+     * @return list
      */
     @Select("SELECT id,title,index_book,img,tag,summary, " +
             "(SELECT lastest_loc FROM learner_book WHERE learner_id = #{learner_id} AND book_index = #{index_book} limit 1) as lastest_loc \n" +
-            "FROM book WHERE index_book = #{index_book} limit 1;")
-    Book findBookByIndex(Integer index_book,Integer learner_id);
+            "FROM book WHERE index_book = #{indexBook} limit 1;")
+    Book findBookByIndex(Integer indexBook, Integer learnerId);
 
-    //查询我的书籍,结果按照时间排序，最新排在最前
-    @Select("SELECT lb.`lastest_loc` as lastestLoc,b.`title`,b.`tag`,b.`title`,b.`author`,b.`img`,b.`index_book` as indexBook\n" +
-            "FROM learner_book lb \n" +
-            "INNER JOIN book b \n" +
+    /**
+     * 查询我的书籍,结果按照时间排序，最新排在最前
+     * @param learnerId 用户id
+     * @return list
+     */
+    @Select("SELECT lb.`lastest_loc` as lastestLoc, b.`id`, b.`img`, b.`title`, b.`index_book` as indexBook " +
+            "FROM learner_book lb " +
+            "INNER JOIN book b " +
             "ON (lb.`learner_id` = #{learner_id} AND lb.`book_index` = b.`index_book`) ORDER BY lb.`modified` DESC;")
-    List<Book> getMyBooks(Integer learner_id);
+    List<MyBookDto> getMyBooks(Integer learnerId);
 
 //    //根据章节号返回所有段落
 //    @Select("SELECT id,para_en,para_cn FROM chapter_paragraph WHERE chapter_index = #{chapter_index};")
 //    List<Paragraph> getParaByChapterIndex(Integer chapter_index);
 
-    //根据章节号返回所有段落
-    @Select("SELECT id, chapter_name, chapter_index FROM book_chapter WHERE chapter_index = #{chapter_index};")
+    /**
+     * 根据章节号返回所有段落
+     * @param chapterIndex 章节号
+     * @return chapter
+     */
+    @Select("SELECT id, chapter_name, chapter_index FROM book_chapter WHERE chapter_index = #{chapterIndex};")
     @Results({
-            @Result(id=true,property="id",column="id"),
-            @Result(property="chapterName",column="chapter_name"),
-            @Result(property="chapterIndex",column="chapter_index"),
-            @Result(property="paragraphs",column="chapter_index",javaType=List.class,
-                    many=@Many(select="com.ahuiali.word.mapper.BookMapper.getAllParasByChapterIndex"))
+            @Result(id = true, property = "id", column = "id"),
+            @Result(property = "chapterName", column = "chapter_name"),
+            @Result(property = "chapterIndex", column = "chapter_index"),
+            @Result(property = "paragraphs", column = "chapter_index", javaType = List.class,
+                    many = @Many(select = "com.ahuiali.word.mapper.BookMapper.getAllParasByChapterIndex"))
     })
-    Chapter getParaByChapterIndex(Integer chapter_index);
+    Chapter getParaByChapterIndex(Integer chapterIndex);
 
     //查询某章节的所有英语段落
     @Select("select id, para_en as paraEn from chapter_paragraph where chapter_index = #{chapter_index};")
@@ -90,7 +106,7 @@ public interface BookMapper extends BaseMapper<Book> {
 
     @Insert("insert into learner_book (learner_id,book_index,lastest_loc,created,modified) \n" +
             "values (#{learner_id},#{index_book},#{lastest_loc},NOW(),NOW());")
-    Integer addBook(Integer index_book, Integer learner_id,String lastest_loc);
+    Integer addBook(Integer index_book, Integer learner_id, String lastest_loc);
 
     @Delete("delete from learner_book where learner_id = #{learner_id} and book_index = #{book_index};")
     Integer removeBook(Integer learner_id, Integer book_index);
@@ -105,6 +121,7 @@ public interface BookMapper extends BaseMapper<Book> {
 
     /**
      * 根据书名查询书籍
+     *
      * @param bookName
      * @return
      */
