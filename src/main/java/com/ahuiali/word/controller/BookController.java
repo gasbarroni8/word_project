@@ -19,46 +19,6 @@ public class BookController {
     BookService bookService;
 
     /**
-     * 跳转至书城
-     *
-     * @return
-     */
-    @RequestMapping(value = "/gotoBookStore")
-    public String gotoBookStore() {
-        return "/book/bookstore";
-    }
-
-    /**
-     * 跳转至书籍详情
-     *
-     * @return
-     */
-    @RequestMapping(value = "/gotoBookDetail")
-    public String gotoBookDetail() {
-        return "/book/bookDetail";
-    }
-
-    /**
-     * 跳转至阅读界面
-     *
-     * @return
-     */
-    @RequestMapping(value = "/gotoRead")
-    public String gotoRead() {
-        return "/book/read";
-    }
-
-    /**
-     * 跳转至书架
-     *
-     * @return
-     */
-    @RequestMapping(value = "/gotoShelf")
-    public String gotoShelf() {
-        return "/book/bookshelf";
-    }
-
-    /**
      * 初始化，自动显示热门书籍,不需要分页
      *
      * @param
