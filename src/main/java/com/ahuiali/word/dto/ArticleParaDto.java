@@ -11,9 +11,15 @@ import java.util.List;
  * @date 2020/12/24 13:17
  */
 @Data
-public class ArticleParaDto {
+public class ArticleParaDto{
 
+    /**
+     * 文章信息
+     */
     private ArticleDto article;
 
+    /**
+     * 文章内容
+     */
     private List<String> paragraphs;
 }

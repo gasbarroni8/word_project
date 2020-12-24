@@ -3,6 +3,7 @@ package com.ahuiali.word.service.impl;
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.dto.BookDto;
+import com.ahuiali.word.dto.ChapterParaDto;
 import com.ahuiali.word.dto.MyBookDto;
 import com.ahuiali.word.mapper.BookMapper;
 import com.ahuiali.word.pojo.Book;
@@ -114,12 +115,12 @@ public class BookServiceImpl implements BookService {
      */
     @Override
     public Response<?> findParasByChapterIndex(Integer chapterIndex) {
-        Response<Chapter> response = Response.success();
-        Chapter chapter = bookMapper.getParaByChapterIndex(chapterIndex);
-        if (chapter == null) {
+        Response<ChapterParaDto> response = Response.success();
+        ChapterParaDto chapterParaDto = bookMapper.getParaByChapterIndex(chapterIndex);
+        if (chapterParaDto != null && chapterParaDto.getParagraphs() == null) {
             return Response.result(Constant.Error.CHAPTER_EMPTY);
         }
-        response.setData(chapter);
+        response.setData(chapterParaDto);
         return response;
     }
 

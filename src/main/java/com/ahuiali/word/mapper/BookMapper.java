@@ -1,7 +1,9 @@
 package com.ahuiali.word.mapper;
 
 import com.ahuiali.word.dto.BookDto;
+import com.ahuiali.word.dto.ChapterParaDto;
 import com.ahuiali.word.dto.MyBookDto;
+import com.ahuiali.word.dto.ParaEnDto;
 import com.ahuiali.word.pojo.Book;
 import com.ahuiali.word.pojo.Chapter;
 import com.ahuiali.word.pojo.Paragraph;
@@ -98,11 +100,11 @@ public interface BookMapper extends BaseMapper<Book> {
             @Result(property = "paragraphs", column = "chapter_index", javaType = List.class,
                     many = @Many(select = "com.ahuiali.word.mapper.BookMapper.getAllParasByChapterIndex"))
     })
-    Chapter getParaByChapterIndex(Integer chapterIndex);
+    ChapterParaDto getParaByChapterIndex(Integer chapterIndex);
 
     //查询某章节的所有英语段落
     @Select("select id, para_en as paraEn from chapter_paragraph where chapter_index = #{chapterIndex};")
-    List<Paragraph> getAllParasByChapterIndex(Integer chapterIndex);
+    List<ParaEnDto> getAllParasByChapterIndex(Integer chapterIndex);
 
     @Insert("insert into learner_book (learner_id,book_index,lastest_loc,created,modified) \n" +
             "values (#{learnerId},#{indexBook},#{lastestLoc},NOW(),NOW());")
