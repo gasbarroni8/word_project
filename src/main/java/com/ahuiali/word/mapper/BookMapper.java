@@ -101,8 +101,8 @@ public interface BookMapper extends BaseMapper<Book> {
     Chapter getParaByChapterIndex(Integer chapterIndex);
 
     //查询某章节的所有英语段落
-    @Select("select id, para_en as paraEn from chapter_paragraph where chapter_index = #{chapter_index};")
-    List<Paragraph> getAllParasByChapterIndex(Integer chapter_index);
+    @Select("select id, para_en as paraEn from chapter_paragraph where chapter_index = #{chapterIndex};")
+    List<Paragraph> getAllParasByChapterIndex(Integer chapterIndex);
 
     @Insert("insert into learner_book (learner_id,book_index,lastest_loc,created,modified) \n" +
             "values (#{learnerId},#{indexBook},#{lastestLoc},NOW(),NOW());")

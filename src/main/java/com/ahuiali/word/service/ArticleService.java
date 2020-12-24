@@ -24,4 +24,9 @@ public interface ArticleService extends IService<Article> {
     List<ArticleDto> getLastestArticle();
 
 
+    /**
+     * 获取文章内容
+     * @param articleId 文章id
+     */
+    Response<?> getContentByArticleId(String articleId);
 }
