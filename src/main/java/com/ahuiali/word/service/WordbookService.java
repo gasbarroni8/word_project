@@ -1,6 +1,7 @@
 package com.ahuiali.word.service;
 
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.dto.BaseInfoDto;
 
 public interface WordbookService {
     Response<?> getWordbooks();
@@ -19,5 +20,5 @@ public interface WordbookService {
 
     Integer findReviewCount( Integer learnerId, Integer wordbook_id);
 
-    Response<?> getMemorizingWordbookAndReviewCount(Integer learnerId);
+    BaseInfoDto getMemorizingWordbookAndReviewCount(Integer learnerId);
 }

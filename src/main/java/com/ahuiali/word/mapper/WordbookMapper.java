@@ -1,5 +1,6 @@
 package com.ahuiali.word.mapper;
 
+import com.ahuiali.word.dto.BaseInfoDto;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.pojo.Wordbook;
 import org.apache.ibatis.annotations.*;
@@ -114,7 +115,7 @@ public interface WordbookMapper {
             "        ON lw.`wordbook_id` = w.`id` \n" +
             "        AND lw.`learner_id` = #{learnerId}\n" +
             "        AND lw.is_memorizing = 1;")
-    Wordbook getMemorizingWordbookAndReviewCount(Integer learnerId);
+    BaseInfoDto getMemorizingWordbookAndReviewCount(Integer learnerId);
 
     /**
      * 设置新计划

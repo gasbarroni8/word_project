@@ -1,9 +1,13 @@
 package com.ahuiali.word.mapper;
 
+import com.ahuiali.word.dto.ArticleDto;
 import com.ahuiali.word.pojo.Article;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * ArticleMapper
@@ -14,4 +18,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface ArticleMapper extends BaseMapper<Article> {
+
+    @Select("SELECT id, title, source, url, description, date, image FROM article ORDER BY date DESC LIMIT 15;")
+    List<ArticleDto> getLastestArticle();
 }

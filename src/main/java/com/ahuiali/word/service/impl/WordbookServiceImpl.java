@@ -2,6 +2,7 @@ package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.dto.BaseInfoDto;
 import com.ahuiali.word.mapper.WordMapper;
 import com.ahuiali.word.mapper.WordbookMapper;
 import com.ahuiali.word.pojo.Word;
@@ -177,13 +178,7 @@ public class WordbookServiceImpl implements WordbookService {
      * @return resp
      */
     @Override
-    public Response<?> getMemorizingWordbookAndReviewCount(Integer learnerId) {
-        Response<Wordbook> response = Response.success();
-        Wordbook wordbook = wordbookMapper.getMemorizingWordbookAndReviewCount(learnerId);
-        if (wordbook == null) {
-            return Response.result(Constant.Error.WORDBOOK_NOT_FOUNDED);
-        }
-        response.setData(wordbook);
-        return response;
+    public BaseInfoDto getMemorizingWordbookAndReviewCount(Integer learnerId) {
+        return wordbookMapper.getMemorizingWordbookAndReviewCount(learnerId);
     }
 }

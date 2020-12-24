@@ -3,6 +3,7 @@ package com.ahuiali.word.job;
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.common.utils.PageUtil;
+import com.ahuiali.word.dto.BaseInfoDto;
 import com.ahuiali.word.pojo.Learner;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.pojo.Wordbook;
@@ -85,16 +86,15 @@ public class Job {
                 continue;
             }
             // 查询用户当前计划的复习词汇
-            Response<Wordbook> response = (Response<Wordbook>) wordbookService.getMemorizingWordbookAndReviewCount(learner.getId());
-            if (!Constant.SUCCESS.getCode().equals(response.getCode())) {
+            BaseInfoDto baseInfoDto = wordbookService.getMemorizingWordbookAndReviewCount(learner.getId());
+            if (baseInfoDto == null) {
                 continue;
             }
-            Wordbook wordbook = response.getData();
-            if (wordbook.getReviewCount() > 0) {
+            if (baseInfoDto.getReviewCount() > 0) {
                 // 查询总数
-                Integer count = wordbookService.findReviewCount(learner.getId(), wordbook.getId());
+                Integer count = wordbookService.findReviewCount(learner.getId(), baseInfoDto.getId());
                 // 查询单词（最多30）
-                Response<List<Word>> reviewWords = (Response<List<Word>>) wordService.getReviewWords(learner.getId(), wordbook.getId(), new PageUtil());
+                Response<List<Word>> reviewWords = (Response<List<Word>>) wordService.getReviewWords(learner.getId(), baseInfoDto.getId(), new PageUtil());
                 List<Word> words = reviewWords.getData();
                 // 通知
                 StringBuilder sb = new StringBuilder();
