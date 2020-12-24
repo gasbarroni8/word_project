@@ -20,6 +20,9 @@ import java.util.List;
 
 import static com.ahuiali.word.common.constant.Constant.ZERO;
 
+/**
+ * 书籍impl
+ */
 @Transactional
 @Service
 public class BookServiceImpl implements BookService {

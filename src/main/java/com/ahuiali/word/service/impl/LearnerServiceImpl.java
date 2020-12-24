@@ -20,7 +20,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 /**
- *
+ * 用户impl
  */
 @Transactional
 @Service

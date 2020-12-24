@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * IndexServiceImpl
+ * 主页service实现类
  *
  * @author ZhengChaoHui
  * @date 2020/12/24 12:38
@@ -32,7 +33,9 @@ public class IndexServiceImpl implements IndexService {
     @Override
     public Response<IndexDto> getIndexDto(Integer learnerId) {
         Response<IndexDto> response = Response.success();
+        // 获取基本信息
         BaseInfoDto baseInfoDto = wordbookService.getMemorizingWordbookAndReviewCount(learnerId);
+        // 获取最新文章
         List<ArticleDto> lastestArticle = articleService.getLastestArticle();
         IndexDto indexDto = new IndexDto(baseInfoDto, lastestArticle);
         response.setData(indexDto);

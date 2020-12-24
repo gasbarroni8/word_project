@@ -78,5 +78,8 @@ public class Constant {
         Result CHAPTER_EMPTY = new Result("807", "章节内容为空");
         Result PARA_CN_EMPTY = new Result("808", "段落翻译为空");
 
+        //文章
+        Result ARTICLE_CONTENT_NOT_FOUND = new Result("900", "找不到文章内容");
+
     }
 }

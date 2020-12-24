@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 词书impl
+ */
 @Service
 @Slf4j
 public class WordbookServiceImpl implements WordbookService {
@@ -45,9 +48,9 @@ public class WordbookServiceImpl implements WordbookService {
     /**
      * 获取词书细节
      *
-     * @param id
-     * @param learnerId
-     * @return
+     * @param id        词书id
+     * @param learnerId 用户id
+     * @return resp
      */
     @Override
     public Response<?> getWordbookDetail(Integer id, Integer learnerId) {
@@ -65,10 +68,10 @@ public class WordbookServiceImpl implements WordbookService {
     /**
      * 获取词书单词
      *
-     * @param id
-     * @param curr
-     * @param size
-     * @return
+     * @param id   词书id
+     * @param curr 当前页
+     * @param size 页大小
+     * @return resp
      */
     @Override
     public Response<?> getWords(Integer id, int curr, int size) {
@@ -83,8 +86,8 @@ public class WordbookServiceImpl implements WordbookService {
     /**
      * 为用户添加词书
      *
-     * @param learnerId
-     * @param wordbookId
+     * @param learnerId  用户id
+     * @param wordbookId 词书id
      * @return
      */
     @Transactional(rollbackFor = Exception.class)

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
+ * 生词本impl
  * @author ZhengChaoHui
  */
 @Service
