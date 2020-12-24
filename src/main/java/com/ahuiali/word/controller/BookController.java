@@ -80,8 +80,8 @@ public class BookController {
     public @ResponseBody
     Response<?> getBookDetail(@PathVariable("indexBook") Integer indexBook, HttpSession session) {
 
-        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
-        return bookService.getBookDetail(indexBook, learner_id);
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
+        return bookService.getBookDetail(indexBook, learnerId);
     }
 
     /**

@@ -65,8 +65,8 @@ public interface BookMapper extends BaseMapper<Book> {
      * @param learnerId 用户id
      * @return list
      */
-    @Select("SELECT id,title,index_book,img,tag,summary, " +
-            "(SELECT lastest_loc FROM learner_book WHERE learner_id = #{learner_id} AND book_index = #{index_book} limit 1) as lastest_loc \n" +
+    @Select("SELECT id,title,index_book as indexBook,img,tag,summary, " +
+            "(SELECT lastest_loc FROM learner_book WHERE learner_id = #{learnerId} AND book_index = #{indexBook} limit 1) as lastestLoc \n" +
             "FROM book WHERE index_book = #{indexBook} limit 1;")
     Book findBookByIndex(Integer indexBook, Integer learnerId);
 
@@ -105,15 +105,15 @@ public interface BookMapper extends BaseMapper<Book> {
     List<Paragraph> getAllParasByChapterIndex(Integer chapter_index);
 
     @Insert("insert into learner_book (learner_id,book_index,lastest_loc,created,modified) \n" +
-            "values (#{learner_id},#{index_book},#{lastest_loc},NOW(),NOW());")
-    Integer addBook(Integer index_book, Integer learner_id, String lastest_loc);
+            "values (#{learnerId},#{indexBook},#{lastestLoc},NOW(),NOW());")
+    Integer addBook(Integer indexBook, Integer learnerId, String lastestLoc);
 
-    @Delete("delete from learner_book where learner_id = #{learner_id} and book_index = #{book_index};")
-    Integer removeBook(Integer learner_id, Integer book_index);
+    @Delete("delete from learner_book where learner_id = #{learnerId} and book_index = #{indexBook};")
+    Integer removeBook(Integer learnerId, Integer indexBook);
 
-    @Update("update learner_book set lastest_loc = #{lastest_loc},modified = NOW() " +
-            "where learner_id = #{learner_id} and book_index = #{book_index};")
-    Integer updateBook(Integer learner_id, Integer book_index, String lastest_loc);
+    @Update("update learner_book set lastest_loc = #{lastestLoc},modified = NOW() " +
+            "where learner_id = #{learnerId} and book_index = #{book_index};")
+    Integer updateBook(Integer learnerId, Integer book_index, String lastestLoc);
 
     /**
      * 根据段落id查询段落翻译

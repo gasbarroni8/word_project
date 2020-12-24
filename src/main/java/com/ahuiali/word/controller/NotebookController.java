@@ -37,9 +37,9 @@ public class NotebookController {
      *
      * @return
      */
-    @RequestMapping(value = "/myNotebookJson")
+    @RequestMapping(value = "/myNotebook")
     public @ResponseBody
-    Response<?> myNotebookJSON(HttpSession session) {
+    Response<?> myNotebook(HttpSession session) {
         //获取学习者id
         Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
         return notebookService.findAllNotebookByLearnerId(learner_id);
