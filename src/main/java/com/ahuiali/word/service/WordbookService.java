@@ -6,19 +6,19 @@ import com.ahuiali.word.dto.BaseInfoDto;
 public interface WordbookService {
     Response<?> getWordbooks();
 
-    Response<?> getWordbookDetail(Integer id, Integer learner_id);
+    Response<?> getWordbookDetail(Integer id, Integer wordbookId);
 
     Response<?> getWords(Integer id, int curr, int size);
 
-    Response<?> addWordbook(Integer learnerId, Integer wordbook_id) throws Exception;
+    Response<?> addWordbook(Integer learnerId, Integer wordbookId) throws Exception;
 
     Response<?> findMyWordbooks(Integer learnerId);
 
-    Response<?> updateWordbookPlan(Integer learnerId, Integer wordbook_id);
+    Response<?> updateWordbookPlan(Integer learnerId, Integer wordbookId);
 
     Response<?> myMemorizingWordbook(Integer learnerId);
 
-    Integer findReviewCount( Integer learnerId, Integer wordbook_id);
+    Integer findReviewCount( Integer learnerId, Integer wordbookId);
 
     BaseInfoDto getMemorizingWordbookAndReviewCount(Integer learnerId);
 }

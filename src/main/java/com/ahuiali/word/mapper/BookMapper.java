@@ -57,7 +57,7 @@ public interface BookMapper extends BaseMapper<Book> {
      * @param learner_id
      * @return
      */
-    @Select("select lastest_loc from learner_book where learner_id = #{learner_id} and book_index = #{book_index}")
+    @Select("select latest_loc from learner_book where learner_id = #{learner_id} and book_index = #{book_index}")
     String findIsAddThisBook(Integer book_index, Integer learner_id);
 
     /**
@@ -68,7 +68,7 @@ public interface BookMapper extends BaseMapper<Book> {
      * @return list
      */
     @Select("SELECT id,title,index_book as indexBook,img,tag,summary, " +
-            "(SELECT lastest_loc FROM learner_book WHERE learner_id = #{learnerId} AND book_index = #{indexBook} limit 1) as lastestLoc \n" +
+            "(SELECT latest_loc FROM learner_book WHERE learner_id = #{learnerId} AND book_index = #{indexBook} limit 1) as latestLoc \n" +
             "FROM book WHERE index_book = #{indexBook} limit 1;")
     Book findBookByIndex(Integer indexBook, Integer learnerId);
 
@@ -77,7 +77,7 @@ public interface BookMapper extends BaseMapper<Book> {
      * @param learnerId 用户id
      * @return list
      */
-    @Select("SELECT lb.`lastest_loc` as lastestLoc, b.`id`, b.`img`, b.`title`, b.`index_book` as indexBook " +
+    @Select("SELECT lb.`latest_loc` as latestLoc, b.`id`, b.`img`, b.`title`, b.`index_book` as indexBook " +
             "FROM learner_book lb " +
             "INNER JOIN book b " +
             "ON (lb.`learner_id` = #{learner_id} AND lb.`book_index` = b.`index_book`) ORDER BY lb.`modified` DESC;")
@@ -102,20 +102,24 @@ public interface BookMapper extends BaseMapper<Book> {
     })
     ChapterParaDto getParaByChapterIndex(Integer chapterIndex);
 
-    //查询某章节的所有英语段落
+    /**
+     * 查询某章节的所有英语段落
+     * @param chapterIndex 章节号
+     * @return list
+     */
     @Select("select id, para_en as paraEn from chapter_paragraph where chapter_index = #{chapterIndex};")
     List<ParaEnDto> getAllParasByChapterIndex(Integer chapterIndex);
 
-    @Insert("insert into learner_book (learner_id,book_index,lastest_loc,created,modified) \n" +
+    @Insert("insert into learner_book (learner_id,book_index,latest_loc,created,modified) \n" +
             "values (#{learnerId},#{indexBook},#{lastestLoc},NOW(),NOW());")
     Integer addBook(Integer indexBook, Integer learnerId, String lastestLoc);
 
     @Delete("delete from learner_book where learner_id = #{learnerId} and book_index = #{indexBook};")
     Integer removeBook(Integer learnerId, Integer indexBook);
 
-    @Update("update learner_book set lastest_loc = #{lastestLoc},modified = NOW() " +
-            "where learner_id = #{learnerId} and book_index = #{book_index};")
-    Integer updateBook(Integer learnerId, Integer book_index, String lastestLoc);
+    @Update("update learner_book set latest_loc = #{latestLoc},modified = NOW() " +
+            "where learner_id = #{learnerId} and book_index = #{bookIndex};")
+    Integer updateBook(Integer learnerId, Integer bookIndex, String latestLoc);
 
     /**
      * 根据段落id查询段落翻译

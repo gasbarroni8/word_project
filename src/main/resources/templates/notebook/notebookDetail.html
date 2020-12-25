@@ -140,7 +140,6 @@
             success: function (result) {
                 if(result.code === "200"){
                     curr++;
-
                     $.each(result.data.words,function (i,item) {
                         count++;
                         // $("#words").append("<a href='/wordect/gotoWordDetail/"+ item.word+"'>"+item.word+"</a><br>")
@@ -204,11 +203,11 @@
             dataType: "json", //json类型
             success: function (result) {
                 if(result.code == 200){
-                    $.each(result.notebook.words,function (i,item) {
+                    $.each(result.data.words,function (i,item) {
                         $("#words").append("<a href='/notebook/'>"+item.word+"</a><br>")
-                        curr++;
                         count++;
                     });
+                    curr++;
                     init();
                     //如果count大于30,说明或许还有
                     if(count == 30){

@@ -16,5 +16,5 @@ public class MyBookDto extends BookDto {
     /**
      * 上次阅读位置
      */
-    private String lastestLoc;
+    private String latestLoc;
 }

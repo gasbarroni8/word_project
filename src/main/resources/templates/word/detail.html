@@ -189,7 +189,7 @@
         //例句发音
         $(".sentencePron").click(function () {
             let sen = $(this).attr("content");
-            let src = "http://dict.youdao.com/dictvoice?audio="+ sen +"&type=2";
+                let src = "http://dict.youdao.com/dictvoice?audio="+ sen +"&type=2";
             $("#sound").attr("src",src);
             $("#sound")[0].play();
         });

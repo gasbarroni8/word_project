@@ -69,7 +69,7 @@ public class WordBookController {
      *
      * @return
      */
-    @RequestMapping(value = "/", produces = "application/json;charset=utf-8;")
+    @RequestMapping(value = "/all", produces = "application/json;charset=utf-8;")
     public @ResponseBody
     Response<?> getWordbooks() {
         return wordbookService.getWordbooks();
@@ -87,8 +87,8 @@ public class WordBookController {
     Response<?> getWordbookDetail(@PathVariable("id") String id,
                                   HttpSession session) {
         //获取学习者id
-        Integer learner_id = (Integer) session.getAttribute("learnerId");
-        return wordbookService.getWordbookDetail(Integer.parseInt(id), learner_id);
+        Integer learnerId = (Integer) session.getAttribute("learnerId");
+        return wordbookService.getWordbookDetail(Integer.parseInt(id), learnerId);
     }
 
     /**

@@ -20,7 +20,7 @@ public interface BookService {
 
     Response<?> removeBook(Integer learnerId, Integer index_book);
 
-    Response<?> updateBook(Integer learnerId, Integer book_index, String lastest_loc);
+    Response<?> updateBook(Integer learnerId, Integer book_index, String latestLoc);
 
     Response<?> findParaCNById(Integer para_id);
 
