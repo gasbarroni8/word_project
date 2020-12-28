@@ -1,12 +1,13 @@
 package com.ahuiali.word.service;
 
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.dto.LoginDto;
 import com.ahuiali.word.pojo.Learner;
 
 
 public interface LearnerService {
 
-    Response<?> queryLearner(Learner learner);
+    Response<LoginDto> queryLearner(Learner learner);
 
     Response<?> queryLearnerByEmail(String email);
 

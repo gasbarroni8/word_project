@@ -1,6 +1,7 @@
 package com.ahuiali.word.mapper;
 
 
+import com.ahuiali.word.dto.LoginDto;
 import com.ahuiali.word.pojo.Learner;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,7 @@ public interface LearnerMapper {
             "email = #{email} " +
             "and " +
             "password = #{password} limit 1;" )
-    Learner queryLearner(Learner learner);
+    LoginDto queryLearner(Learner learner);
 
     //根据邮箱查询learner
     @Select("select id from learner where email = #{email} limit 1;")

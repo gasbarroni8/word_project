@@ -2,6 +2,7 @@ package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.dto.WordBaseDto;
 import com.ahuiali.word.mapper.NotebookMapper;
 import com.ahuiali.word.mapper.SentencesMapper;
 import com.ahuiali.word.mapper.WordEctMapper;
@@ -164,8 +165,8 @@ public class WordEctServiceImpl implements WordEctService {
      */
     @Override
     public Response<?> findWord(String word, Integer learnerId) {
-        Response<WordEct> response = Response.success();
-        WordEct wordEct = new WordEct();
+        Response<WordBaseDto> response = Response.success();
+        WordBaseDto wordBaseDto = new WordBaseDto();
         //先去redis查有没有该单词
         boolean hasWordKey = template.opsForHash().hasKey("words", word);
         //如果redis中能找到
@@ -174,22 +175,22 @@ public class WordEctServiceImpl implements WordEctService {
             String wordJsonStr = (String) template.opsForHash().get("words", "word");
             if (!"".equals(wordJsonStr) && wordJsonStr != null) {
                 //将json转换为单词对象
-                wordEct = JSON.parseObject(wordJsonStr, WordEct.class);
+                wordBaseDto = JSON.parseObject(wordJsonStr, WordBaseDto.class);
             }
         } else {
             //数据库中查询
-            wordEct = wordEctMapper.findWord(word);
-            if (wordEct == null) {
+            wordBaseDto = wordEctMapper.findWord(word);
+            if (wordBaseDto == null) {
                 return Response.result(Constant.Error.WORDECT_NOT_FOUNDED);
             }
         }
         //查询该单词是否已收藏
-        Integer notebook_id = notebookMapper.findWordExistNotebooks(wordEct.getWord(), learnerId);
+        Integer notebook_id = notebookMapper.findWordExistNotebooks(wordBaseDto.getWord(), learnerId);
         //已收藏
         if (notebook_id != null && notebook_id > Constant.ZERO) {
-            wordEct.setNotebook_word_id(notebook_id);
+            wordBaseDto.setNotebookWordId(notebook_id);
         } else {
-            wordEct.setNotebook_word_id(Constant.ZERO);
+            wordBaseDto.setNotebookWordId(Constant.ZERO);
         }
         return response;
     }
@@ -239,20 +240,21 @@ public class WordEctServiceImpl implements WordEctService {
 
     @Override
     public Response<?> findWordNoRedis(String word, Integer learnerId) {
-        Response<WordEct> response = Response.success();
-        WordEct wordEct = wordEctMapper.findWord(word);
-        if (wordEct == null) {
+        Response<WordBaseDto> response = Response.success();
+        WordBaseDto wordBaseDto = wordEctMapper.findWord(word);
+        if (wordBaseDto == null) {
             return Response.result(Constant.Error.WORDECT_NOT_FOUNDED);
         }
         //查询该单词是否已收藏
-        Integer notebookId = notebookMapper.findWordExistNotebooks(wordEct.getWord(), learnerId);
+        Integer notebookId = notebookMapper.findWordExistNotebooks(wordBaseDto.getWord(), learnerId);
         //已收藏
         if (notebookId != null && notebookId > Constant.ZERO) {
-            wordEct.setNotebook_word_id(notebookId);
+            wordBaseDto.setNotebookWordId(notebookId);
         } else {
-            wordEct.setNotebook_word_id(Constant.ZERO);
+            // 生词本为0说明没有收藏
+            wordBaseDto.setNotebookWordId(Constant.ZERO);
         }
-        response.setData(wordEct);
+        response.setData(wordBaseDto);
         return response;
     }
 }

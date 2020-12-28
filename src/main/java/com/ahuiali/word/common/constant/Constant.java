@@ -42,6 +42,7 @@ public class Constant {
         Result EMAIL_SEND_ERROR = new Result("409", "邮箱发送失败");
         Result UPDATE_PWD_ERROR = new Result("410", "更改密码失败");
         Result BLOCK_WORD = new Result("444", "敏感词汇");
+        Result REPEATED_LOGIN = new Result("498", "重复登录");
         Result UN_LOGIN = new Result("499", "用户未登录");
 
         // 单词模块

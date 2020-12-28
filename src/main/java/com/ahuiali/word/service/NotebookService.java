@@ -8,7 +8,7 @@ import com.ahuiali.word.common.utils.PageUtil;
 
 public interface NotebookService {
 
-    Response<?> findAllNotebookByLearnerId(Integer learner_id);
+    Response<?> findAllNotebookByLearnerId(Integer learnerId);
 
     Response<?> addNotebook(Notebook notebook);
 
@@ -16,11 +16,11 @@ public interface NotebookService {
 
     Response<?> removeWord(Integer id);
 
-    Response<?> addWord(Integer notebook_id, String word);
+    Response<?> addWord(Integer notebookId, String word);
 
-    Response<?> listWord(Integer notebook_id, PageUtil pageUtil);
+    Response<?> listWord(Integer notebookId, PageUtil pageUtil);
 
-    Response<?> editNotebook(String trim, Integer learner_id);
+    Response<?> editNotebook(String trim, Integer learnerId);
 
     Response<?> addWordEct(Integer id, WordEct wordect);
 }

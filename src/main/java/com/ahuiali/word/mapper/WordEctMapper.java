@@ -1,5 +1,6 @@
 package com.ahuiali.word.mapper;
 
+import com.ahuiali.word.dto.WordBaseDto;
 import com.ahuiali.word.pojo.WordEct;
 import com.ahuiali.word.pojo.WordEctDetail;
 import org.apache.ibatis.annotations.Mapper;
@@ -77,8 +78,8 @@ public interface WordEctMapper {
     @Select("select word, translation from enwords where word like concat('',#{word},'%') limit 5;")
     List<WordEct> getWordsByPre(String word);
 
-    @Select("select id, word, pron_uk, pron_us,translation from wordect where word = #{word}")
-    WordEctDetail findWord(String word);
+    @Select("select id, word, pron_uk as pronUk, pron_us as pronUs,translation as mean from wordect where word = #{word}")
+    WordBaseDto findWord(String word);
 
 
     /**

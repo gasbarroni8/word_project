@@ -2,6 +2,7 @@ package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.dto.IdDto;
 import com.ahuiali.word.mapper.NotebookMapper;
 import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.Word;
@@ -107,7 +108,7 @@ public class NotebookServiceImpl implements NotebookService {
     }
 
     /**
-     * 为生词本添加单词(弃用)
+     * 为生词本添加单词(弃用) --2020/12/28 暂不弃用
      *
      * @param notebookId 生词本id
      * @param word       单词
@@ -115,11 +116,15 @@ public class NotebookServiceImpl implements NotebookService {
      */
     @Override
     public Response<?> addWord(Integer notebookId, String word) {
-        Response<?> response = Response.success();
-        Integer total = notebookMapper.addWord(notebookId, word);
-        if (total <= Constant.ZERO) {
+        Response<IdDto> response = Response.success();
+        IdDto idDto = new IdDto();
+        // 这个id是
+        notebookMapper.addWord(notebookId, word, idDto);
+        if (idDto.getId() <= Constant.ZERO) {
             response = Response.result(Constant.Error.NOTEBOOK_WORD_ADD_ERROR);
+            idDto.setId(Constant.ZERO);
         }
+        response.setData(idDto);
         return response;
     }
 

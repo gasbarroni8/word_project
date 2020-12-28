@@ -3,6 +3,7 @@ package com.ahuiali.word.service.impl;
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.enums.StatusEnum;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.dto.LoginDto;
 import com.ahuiali.word.mapper.LearnerMapper;
 import com.ahuiali.word.pojo.Learner;
 import com.ahuiali.word.service.LearnerService;
@@ -59,22 +60,22 @@ public class LearnerServiceImpl implements LearnerService {
     /**
      * 根据邮箱和密码查询用户
      *
-     * @param learner1 用户
+     * @param learner 用户
      * @return resp
      */
     @Override
-    public Response<?> queryLearner(Learner learner1) {
-        log.info("根据邮箱和密码查询用户：learner:{}", learner1);
+    public Response<LoginDto> queryLearner(Learner learner) {
+        log.info("根据邮箱和密码查询用户：learner:{}", learner);
         //md5加密
-        learner1.setPassword(Md5Utils.md5(learner1.getPassword()));
+        learner.setPassword(Md5Utils.md5(learner.getPassword()));
         //查询
-        Learner learner = learnerMapper.queryLearner(learner1);
-        Response<Learner> response = Response.success();
+        LoginDto loginDto = learnerMapper.queryLearner(learner);
+        Response<LoginDto> response = Response.success();
         //该用户存在时
-        if (learner != null) {
-            int status = learner.getStatus();
+        if (loginDto != null) {
+            int status = loginDto.getStatus();
             if (status == StatusEnum.NORMAL.getStatus()) {
-                response.setData(learner);
+                response.setData(loginDto);
                 return response;
             } else if (status == StatusEnum.BLOCKED.getStatus()) {
                 //封禁中

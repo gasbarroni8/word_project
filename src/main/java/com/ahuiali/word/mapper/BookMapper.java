@@ -24,14 +24,14 @@ public interface BookMapper extends BaseMapper<Book> {
     /**
      * 根据书籍号查询所有章节
      *
-     * @param book_index
-     * @param pageUtil
-     * @return
+     * @param bookIndex 书籍号
+     * @param pageUtil 分页
+     * @return list
      */
     @Select("SELECT id,chapter_name,chapter_index FROM book_chapter " +
-            "WHERE book_index = #{book_index} " +
+            "WHERE book_index = #{bookIndex} " +
             "limit #{pageUtil.offset},#{pageUtil.size};")
-    List<Chapter> getAllChapterByBookIndex(Integer book_index, PageUtil pageUtil);
+    List<Chapter> getAllChapterByBookIndex(Integer bookIndex, PageUtil pageUtil);
 
     /**
      * 获取热门书籍
@@ -77,7 +77,7 @@ public interface BookMapper extends BaseMapper<Book> {
      * @param learnerId 用户id
      * @return list
      */
-    @Select("SELECT lb.`latest_loc` as latestLoc, b.`id`, b.`img`, b.`title`, b.`index_book` as indexBook " +
+    @Select("SELECT lb.`latest_loc` as latestLoc, b.`id` , b.`img`, b.`title`, b.`index_book` as indexBook " +
             "FROM learner_book lb " +
             "INNER JOIN book b " +
             "ON (lb.`learner_id` = #{learner_id} AND lb.`book_index` = b.`index_book`) ORDER BY lb.`modified` DESC;")

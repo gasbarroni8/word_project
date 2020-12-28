@@ -1,6 +1,7 @@
 package com.ahuiali.word.mapper;
 
 
+import com.ahuiali.word.dto.IdDto;
 import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.pojo.WordEct;
@@ -65,7 +66,8 @@ public interface NotebookMapper {
             "SELECT #{notebookId},word,pron_us,pron_uk,translation " +
             "FROM wordect " +
             "WHERE word = #{word};")
-    Integer addWord(Integer notebookId, String word);
+    @Options(useGeneratedKeys = true, keyProperty = "idDto.id", keyColumn = "id")
+    Integer addWord(Integer notebookId, String word, IdDto idDto);
 
     /**
      * 分页显示生词本单词

@@ -3,6 +3,7 @@ package com.ahuiali.word.controller;
 
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.dto.LoginDto;
 import com.ahuiali.word.pojo.Learner;
 import com.ahuiali.word.service.LearnerService;
 import lombok.extern.slf4j.Slf4j;
@@ -99,14 +100,25 @@ public class LearnerController {
     Response<?> login(@RequestBody Learner learner,
                       @PathVariable("isRemember") Integer isRemember,
                       HttpSession session) {
-        log.info("用户登录, learnerId:{}", learner.getEmail());
+        log.info("用户登录, learnerEmail:{}", learner.getEmail());
         //根据邮箱和密码查询
-        Response<Learner> response = (Response<Learner>) learnerService.queryLearner(learner);
+        Response<LoginDto> response = learnerService.queryLearner(learner);
         if ("200".equals(response.getCode())) {
-            session.setAttribute(Constant.LEARNER_ID, response.getData().getId());
-            //七天有效
-            if (isRemember == 1) {
-                session.setMaxInactiveInterval(7 * 24 * 60);
+            // 如果没有登录
+            Integer learnerID = (Integer) session.getAttribute(Constant.LEARNER_ID);
+            if (learnerID == null) {
+                session.setAttribute(Constant.LEARNER_ID, response.getData().getId());
+                //七天有效
+                if (isRemember == 1) {
+                    session.setMaxInactiveInterval(7 * 24 * 60);
+                }
+                // 注入sessionId
+                String sessionID = session.getId();
+                response.getData().setSessionId(sessionID);
+            } else {
+                // 重复登录
+                response.setData(null);
+                response.putResult(Constant.Error.REPEATED_LOGIN);
             }
         }
         return response;
