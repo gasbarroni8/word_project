@@ -1,9 +1,6 @@
 package com.ahuiali.word.mapper;
 
-import com.ahuiali.word.dto.BookDto;
-import com.ahuiali.word.dto.ChapterParaDto;
-import com.ahuiali.word.dto.MyBookDto;
-import com.ahuiali.word.dto.ParaEnDto;
+import com.ahuiali.word.dto.*;
 import com.ahuiali.word.pojo.Book;
 import com.ahuiali.word.pojo.Chapter;
 import com.ahuiali.word.pojo.Paragraph;
@@ -25,13 +22,11 @@ public interface BookMapper extends BaseMapper<Book> {
      * 根据书籍号查询所有章节
      *
      * @param bookIndex 书籍号
-     * @param pageUtil 分页
      * @return list
      */
-    @Select("SELECT id,chapter_name,chapter_index FROM book_chapter " +
-            "WHERE book_index = #{bookIndex} " +
-            "limit #{pageUtil.offset},#{pageUtil.size};")
-    List<Chapter> getAllChapterByBookIndex(Integer bookIndex, PageUtil pageUtil);
+    @Select("SELECT id, chapter_name as chapterName,chapter_index as chapterIndex FROM book_chapter " +
+            "WHERE book_index = #{bookIndex} ")
+    List<ChapterDto> getAllChapterByBookIndex(Integer bookIndex);
 
     /**
      * 获取热门书籍
@@ -61,7 +56,7 @@ public interface BookMapper extends BaseMapper<Book> {
     String findIsAddThisBook(Integer book_index, Integer learner_id);
 
     /**
-     * 根据书籍号查询，并且返回是否加入
+     * 根据书籍号查询书籍详情，并且返回是否加入
      *
      * @param indexBook 书籍号
      * @param learnerId 用户id
@@ -70,7 +65,7 @@ public interface BookMapper extends BaseMapper<Book> {
     @Select("SELECT id,title,index_book as indexBook,img,tag,summary, " +
             "(SELECT latest_loc FROM learner_book WHERE learner_id = #{learnerId} AND book_index = #{indexBook} limit 1) as latestLoc \n" +
             "FROM book WHERE index_book = #{indexBook} limit 1;")
-    Book findBookByIndex(Integer indexBook, Integer learnerId);
+    BookDetailDto findBookByIndex(Integer indexBook, Integer learnerId);
 
     /**
      * 查询我的书籍,结果按照时间排序，最新排在最前
@@ -110,8 +105,8 @@ public interface BookMapper extends BaseMapper<Book> {
     @Select("select id, para_en as paraEn from chapter_paragraph where chapter_index = #{chapterIndex};")
     List<ParaEnDto> getAllParasByChapterIndex(Integer chapterIndex);
 
-    @Insert("insert into learner_book (learner_id,book_index,latest_loc,created,modified) \n" +
-            "values (#{learnerId},#{indexBook},#{lastestLoc},NOW(),NOW());")
+    @Insert("insert into learner_book (learner_id, book_index, latest_loc) " +
+            "values (#{learnerId},#{indexBook},#{lastestLoc});")
     Integer addBook(Integer indexBook, Integer learnerId, String lastestLoc);
 
     @Delete("delete from learner_book where learner_id = #{learnerId} and book_index = #{indexBook};")
@@ -127,7 +122,7 @@ public interface BookMapper extends BaseMapper<Book> {
      * @return Paragraph
      */
     @Select("SELECT para_cn FROM chapter_paragraph WHERE id = #{paraId};")
-    Paragraph findParaCNById(Integer paraId);
+    String findParaCNById(Integer paraId);
 
     /**
      * 根据书名查询书籍

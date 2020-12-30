@@ -14,7 +14,7 @@ public interface BookService {
 
     Response<?> findParasByChapterIndex(Integer chapter_index);
 
-    Response<?> getAllChapterByBookIndex(Integer index_book, PageUtil pageUtil);
+    Response<?> getAllChapterByBookIndex(Integer indexBook);
 
     Response<?> addBook(Integer index_book, Integer learnerId);
 

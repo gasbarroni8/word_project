@@ -103,15 +103,13 @@ public class BookController {
      * 根据书籍号查询所有章节
      *
      * @param indexBook
-     * @param pageUtil
      * @return
      */
-    @RequestMapping(value = "/shelf/chapters/{indexBook}")
+    @RequestMapping(value = "/chapters/{indexBook}")
     public @ResponseBody
-    Response<?> listChapters(@PathVariable("indexBook") Integer indexBook,
-                             PageUtil pageUtil) {
-        pageUtil.renew();
-        return bookService.getAllChapterByBookIndex(indexBook, pageUtil);
+    Response<?> listChapters(@PathVariable("indexBook") Integer indexBook) {
+
+        return bookService.getAllChapterByBookIndex(indexBook);
     }
 
     /**

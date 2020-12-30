@@ -1,10 +1,9 @@
 package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.constant.Constant;
+import com.ahuiali.word.common.enums.BookIsAddEnum;
 import com.ahuiali.word.common.resp.Response;
-import com.ahuiali.word.dto.BookDto;
-import com.ahuiali.word.dto.ChapterParaDto;
-import com.ahuiali.word.dto.MyBookDto;
+import com.ahuiali.word.dto.*;
 import com.ahuiali.word.mapper.BookMapper;
 import com.ahuiali.word.pojo.Book;
 import com.ahuiali.word.pojo.Chapter;
@@ -78,18 +77,18 @@ public class BookServiceImpl implements BookService {
      */
     @Override
     public Response<?> getBookDetail(Integer bookIndex, Integer learnerId) {
-        Response<Book> response = Response.success();
-        Book book = bookMapper.findBookByIndex(bookIndex, learnerId);
-        if (book == null) {
+        Response<BookDetailDto> response = Response.success();
+        BookDetailDto bookDetailDto = bookMapper.findBookByIndex(bookIndex, learnerId);
+        if (bookDetailDto == null) {
             return Response.result(Constant.Error.BOOK_NOT_FOUNDED);
         }
-        // TODO 有空看看这里的注释代码
-        //查询该用户有没有将该本书加入书架
-//        String  count = bookMapper.findIsAddThisBook(index_book,learner_id);
-        //有则将is_add设置为1
-//        if(count > 0)
-//            bookJson.setIs_add(1);
-        response.setData(book);
+
+        // 如果找不到阅读位置则说明尚未加入书架
+        if (bookDetailDto.getLatestLoc() == null || "".equals(bookDetailDto.getLatestLoc())) {
+            bookDetailDto.setIsAdd(BookIsAddEnum.UN_ADD.getStatus());
+        }
+
+        response.setData(bookDetailDto);
         return response;
     }
 
@@ -131,13 +130,12 @@ public class BookServiceImpl implements BookService {
      * 根据书号获取其所有的章节名称
      *
      * @param indexBook 小说号
-     * @param pageUtil 分页
      * @return resp
      */
     @Override
-    public Response<?> getAllChapterByBookIndex(Integer indexBook, PageUtil pageUtil) {
-        Response<List<Chapter>> response = Response.success();
-        List<Chapter> chapters = bookMapper.getAllChapterByBookIndex(indexBook, pageUtil);
+    public Response<?> getAllChapterByBookIndex(Integer indexBook) {
+        Response<List<ChapterDto>> response = Response.success();
+        List<ChapterDto> chapters = bookMapper.getAllChapterByBookIndex(indexBook);
         if (chapters.size() <= ZERO) {
             return Response.result(Constant.Error.CHAPTER_LIST_EMPTY);
         }
@@ -207,12 +205,12 @@ public class BookServiceImpl implements BookService {
      */
     @Override
     public Response<?> findParaCNById(Integer paraId) {
-        Response<Paragraph> response = Response.success();
-        Paragraph paragraph = bookMapper.findParaCNById(paraId);
-        if (paragraph == null) {
+        Response<String> response = Response.success();
+        String paraMean = bookMapper.findParaCNById(paraId);
+        if (paraMean == null || "".equals(paraMean)) {
             return Response.result(Constant.Error.PARA_CN_EMPTY);
         }
-        response.setData(paragraph);
+        response.setData(paraMean);
         return response;
     }
 
