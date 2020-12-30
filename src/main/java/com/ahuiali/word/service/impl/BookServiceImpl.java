@@ -3,6 +3,7 @@ package com.ahuiali.word.service.impl;
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.enums.BookIsAddEnum;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.common.utils.BookTagUtil;
 import com.ahuiali.word.dto.*;
 import com.ahuiali.word.mapper.BookMapper;
 import com.ahuiali.word.pojo.Book;
@@ -53,7 +54,7 @@ public class BookServiceImpl implements BookService {
     /**
      * 分类查询书籍
      *
-     * @param tag 类别
+     * @param tag      类别
      * @param pageUtil 分页
      * @return
      */
@@ -82,12 +83,14 @@ public class BookServiceImpl implements BookService {
         if (bookDetailDto == null) {
             return Response.result(Constant.Error.BOOK_NOT_FOUNDED);
         }
-
         // 如果找不到阅读位置则说明尚未加入书架
         if (bookDetailDto.getLatestLoc() == null || "".equals(bookDetailDto.getLatestLoc())) {
             bookDetailDto.setIsAdd(BookIsAddEnum.UN_ADD.getStatus());
+        } else {
+            bookDetailDto.setIsAdd(BookIsAddEnum.ADD.getStatus());
         }
-
+        // 将书籍类别替换为中文
+        bookDetailDto.setTag(BookTagUtil.getCnTag(bookDetailDto.getTag()));
         response.setData(bookDetailDto);
         return response;
     }
@@ -181,8 +184,8 @@ public class BookServiceImpl implements BookService {
     /**
      * 更新最新阅读位置
      *
-     * @param learnerId 用户id
-     * @param bookIndex 书号
+     * @param learnerId  用户id
+     * @param bookIndex  书号
      * @param lastestLoc 最新位置
      * @return resp
      */

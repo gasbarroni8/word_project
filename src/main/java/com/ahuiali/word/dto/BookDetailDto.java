@@ -2,6 +2,8 @@ package com.ahuiali.word.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * BookDetailDto
  * 书籍详情
@@ -55,5 +57,10 @@ public class BookDetailDto {
      * 书籍号
      */
     private Integer indexBook;
+
+    /**
+     * 章节信息
+     */
+    private List<ChapterDto> chapters;
 
 }

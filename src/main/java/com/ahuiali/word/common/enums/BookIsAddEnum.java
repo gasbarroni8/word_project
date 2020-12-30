@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * BookIsAddEnum
- * 书籍是否加入枚举
+ * 书籍是否加入 枚举
  * @author ZhengChaoHui
  * @date 2020/12/30 11:48
  */
@@ -28,5 +28,7 @@ public enum BookIsAddEnum {
      * 描述
      */
     private String desc;
+
+
 
 }

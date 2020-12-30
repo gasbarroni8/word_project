@@ -15,25 +15,17 @@ import java.util.List;
 @Repository
 public interface BookMapper extends BaseMapper<Book> {
 
-    @Select("SELECT id,title,img,author,tag,summary,index_book,is_hot FROM book;")
+    @Select("SELECT id,title,img,author,tag,summary,book_index,is_hot FROM book;")
     List<Book> getAllBooks();
 
-    /**
-     * 根据书籍号查询所有章节
-     *
-     * @param bookIndex 书籍号
-     * @return list
-     */
-    @Select("SELECT id, chapter_name as chapterName,chapter_index as chapterIndex FROM book_chapter " +
-            "WHERE book_index = #{bookIndex} ")
-    List<ChapterDto> getAllChapterByBookIndex(Integer bookIndex);
+
 
     /**
      * 获取热门书籍
      *
      * @return list
      */
-    @Select("select id, title, index_book as indexBook, img from book where is_hot = 1;")
+    @Select("select id, title, book_index as indexBook, img from book where is_hot = 1;")
     List<BookDto> getHotBooks();
 
     /**
@@ -43,7 +35,7 @@ public interface BookMapper extends BaseMapper<Book> {
      * @param pageUtil 分页
      * @return
      */
-    @Select("select id,title,index_book as indexBook,img from book where tag like #{tag} " +
+    @Select("select id,title,book_index as indexBook,img from book where tag like #{tag} " +
             "LIMIT #{pageUtil.offset},#{pageUtil.size};")
     List<BookDto> getBooksByTag(String tag, PageUtil pageUtil);
 
@@ -62,20 +54,34 @@ public interface BookMapper extends BaseMapper<Book> {
      * @param learnerId 用户id
      * @return list
      */
-    @Select("SELECT id,title,index_book as indexBook,img,tag,summary, " +
-            "(SELECT latest_loc FROM learner_book WHERE learner_id = #{learnerId} AND book_index = #{indexBook} limit 1) as latestLoc \n" +
-            "FROM book WHERE index_book = #{indexBook} limit 1;")
+    @Select("SELECT id,title,book_index as indexBook, img, tag, summary, author, " +
+            " (SELECT latest_loc FROM learner_book WHERE learner_id = #{learnerId} AND book_index = #{indexBook} limit 1) as latestLoc " +
+            " FROM book WHERE book_index = #{indexBook} limit 1;")
+    @Results({
+            @Result(property = "chapters", column = "indexBook", javaType = List.class,
+            many = @Many(select = "com.ahuiali.word.mapper.BookMapper.getAllChapterByBookIndex"))
+    })
     BookDetailDto findBookByIndex(Integer indexBook, Integer learnerId);
+
+    /**
+     * 根据书籍号查询所有章节
+     *
+     * @param bookIndex 书籍号
+     * @return list
+     */
+    @Select("SELECT id, chapter_name as chapterName,chapter_index as chapterIndex FROM book_chapter " +
+            "WHERE book_index = #{bookIndex} ")
+    List<ChapterDto> getAllChapterByBookIndex(Integer bookIndex);
 
     /**
      * 查询我的书籍,结果按照时间排序，最新排在最前
      * @param learnerId 用户id
      * @return list
      */
-    @Select("SELECT lb.`latest_loc` as latestLoc, b.`id` , b.`img`, b.`title`, b.`index_book` as indexBook " +
+    @Select("SELECT lb.`latest_loc` as latestLoc, b.`id` , b.`img`, b.`title`, b.`book_index` as indexBook " +
             "FROM learner_book lb " +
             "INNER JOIN book b " +
-            "ON (lb.`learner_id` = #{learner_id} AND lb.`book_index` = b.`index_book`) ORDER BY lb.`modified` DESC;")
+            "ON (lb.`learner_id` = #{learner_id} AND lb.`book_index` = b.`book_index`) ORDER BY lb.`modified` DESC;")
     List<MyBookDto> getMyBooks(Integer learnerId);
 
 //    //根据章节号返回所有段落
@@ -130,6 +136,6 @@ public interface BookMapper extends BaseMapper<Book> {
      * @param bookName 书名
      * @return list
      */
-    @Select("select id, title, index_book as indexBook, img from book where title like concat('%',#{bookName},'%');")
+    @Select("select id, title, book_index as indexBook, img from book where title like concat('%',#{bookName},'%');")
     List<BookDto> getBooksByName(String bookName);
 }
