@@ -81,6 +81,7 @@ public class Constant {
 
         //文章
         Result ARTICLE_CONTENT_NOT_FOUND = new Result("900", "找不到文章内容");
+        Result ARTICLE_LIST_EMPTY = new Result("901", "文章列表为空");
 
     }
 }

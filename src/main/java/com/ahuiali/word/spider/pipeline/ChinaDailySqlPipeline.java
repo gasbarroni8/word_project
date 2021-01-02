@@ -1,6 +1,7 @@
 package com.ahuiali.word.spider.pipeline;
 
 import com.ahuiali.word.common.constant.RedisKeyConstant;
+import com.ahuiali.word.common.constant.UrlConstant;
 import com.ahuiali.word.common.utils.UrlUtil;
 import com.ahuiali.word.pojo.Article;
 import com.ahuiali.word.pojo.ArticleParagraph;
@@ -63,6 +64,7 @@ public class ChinaDailySqlPipeline implements Pipeline {
                     article.setId(UrlUtil.urlToId(url));
                     article.setSource(CHINA_DAILY);
                     article.setDescription(article.getTitle());
+                    article.setTag(resultItems.get(TAG));
                     try {
                         article.setDate(simpleDateFormat.parse(date));
                     } catch (ParseException ex) {

@@ -2,6 +2,7 @@ package com.ahuiali.word.dto;
 
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,5 +63,10 @@ public class BookDetailDto {
      * 章节信息
      */
     private List<ChapterDto> chapters;
+
+    /**
+     * 小说阅读位置最新更新时间
+     */
+    private Date modified;
 
 }

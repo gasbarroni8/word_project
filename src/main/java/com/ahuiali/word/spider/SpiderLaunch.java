@@ -1,8 +1,10 @@
 package com.ahuiali.word.spider;
 
 import com.ahuiali.word.common.constant.UrlConstant;
+import com.ahuiali.word.spider.pipeline.BookSqlPipeline;
 import com.ahuiali.word.spider.pipeline.CCTVSqlPipeline;
 import com.ahuiali.word.spider.pipeline.ChinaDailySqlPipeline;
+import com.ahuiali.word.spider.processor.BookProcessor;
 import com.ahuiali.word.spider.processor.CCTVProcessor;
 import com.ahuiali.word.spider.processor.ChinaDailyProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +30,16 @@ public class SpiderLaunch {
     private ChinaDailySqlPipeline chinaDailySqlPipeline;
 
     @Autowired
+    private BookSqlPipeline bookSqlPipeline;
+
+    @Autowired
     private CCTVProcessor cctvProcessor;
 
     @Autowired
     private ChinaDailyProcessor chinaDailyProcessor;
+
+    @Autowired
+    private BookProcessor bookProcessor;
 
     /**
      * 爬取中国日报英文版新闻
@@ -43,7 +51,8 @@ public class SpiderLaunch {
                     .addUrl(chinaDailyUrl)
                     .addPipeline(chinaDailySqlPipeline)
                     .thread(5)
-                    .runAsync();
+                    .run();
+//                    .runAsync();
         }
     }
 
@@ -55,6 +64,19 @@ public class SpiderLaunch {
         Spider.create(cctvProcessor)
                 .addUrl(UrlConstant.CCTV_REQUEST_LIST_URL)
                 .addPipeline(cctvSqlPipeline)
+                .thread(5)
+                .run();
+//                .runAsync();
+    }
+
+
+    /**
+     * 爬取小说
+     */
+    public void startSpiderBook() {
+        Spider.create(bookProcessor)
+                .addUrl("http://www.dian3x.com/")
+                .addPipeline(bookSqlPipeline)
                 .thread(5)
                 .runAsync();
     }

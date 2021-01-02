@@ -44,6 +44,12 @@ public class Article implements Serializable {
     private String source;
 
     /**
+     * 分类
+     */
+    @TableField(value = "tag")
+    private String tag;
+
+    /**
      * 文章日期
      */
     @JSONField(name = "focus_date")

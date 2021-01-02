@@ -1,6 +1,7 @@
 package com.ahuiali.word.mapper;
 
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.common.utils.PageUtil;
 import com.ahuiali.word.dto.ArticleDto;
 import com.ahuiali.word.dto.ArticleParaDto;
 import com.ahuiali.word.pojo.Article;
@@ -42,6 +43,9 @@ public interface ArticleMapper extends BaseMapper<Article> {
     })
     ArticleParaDto getContentByArticleId(String articleId);
 
-    @Select("SELECT para FROM article_paragraph WHERE article_id = #{articleId} ORDER BY no ASC;")
+    @Select("SELECT DISTINCT(para), no FROM article_paragraph WHERE article_id = #{articleId} ORDER BY no ASC;")
     List<String> getContentsByArticleId(String articleId);
+
+    @Select("SELECT id, title, source, url, description, date, image FROM article WHERE tag = #{tag} ORDER BY date DESC LIMIT #{pageUtil.offset},#{pageUtil.size};")
+    List<ArticleDto> getByTag(String tag, PageUtil pageUtil);
 }

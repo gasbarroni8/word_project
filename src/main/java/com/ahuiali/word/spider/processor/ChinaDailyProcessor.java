@@ -1,6 +1,7 @@
 package com.ahuiali.word.spider.processor;
 
 import com.ahuiali.word.common.constant.RedisKeyConstant;
+import com.ahuiali.word.common.constant.UrlConstant;
 import com.ahuiali.word.common.utils.UrlUtil;
 import com.ahuiali.word.pojo.Article;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,9 @@ public class ChinaDailyProcessor implements PageProcessor {
     public void process(Page page) {
         List<String> visitedUrls = redisTemplate.opsForList()
                 .range(String.format(RedisKeyConstant.SPIDER_LINK_VISITED, CHINA_DAILY), 0, -1);
+        String url = page.getUrl().toString();
         // 列表
-        if (UrlUtil.isContain(CHINA_DAILY_URLS, page.getUrl().toString())) {
+        if (UrlUtil.isContain(CHINA_DAILY_URLS, url)) {
             List<String> listUrls = page.getHtml().xpath("//*span[@class=\"tw3_01_2_t\"]/h4/a/@href").all();
             List<String> articles = page.getHtml().xpath("//div[@class=\"mb10 tw3_01_2\"]").all();
             List<String> newUrls = new ArrayList<>(listUrls.size()) ;
@@ -60,6 +62,7 @@ public class ChinaDailyProcessor implements PageProcessor {
                 }
             });
             page.putField(UNVISITED_URL, newUrls);
+            page.putField(TAG, UrlConstant.getChinaDaily().get(url));
             // 加入新链接
             page.addTargetRequests(newUrls);
         } else {

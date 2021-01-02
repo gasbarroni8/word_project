@@ -21,6 +21,7 @@ public class SpiderConstant {
     public final static String TITLES = "titles";
     public final static String IMAGES = "images";
     public final static String URLS = "urls";
+    public final static String TAG = "tag";
     public final static String DATES = "dates";
     public final static String HTTPS = "https:";
 

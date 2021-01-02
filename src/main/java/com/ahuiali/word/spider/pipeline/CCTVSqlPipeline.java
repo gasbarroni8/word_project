@@ -50,6 +50,7 @@ public class CCTVSqlPipeline implements Pipeline {
                 if (unVisitedUrls.contains(e.getUrl())) {
                     // 来源为CCTV
                     e.setSource(CCTV);
+                    e.setTag(CCTV);
                     articleMapper.insert(e);
                     redisTemplate.opsForList()
                             .leftPush(String.format(RedisKeyConstant.SPIDER_LINK_VISITED, CCTV), e.getUrl());

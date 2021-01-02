@@ -54,11 +54,26 @@ public interface BookMapper extends BaseMapper<Book> {
      * @param learnerId 用户id
      * @return list
      */
-    @Select("SELECT id,title,book_index as indexBook, img, tag, summary, author, " +
-            " (SELECT latest_loc FROM learner_book WHERE learner_id = #{learnerId} AND book_index = #{indexBook} limit 1) as latestLoc " +
-            " FROM book WHERE book_index = #{indexBook} limit 1;")
+    @Select("SELECT\n" +
+            "b.id,\n" +
+            "b.title,\n" +
+            "b.img,\n" +
+            "b.tag,\n" +
+            "b.summary,\n" +
+            "b.book_index,\n" +
+            "b.author,\n" +
+            "lb.modified,\n" +
+            "lb.latest_loc\n" +
+            "FROM\n" +
+            "book b\n" +
+            "LEFT JOIN \n" +
+            "( SELECT latest_loc, book_index, modified FROM learner_book WHERE learner_id = #{learnerId} AND book_index = #{indexBook} LIMIT 1 ) lb ON lb.book_index = b.book_index \n" +
+            "WHERE\n" +
+            "b.book_index = #{indexBook} \n" +
+            "LIMIT 1;")
     @Results({
-            @Result(property = "chapters", column = "indexBook", javaType = List.class,
+            @Result(property = "indexBook", column = "book_index"),
+            @Result(property = "chapters", column = "book_index", javaType = List.class,
             many = @Many(select = "com.ahuiali.word.mapper.BookMapper.getAllChapterByBookIndex"))
     })
     BookDetailDto findBookByIndex(Integer indexBook, Integer learnerId);
@@ -78,7 +93,7 @@ public interface BookMapper extends BaseMapper<Book> {
      * @param learnerId 用户id
      * @return list
      */
-    @Select("SELECT lb.`latest_loc` as latestLoc, b.`id` , b.`img`, b.`title`, b.`book_index` as indexBook " +
+    @Select("SELECT lb.`latest_loc` as latestLoc, lb.modified as modified, b.`id` , b.`img`, b.`title`, b.`book_index` as indexBook " +
             "FROM learner_book lb " +
             "INNER JOIN book b " +
             "ON (lb.`learner_id` = #{learner_id} AND lb.`book_index` = b.`book_index`) ORDER BY lb.`modified` DESC;")

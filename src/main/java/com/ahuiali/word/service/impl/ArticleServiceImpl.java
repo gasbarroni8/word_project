@@ -2,6 +2,7 @@ package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.common.utils.PageUtil;
 import com.ahuiali.word.dto.ArticleDto;
 import com.ahuiali.word.dto.ArticleParaDto;
 import com.ahuiali.word.mapper.ArticleMapper;
@@ -44,6 +45,19 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             return response;
         }
         response.setData(articleParaDto);
+        return response;
+    }
+
+    @Override
+    public Response<List<ArticleDto>> getByTag(String tag, PageUtil pageUtil) {
+        Response<List<ArticleDto>> response = Response.success();
+        List<ArticleDto> articles = articleMapper.getByTag(tag, pageUtil);
+        if (articles == null || articles.size() == 0) {
+            // 文章列表为空
+            response.putResult(Constant.Error.ARTICLE_LIST_EMPTY);
+            return response;
+        }
+        response.setData(articles);
         return response;
     }
 }
