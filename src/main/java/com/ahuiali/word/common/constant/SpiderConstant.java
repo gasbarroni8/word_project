@@ -25,6 +25,16 @@ public class SpiderConstant {
     public final static String DATES = "dates";
     public final static String HTTPS = "https:";
 
+    public final static String BOOK = "book";
+    public final static String BOOKS = "books";
+    public final static String CHAPTER = "chapter";
+    public final static String AUTHOR = "author";
+    public final static String SUMMARY = "summary";
+    public final static String CHAPTER_INDEX = "chapterIndex";
+    public final static String ENS = "ens";
+    public final static String CNS = "cns";
+
+
 
 
 }

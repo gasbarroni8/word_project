@@ -75,9 +75,10 @@ public class SpiderLaunch {
      */
     public void startSpiderBook() {
         Spider.create(bookProcessor)
-                .addUrl("http://www.dian3x.com/")
+                .addUrl(UrlConstant.BOOK_URL)
                 .addPipeline(bookSqlPipeline)
                 .thread(5)
-                .runAsync();
+                .run();
+//                .runAsync();
     }
 }

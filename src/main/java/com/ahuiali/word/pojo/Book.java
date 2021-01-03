@@ -1,6 +1,8 @@
 package com.ahuiali.word.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -9,8 +11,9 @@ import java.util.List;
 
 @Data
 @TableName(value = "book")
-public class Book implements Serializable {
+public class Book {
 
+    @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
 
     private String title;
@@ -19,35 +22,32 @@ public class Book implements Serializable {
 
     private String author;
 
+    /**
+     * 分类
+     */
     private String tag;
 
+    /**
+     * 长度
+     */
+    private String length;
+
+    /**
+     * 难度
+     */
+    private String hard;
+
     //是否推荐，0否1是
-    @TableField(value = "id_hot")
+    @TableField(value = "is_hot")
     private Integer isHot;
 
     private String summary;
 
-    @TableField(value = "index_book")
+    @TableField(value = "book_index")
     private Integer indexBook;
 
-    @TableField(value = "lastest_loc")
-    private String lastestLoc;
+    @TableField(value = "latest_loc")
+    private String latestLoc;
 
     private List<Chapter> chapters;
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", img='" + img + '\'' +
-                ", author='" + author + '\'' +
-                ", tag='" + tag + '\'' +
-                ", isHot=" + isHot +
-                ", summary='" + summary + '\'' +
-                ", indexBook=" + indexBook +
-                ", lastestLoc='" + lastestLoc + '\'' +
-                ", chapters=" + chapters +
-                '}';
-    }
 }

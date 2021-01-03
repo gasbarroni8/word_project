@@ -21,6 +21,13 @@ public class UrlConstant {
     public final static String CCTV_REQUEST_LIST_URL = "https://api.cntv.cn/NewArticle/getArticleListByPageId?serviceId=pcenglish&id="
             + CCTV_ID + "&p=" + CCTV_PAGE + "&n=" + CCTV_PAGE_SIZE;
 
+    /**
+     * 点学英语网站（爬取小说）
+     *
+     */
+    public final static String BOOK_URL = "http://www.dian3x.com";
+    public final static String CHAPTER_URL_PREFIX = "http://www.dian3x.com/story/book/";
+    public final static String PARAGRAPH_URL_PREFIX = "http://www.dian3x.com/story/chapter/";
 
     /**
      * 中国日报网站

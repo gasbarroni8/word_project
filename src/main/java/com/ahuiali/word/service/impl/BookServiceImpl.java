@@ -11,6 +11,7 @@ import com.ahuiali.word.pojo.Chapter;
 import com.ahuiali.word.pojo.Paragraph;
 import com.ahuiali.word.service.BookService;
 import com.ahuiali.word.common.utils.PageUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ import static com.ahuiali.word.common.constant.Constant.ZERO;
  */
 @Transactional
 @Service
-public class BookServiceImpl implements BookService {
+public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements BookService {
 
     @Autowired
     BookMapper bookMapper;

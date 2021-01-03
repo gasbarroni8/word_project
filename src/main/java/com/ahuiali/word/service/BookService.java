@@ -2,8 +2,10 @@ package com.ahuiali.word.service;
 
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.common.utils.PageUtil;
+import com.ahuiali.word.pojo.Book;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-public interface BookService {
+public interface BookService extends IService<Book> {
     Response<?> findHotBooks();
 
     Response<?> getBooksByTag(String tag, PageUtil pageUtil);
