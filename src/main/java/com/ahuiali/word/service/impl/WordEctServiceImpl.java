@@ -3,6 +3,7 @@ package com.ahuiali.word.service.impl;
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.dto.WordBaseDto;
+import com.ahuiali.word.dto.WordPreDto;
 import com.ahuiali.word.mapper.NotebookMapper;
 import com.ahuiali.word.mapper.SentencesMapper;
 import com.ahuiali.word.mapper.WordEctMapper;
@@ -44,9 +45,9 @@ public class WordEctServiceImpl implements WordEctService {
      */
     @Override
     public Response<?> getWordsByPre(String wordRre) {
-        Response<List<WordEct>> response = Response.success();
+        Response<List<WordPreDto>> response = Response.success();
         //数据库中查找
-        List<WordEct> wordEctList = wordEctMapper.getWordsByPre(wordRre);
+        List<WordPreDto> wordEctList = wordEctMapper.getWordsByPre(wordRre);
         //如果大于0说明仍有提示
         if (wordEctList.size() <= Constant.ZERO) {
             return Response.result(Constant.Error.WORD_PRE_NOT_FOUNDED);

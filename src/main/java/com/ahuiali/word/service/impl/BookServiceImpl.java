@@ -91,7 +91,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
             bookDetailDto.setIsAdd(BookIsAddEnum.ADD.getStatus());
         }
         // 将书籍类别替换为中文
-        bookDetailDto.setTag(BookTagUtil.getCnTag(bookDetailDto.getTag()));
+//        bookDetailDto.setTag(BookTagUtil.getCnTag(bookDetailDto.getTag()));
         response.setData(bookDetailDto);
         return response;
     }

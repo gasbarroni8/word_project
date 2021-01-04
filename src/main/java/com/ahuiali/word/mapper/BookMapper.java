@@ -61,6 +61,8 @@ public interface BookMapper extends BaseMapper<Book> {
             "b.tag,\n" +
             "b.summary,\n" +
             "b.book_index,\n" +
+            "b.length,\n" +
+            "b.hard,\n" +
             "b.author,\n" +
             "lb.modified,\n" +
             "lb.latest_loc\n" +
@@ -151,6 +153,6 @@ public interface BookMapper extends BaseMapper<Book> {
      * @param bookName 书名
      * @return list
      */
-    @Select("select id, title, book_index as indexBook, img from book where title like concat('%',#{bookName},'%');")
+    @Select("select id, title, book_index as indexBook, img from book where title like concat('%',#{bookName},'%') LIMIT 20;")
     List<BookDto> getBooksByName(String bookName);
 }

@@ -55,6 +55,16 @@ public class BookDetailDto {
     private String tag;
 
     /**
+     * 小说长度
+     */
+    private String length;
+
+    /**
+     * 小说难度
+     */
+    private String hard;
+
+    /**
      * 书籍号
      */
     private Integer indexBook;

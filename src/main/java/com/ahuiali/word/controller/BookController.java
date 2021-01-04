@@ -49,10 +49,10 @@ public class BookController {
      * @param
      * @return
      */
-    @RequestMapping(value = "/tagbooks/{tag}", produces = "application/json;charset=utf-8;")
+    @RequestMapping(value = "/tag/{tag}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
     Response<?> getBooksByTag(@PathVariable("tag") String tag, @RequestBody PageUtil pageUtil) {
-        tag = tag.replaceAll("0", "%");
+//        tag = tag.replaceAll("0", "%");
         pageUtil.renew();
         return bookService.getBooksByTag(tag, pageUtil);
     }
