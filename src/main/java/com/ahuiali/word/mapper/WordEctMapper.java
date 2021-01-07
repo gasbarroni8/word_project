@@ -1,6 +1,7 @@
 package com.ahuiali.word.mapper;
 
 import com.ahuiali.word.dto.WordBaseDto;
+import com.ahuiali.word.dto.WordDetailDto;
 import com.ahuiali.word.dto.WordPreDto;
 import com.ahuiali.word.pojo.WordEct;
 import com.ahuiali.word.pojo.WordEctDetail;
@@ -47,8 +48,8 @@ public interface WordEctMapper {
      * 常用的单词，用于导入到redis中的
      * @return
      */
-    @Select("SELECT w.`id`,w.`word`,w.`pron_uk`,w.`pron_us`,w.`translation`,\n" +
-            "wd.`definition`,wd.`collins`,wd.`exchange`,wd.`oxford`,wd.`bnc`,wd.tag,wd.`sentence_list` \n" +
+    @Select("SELECT w.`id`,w.`word`,w.`pron_uk` as pronUk,w.`pron_us` as pronUs,w.`translation`,\n" +
+            "wd.`definition`,wd.`collins`,wd.`exchange`,wd.`oxford`,wd.`bnc`, wd.tag,wd.`sentence_list` \n" +
             "FROM wordect_detail wd INNER JOIN  wordect w \n" +
             "ON wd.`word_id` = w.`id`  WHERE \n" +
             "wd.collins IS NOT NULL \n" +
@@ -73,7 +74,7 @@ public interface WordEctMapper {
             "\tON n.`notebook_id` IN (SELECT id FROM notebook WHERE learner_id = #{learnerId}) " +
             "\tAND w.`word` = n.`word` \n" +
             "\tWHERE w.`word` = #{word} limit 1; ")
-    WordEctDetail findWordEctDetail(String word, Integer learnerId);
+    WordDetailDto findWordEctDetail(String word, Integer learnerId);
 
 
     @Select("select word, translation from enwords where word like concat('',#{word},'%') limit 5;")

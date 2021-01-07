@@ -27,6 +27,11 @@ public class BaseInfoDto {
     private Integer count;
 
     /**
+     * 词书图片地址
+     */
+    private String img;
+
+    /**
      * 词书已背单词数目
      */
     private Integer learnedCount;

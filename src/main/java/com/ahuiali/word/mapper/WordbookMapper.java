@@ -104,7 +104,7 @@ public interface WordbookMapper {
      * @param learnerId
      * @return
      */
-    @Select("SELECT lw.`learned_count` as learnedCount,w.`count`,w.`id`,w.`name`,\n" +
+    @Select("SELECT lw.`learned_count` as learnedCount,w.`count`,w.`id`,w.`name`, w.img, \n" +
             "(SELECT COUNT(*) FROM memorize \n" +
             "  WHERE learner_id = #{learnerId}\n" +
             "  AND wordbook_id = w.`id`\n" +

@@ -3,6 +3,7 @@ package com.ahuiali.word.service.impl;
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.dto.WordBaseDto;
+import com.ahuiali.word.dto.WordDetailDto;
 import com.ahuiali.word.dto.WordPreDto;
 import com.ahuiali.word.mapper.NotebookMapper;
 import com.ahuiali.word.mapper.SentencesMapper;
@@ -65,97 +66,99 @@ public class WordEctServiceImpl implements WordEctService {
      */
     @Override
     public Response<?> findWordDetail(String word, Integer learnerId) {
-        Response<WordEctDetail> response = Response.success();
-        //先去redis查有没有该单词
-        boolean hasWordKey = template.opsForHash().hasKey("words", word);
-        //单词详细信息
-        WordEctDetail wordEctDetail = new WordEctDetail();
-        //例句
-        List<Sentence> sentences = new ArrayList<>();
-        //例句id字符串
-        String senStr;
-        //例句id列表
-        List<String> sens;
-        //是否需要在数据库中查询
-        boolean searchSensInDB = false;
-        //如果redis中有该单词
-        if (hasWordKey) {
-            //获取该单词的信息
-            String wordJsonStr = (String) template.opsForHash().get("words", word);
-            //转码
-            wordEctDetail = JSON.parseObject(wordJsonStr, WordEctDetail.class);
-            // TODO NPE
-            //获取例句id数组字符串
-            if (wordEctDetail == null) {
-                response.putResult(Constant.Error.SYSTEM_ERROR);
-                return response;
-            }
-            senStr = wordEctDetail.getSentence_list();
-            //查询例句
-            if (senStr != null && !"".equals(senStr)) {
-                //将字符串转为list
-                List<Object> sensList = Arrays.asList(senStr.split(","));
-                //从redis的sentences中获取
-                List<Object> sentencesObject = template.opsForHash().multiGet("sentences", sensList);
-
-                //如果获取的到，说明redis没失效
-                if (sentencesObject.size() != 0) {
-                    //转码（应该还可以优化）
-                    for (Object s : sentencesObject) {
-                        Sentence sentence = JSON.parseObject(s.toString(), Sentence.class);
-                        ;
-                        sentences.add(sentence);
-                    }
-                } else {
-                    //去数据库中查
-                    searchSensInDB = true;
-                }
-                wordEctDetail.setSentences(sentences);
-                //查询该单词是否已经被该用户收藏
-                Integer notebook_id = notebookMapper.findWordExistNotebooks(wordEctDetail.getWord(), learnerId);
-                //已收藏
-                if (notebook_id != null && notebook_id > Constant.ZERO) {
-                    wordEctDetail.setNotebook_word_id(notebook_id);
-                }
-
-            }
-        } else {
-            //否则全部数据去数据库中查询
-            wordEctDetail = wordEctMapper.findWordEctDetail(word, learnerId);
-            //数据库中仍找不到
-            if (wordEctDetail == null || wordEctDetail.getId() == null) {
-                return Response.result(Constant.Error.WORDECT_NOT_FOUNDED);
-            } else {
-                //数据库中查询到了单词
-                //查询例句id字符串
-                senStr = wordEctMapper.findWordSentenceIds(wordEctDetail.getWord());
-                //如果查询到例句id字符串
-                if (senStr != null && !"".equals(senStr)) {
-                    //需要在数据库中查
-                    searchSensInDB = true;
-                }
-            }
-        }
-        //是否需要在数据库中查询例句
-        if (searchSensInDB) {
-            sens = Arrays.asList(senStr.split(","));
-            //处理例句id字符串
-            StringBuilder sb = new StringBuilder();
-            sb.append("select id, sentence_en, sentence_cn from sentence where");
-            sens.forEach(s -> {
-                sb.append(" id = ").append(s).append(" or ");
-            });
-            sb.append("id = 0;");
-            sentences = sentencesMapper.findSentences(sb.toString());
-        }
-        //清除无关数据(*)
-        wordEctDetail.setSentence_list("");
-        //设置例句
-        wordEctDetail.setSentences(sentences);
-        //将单词详细加入json
-        response.setData(wordEctDetail);
-        return response;
+//        Response<WordEctDetail> response = Response.success();
+//        //先去redis查有没有该单词
+//        boolean hasWordKey = template.opsForHash().hasKey("words", word);
+//        //单词详细信息
+//        WordEctDetail wordEctDetail = new WordEctDetail();
+//        //例句
+//        List<Sentence> sentences = new ArrayList<>();
+//        //例句id字符串
+//        String senStr;
+//        //例句id列表
+//        List<String> sens;
+//        //是否需要在数据库中查询
+//        boolean searchSensInDB = false;
+//        //如果redis中有该单词
+//        if (hasWordKey) {
+//            //获取该单词的信息
+//            String wordJsonStr = (String) template.opsForHash().get("words", word);
+//            //转码
+//            wordEctDetail = JSON.parseObject(wordJsonStr, WordEctDetail.class);
+//            // TODO NPE
+//            //获取例句id数组字符串
+//            if (wordEctDetail == null) {
+//                response.putResult(Constant.Error.SYSTEM_ERROR);
+//                return response;
+//            }
+//            senStr = wordEctDetail.getSentence_list();
+//            //查询例句
+//            if (senStr != null && !"".equals(senStr)) {
+//                //将字符串转为list
+//                List<Object> sensList = Arrays.asList(senStr.split(","));
+//                //从redis的sentences中获取
+//                List<Object> sentencesObject = template.opsForHash().multiGet("sentences", sensList);
+//
+//                //如果获取的到，说明redis没失效
+//                if (sentencesObject.size() != 0) {
+//                    //转码（应该还可以优化）
+//                    for (Object s : sentencesObject) {
+//                        Sentence sentence = JSON.parseObject(s.toString(), Sentence.class);
+//                        ;
+//                        sentences.add(sentence);
+//                    }
+//                } else {
+//                    //去数据库中查
+//                    searchSensInDB = true;
+//                }
+//                wordEctDetail.setSentences(sentences);
+//                //查询该单词是否已经被该用户收藏
+//                Integer notebook_id = notebookMapper.findWordExistNotebooks(wordEctDetail.getWord(), learnerId);
+//                //已收藏
+//                if (notebook_id != null && notebook_id > Constant.ZERO) {
+//                    wordEctDetail.setNotebook_word_id(notebook_id);
+//                }
+//
+//            }
+//        } else {
+//            //否则全部数据去数据库中查询
+//            wordEctDetail = wordEctMapper.findWordEctDetail(word, learnerId);
+//            //数据库中仍找不到
+//            if (wordEctDetail == null || wordEctDetail.getId() == null) {
+//                return Response.result(Constant.Error.WORDECT_NOT_FOUNDED);
+//            } else {
+//                //数据库中查询到了单词
+//                //查询例句id字符串
+//                senStr = wordEctMapper.findWordSentenceIds(wordEctDetail.getWord());
+//                //如果查询到例句id字符串
+//                if (senStr != null && !"".equals(senStr)) {
+//                    //需要在数据库中查
+//                    searchSensInDB = true;
+//                }
+//            }
+//        }
+//        //是否需要在数据库中查询例句
+//        if (searchSensInDB) {
+//            sens = Arrays.asList(senStr.split(","));
+//            //处理例句id字符串
+//            StringBuilder sb = new StringBuilder();
+//            sb.append("select id, sentence_en, sentence_cn from sentence where");
+//            sens.forEach(s -> {
+//                sb.append(" id = ").append(s).append(" or ");
+//            });
+//            sb.append("id = 0;");
+//            sentences = sentencesMapper.findSentences(sb.toString());
+//        }
+//        //清除无关数据(*)
+//        wordEctDetail.setSentence_list("");
+//        //设置例句
+//        wordEctDetail.setSentences(sentences);
+//        //将单词详细加入json
+//        response.setData(wordEctDetail);
+//        return response;
+        return null;
     }
+
 
     /**
      * 查询单词（释义音标）
@@ -205,13 +208,16 @@ public class WordEctServiceImpl implements WordEctService {
      */
     @Override
     public Response<?> findWordDetailNoRedis(String word, Integer learnerId) {
-        Response<WordEctDetail> response = Response.success();
+        Response<WordDetailDto> response = Response.success();
         //单词详细信息
-        WordEctDetail wordEctDetail = wordEctMapper.findWordEctDetail(word, learnerId);
+        WordDetailDto wordEctDetail = wordEctMapper.findWordEctDetail(word, learnerId);
+        if (wordEctDetail == null) {
+            response.putResult(Constant.Error.WORDECT_NOT_FOUNDED);
+            return response;
+        }
         String senStr = wordEctMapper.findWordSentenceIds(wordEctDetail.getWord());
         if (!"".equals(senStr) && senStr != null) {
             List<String> sens = Arrays.asList(senStr.split(","));
-
             //处理例句id字符串
             StringBuilder sb = new StringBuilder();
             sb.append("select id, sentence_en, sentence_cn from sentence where");
@@ -225,15 +231,13 @@ public class WordEctServiceImpl implements WordEctService {
         }
 
         //查询该单词是否已经被该用户收藏
-        Integer notebook_id = notebookMapper.findWordExistNotebooks(wordEctDetail.getWord(), learnerId);
+        Integer notebookId = notebookMapper.findWordExistNotebooks(wordEctDetail.getWord(), learnerId);
         //已收藏
-        if (notebook_id != null && notebook_id > 0) {
-            wordEctDetail.setNotebook_word_id(notebook_id);
+        if (notebookId != null && notebookId > 0) {
+            wordEctDetail.setIsAdd(notebookId);
+        } else {
+            wordEctDetail.setIsAdd(Constant.ZERO);
         }
-
-        //清除无关数据(*)
-        wordEctDetail.setSentence_list("");
-
         //将单词详细加入json
         response.setData(wordEctDetail);
         return response;
