@@ -131,12 +131,13 @@ public class WordBookController {
      * @throws Exception
      */
     @RequestMapping(value = "/changeWordbook/{wordbookId}")
-    public String changeWordbook(@PathVariable("wordbookId") Integer wordbookId, HttpSession session) {
+    public @ResponseBody
+    Response<?> changeWordbook(@PathVariable("wordbookId") Integer wordbookId, HttpSession session) {
         //获取学习者id
         Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
         // TODO 这里要加个判断
-        wordbookService.updateWordbookPlan(learnerId, wordbookId);
-        return "redirect:/wordbook/gotoMyWordbooks";
+
+        return wordbookService.updateWordbookPlan(learnerId, wordbookId);
     }
 
     /**
@@ -154,6 +155,21 @@ public class WordBookController {
         return wordbookService.findMyWordbooks(learnerId);
     }
 
+
+    /**
+     * 移除我的词书计划
+     *
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/remove", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> removeWordbooks(HttpSession session) {
+        //获取学习者id
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
+        //session中保存我的词书
+        return wordbookService.removePlan(learnerId);
+    }
 
     /**
      * 我的词书的单词类型
@@ -185,7 +201,7 @@ public class WordBookController {
      * @param session
      * @return
      */
-    @RequestMapping("/myWordbook/words/wordTypeChange/{wordbookId}/{id}/{type}")
+    @RequestMapping("/myWordbook/wordTypeChange/{wordbookId}/{id}/{type}")
     public @ResponseBody
     Response<?> wordTypeChange(@PathVariable("wordbookId") Integer wordbookId,
                                @PathVariable("id") Integer id,

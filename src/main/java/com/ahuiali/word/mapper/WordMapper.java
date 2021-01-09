@@ -1,6 +1,7 @@
 package com.ahuiali.word.mapper;
 
 
+import com.ahuiali.word.dto.WordDto;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.common.utils.PageUtil;
 import org.apache.ibatis.annotations.*;
@@ -51,14 +52,14 @@ public interface WordMapper {
      * @return
      */
     // TODO 使用IN的时候，如果IN里面的内容很大，那么效率会低
-    @Select("SELECT id,word,paraphrase,pron_us,pron_uk FROM words " +
+    @Select("SELECT id,word,paraphrase FROM words " +
             "WHERE wordbook_id = #{wordbook_id} " +
             "AND id NOT IN " +
             "(SELECT word_id FROM memorize " +
             "WHERE learner_id = #{learner_id} " +
             "AND  wordbook_id = #{wordbook_id}) " +
             "LIMIT #{pageUtil.offset},#{pageUtil.size};")
-    List<Word> getMyWordbookWords(Integer wordbook_id, Integer learner_id, PageUtil pageUtil);
+    List<WordDto> getMyWordbookWords(Integer wordbook_id, Integer learner_id, PageUtil pageUtil);
 
     /**
      * 查询正在背单词
@@ -67,15 +68,14 @@ public interface WordMapper {
      * @param pageUtil
      * @return
      */
-    @Select("SELECT m.id,m.`memorized_count`,m.`next_time`," +
-            "w.`word`,w.`paraphrase`,w.`pron_us`,w.`pron_uk` FROM memorize m  " +
+    @Select("SELECT w.id, w.`word`,w.`paraphrase`,w.`pron_us`,w.`pron_uk` FROM memorize m  " +
             "INNER JOIN words w ON m.word_id = w.id " +
             "WHERE m.learner_id = #{learner_id} " +
             "AND  m.wordbook_id = #{wordbook_id} " +
             "AND m.`is_get` = 0 " +
             "AND memorized_count < 7 order by m.modified,m.id desc " +
             "LIMIT #{pageUtil.offset},#{pageUtil.size};")
-    List<Word> findMemorizingWords(Integer wordbook_id, Integer learner_id, PageUtil pageUtil);
+    List<WordDto> findMemorizingWords(Integer wordbook_id, Integer learner_id, PageUtil pageUtil);
 
     /**
      * 查询已掌握单词
@@ -84,50 +84,53 @@ public interface WordMapper {
      * @param pageUtil
      * @return
      */
-    @Select("SELECT m.id,m.`memorized_count`,w.`word`,w.`paraphrase` FROM memorize m  " +
+    @Select("SELECT w.id, w.`word`,w.`paraphrase` FROM memorize m  " +
             "INNER JOIN words w ON m.word_id = w.id " +
             "WHERE m.learner_id = #{learner_id} " +
             "AND  m.wordbook_id = #{wordbook_id} " +
-            "AND (m.`is_get` = 1 or memorized_count >= 7) order by m.modified,m.id desc " +
+            "AND (m.`is_get` = 1 or memorized_count >= 7) order by m.modified desc " +
             "LIMIT #{pageUtil.offset},#{pageUtil.size} ;")
-    List<Word> findMemorizdWords(Integer wordbook_id, Integer learner_id, PageUtil pageUtil);
+    List<WordDto> findMemorizdWords(Integer wordbook_id, Integer learner_id, PageUtil pageUtil);
 
     /**
      * 设置该单词已掌握,记忆中->掌握
-     * @param id
+     * @param wordId
      */
-    @Update("update memorize set is_get = 1, modified = NOW() where id = #{id}")
-    void setWordIsMemorized(Integer id);
+    @Update("update memorize set is_get = 1, modified = NOW() " +
+            "where learner_id = #{learnerId} AND wordbook_id = #{wordbookId} AND word_id = #{wordId}")
+    void setWordIsMemorized(Integer learnerId, Integer wordbookId, Integer wordId);
 
     /**
      * 往记忆表中加一个单词，并将其设为已掌握。未学->掌握
-     * @param learner_id
-     * @param wordbook_id
-     * @param id
+     * @param learnerId
+     * @param wordbookId
+     * @param wordId
      */
-    @Insert("insert into memorize (learner_id,wordbook_id,word_id,memorized_count,is_get,created,modified) " +
-            "values (#{learner_id},#{wordbook_id},#{id},0,1,NOW(),NOW())")
-    void addWordAndSetMemorized(Integer learner_id, Integer wordbook_id, Integer id);
+    @Insert("insert into memorize (learner_id,wordbook_id,word_id,memorized_count,is_get) " +
+            "values (#{learnerId},#{wordbookId},#{wordId},0,1) " +
+            "ON DUPLICATE KEY UPDATE modified = NOW()")
+    void addWordAndSetMemorized(Integer learnerId, Integer wordbookId, Integer wordId);
 
     /**
      * 从记忆表中删除某条数据，即重新学习
-     * @param id
+     * @param wordId
      */
-    @Delete("delete table memorize where id = #{id}")
-    void removeMemorizeWord(Integer id);
+    @Delete("delete from memorize " +
+            "where learner_id = #{learnerId} AND wordbook_id = #{wordbookId} AND word_id = #{wordId}")
+    void removeMemorizeWord(Integer learnerId, Integer wordbookId, Integer wordId);
 
     /**
      * 获取复习单词数量
-     * @param learner_id
-     * @param wordbook_id
+     * @param learnerId
+     * @param wordbookId
      * @return
      */
     @Select("SELECT count(*) FROM memorize " +
-            "WHERE learner_id = #{learner_id} " +
-            "AND wordbook_id = #{wordbook_id} " +
+            "WHERE learner_id = #{learnerId} " +
+            "AND wordbook_id = #{wordbookId} " +
             "AND is_get = 0 " +
             "AND NOW() > next_time;")
-    Integer getReviewCount(Integer learner_id, Integer wordbook_id);
+    Integer getReviewCount(Integer learnerId, Integer wordbookId);
 
     /**
      * 获取复习单词

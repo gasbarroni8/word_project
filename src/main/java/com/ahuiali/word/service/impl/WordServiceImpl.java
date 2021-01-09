@@ -4,6 +4,7 @@ import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.enums.WordTypeChangeEnum;
 import com.ahuiali.word.common.enums.WordTypeEnum;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.dto.WordDto;
 import com.ahuiali.word.mapper.WordMapper;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.service.WordService;
@@ -53,8 +54,8 @@ public class WordServiceImpl implements WordService {
      */
     @Override
     public Response<?> myWordbookWords(Integer wordbookId, Integer learnerId, PageUtil pageUtil, int wordsType) {
-        Response<List<Word>> response = Response.success();
-        List<Word> words = new ArrayList<>(pageUtil.getSize());
+        Response<List<WordDto>> response = Response.success();
+        List<WordDto> words = new ArrayList<>(pageUtil.getSize());
         //返回单词类型，1为未背，2为记忆中，3为已掌握
         if (wordsType == WordTypeEnum.UN_MEMORIZE.getType()) {
             words = wordMapper.getMyWordbookWords(wordbookId, learnerId, pageUtil);
@@ -86,7 +87,7 @@ public class WordServiceImpl implements WordService {
         Response<?> response = Response.success();
         if (type == WordTypeChangeEnum.MEMORIZING_TO_MEMORIZED.getType()) {
             //记忆中->掌握
-            wordMapper.setWordIsMemorized(id);
+            wordMapper.setWordIsMemorized(learnerId, wordbookId, id);
         } else if (type == WordTypeChangeEnum.UN_MEMORIZE_TO_MEMORIZED.getType()) {
             //未背->掌握，该id是words表的id
             wordMapper.addWordAndSetMemorized(learnerId, wordbookId, id);
@@ -94,7 +95,7 @@ public class WordServiceImpl implements WordService {
             wordMapper.updateLearnCount(wordbookId, learnerId, 1);
         } else if (type == WordTypeChangeEnum.MEMORIZED_TO_UN_MEMORIZE.getType()) {
             //掌握->未背 重新学习
-            wordMapper.removeMemorizeWord(id);
+            wordMapper.removeMemorizeWord(learnerId, wordbookId, id);
         } else {
             response = Response.result(Constant.Error.ARG_ERROR);
         }

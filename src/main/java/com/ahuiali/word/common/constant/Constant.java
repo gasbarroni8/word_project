@@ -54,6 +54,7 @@ public class Constant {
         Result WORD_BATCH_INSERT_ERROR = new Result("505", "新词批量保存失败");
         Result WORDBOOK_WORD_NOT_ALL_UPDATE = new Result("506", "记忆表中的单词没有全部更新成功");
         Result NO_REVIEW_WORD = new Result("507", "没有需要复习的单词");
+        Result REMOVE_PLAN_ERROR = new Result("508", "去除词书计划失败");
 
         // 生词本模块
         Result NOTEBOOK_EMPTY = new Result("600", "生词本列表为空");

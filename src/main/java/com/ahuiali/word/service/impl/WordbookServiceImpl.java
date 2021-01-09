@@ -3,6 +3,7 @@ package com.ahuiali.word.service.impl;
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.dto.BaseInfoDto;
+import com.ahuiali.word.dto.WordbookDto;
 import com.ahuiali.word.mapper.WordMapper;
 import com.ahuiali.word.mapper.WordbookMapper;
 import com.ahuiali.word.pojo.Word;
@@ -113,9 +114,9 @@ public class WordbookServiceImpl implements WordbookService {
      */
     @Override
     public Response<?> findMyWordbooks(Integer learnerId) {
-        Response<List<Wordbook>> response = Response.success();
+        Response<List<WordbookDto>> response = Response.success();
         //查询我的词书
-        List<Wordbook> myWordbooks = wordbookMapper.findMyWordbooks(learnerId);
+        List<WordbookDto> myWordbooks = wordbookMapper.findMyWordbooks(learnerId);
         //如果没有词书，则返回502
         if (myWordbooks.size() <= Constant.ZERO) {
             response = Response.result(Constant.Error.LEARNER_NOT_WORDBOOK);
@@ -134,7 +135,7 @@ public class WordbookServiceImpl implements WordbookService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Response<?> updateWordbookPlan(Integer learnerId, Integer wordbookId) {
-        Response<?> response = new Response<>();
+        Response<?> response = Response.success();
         //将原先计划去掉
         wordbookMapper.removePlan(learnerId);
         //修改计划
@@ -183,5 +184,20 @@ public class WordbookServiceImpl implements WordbookService {
     @Override
     public BaseInfoDto getMemorizingWordbookAndReviewCount(Integer learnerId) {
         return wordbookMapper.getMemorizingWordbookAndReviewCount(learnerId);
+    }
+
+    /**
+     * 去除计划
+     * @param learnerId 用户id
+     * @return
+     */
+    @Override
+    public Response<?> removePlan(Integer learnerId) {
+        Response<?> response = Response.success();
+        Integer total = wordbookMapper.removePlan(learnerId);
+        if (total < 1) {
+            response.putResult(Constant.Error.REMOVE_PLAN_ERROR);
+        }
+        return response;
     }
 }

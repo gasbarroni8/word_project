@@ -1,6 +1,7 @@
 package com.ahuiali.word.mapper;
 
 import com.ahuiali.word.dto.BaseInfoDto;
+import com.ahuiali.word.dto.WordbookDto;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.pojo.Wordbook;
 import org.apache.ibatis.annotations.*;
@@ -32,7 +33,7 @@ public interface WordbookMapper {
     @Select(" SELECT id, NAME, summary, img ,COUNT,(SELECT COUNT(*) " +
             "FROM learner_wordbook " +
             "WHERE wordbook_id = #{id} AND learner_id = #{learnerId}\n" +
-            ") AS is_memorizing FROM wordbook WHERE id = #{id} LIMIT 1;")
+            ") AS isMemorizing FROM wordbook WHERE id = #{id} LIMIT 1;")
     Wordbook getWordbookDetailAndIsAdd(Integer id,Integer learnerId);
 
     /**
@@ -68,9 +69,8 @@ public interface WordbookMapper {
      * @param wordbookId
      * @return
      */
-    @Insert("insert into learner_wordbook (learner_id,wordbook_id,learned_count,is_memorizing,created,modified)" +
-            "values (#{learnerId},#{wordbookId},0,1,NOW(),NOW());")
-    @Options(useGeneratedKeys=true, keyProperty="id")
+    @Insert("insert into learner_wordbook (learner_id,wordbook_id,learned_count,is_memorizing)" +
+            "values (#{learnerId},#{wordbookId},0,1);")
     Integer addWordbook(Integer learnerId, Integer wordbookId);
 
     /**
@@ -78,12 +78,12 @@ public interface WordbookMapper {
      * @param learnerId
      * @return
      */
-    @Select("SELECT lw.`learned_count`  as learnedCount ,lw.`is_memorizing` as isMemorizing,w.`count`,w.`id`,w.`name`,w.`img` \n" +
+    @Select("SELECT lw.`learned_count` as learnedCount ,lw.`is_memorizing` as isMemorizing,w.`count`,w.summary, w.`id`,w.`name`,w.`img` \n" +
             "FROM learner_wordbook lw \n" +
             "INNER JOIN wordbook w \n" +
             "ON lw.`wordbook_id` = w.`id` \n" +
             "AND lw.`learner_id` = #{learnerId};")
-    List<Wordbook> findMyWordbooks(Integer learnerId);
+    List<WordbookDto> findMyWordbooks(Integer learnerId);
 
     /**
      * 查询当前计划

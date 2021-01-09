@@ -21,4 +21,6 @@ public interface WordbookService {
     Integer findReviewCount( Integer learnerId, Integer wordbookId);
 
     BaseInfoDto getMemorizingWordbookAndReviewCount(Integer learnerId);
+
+    Response<?> removePlan(Integer learnerId);
 }
