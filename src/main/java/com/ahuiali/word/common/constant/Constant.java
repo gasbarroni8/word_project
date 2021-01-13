@@ -64,6 +64,8 @@ public class Constant {
         Result NOTEBOOK_WORD_ADD_ERROR = new Result("604", "生词本单词添加失败");
         Result NOTEBOOK_WORD_EMPTY = new Result("605", "生词本单词为空");
         Result NOTEBOOK_UPDATE_ERROR = new Result("606", "生词本修改失败");
+        Result NOTEBOOK_WORD_NOT_ALL_UPDATE = new Result("607", "生词表中的单词没有全部更新成功");
+
 
         // 700
         Result WORD_PRE_NOT_FOUNDED = new Result("700", "该单词模糊查询无结果");

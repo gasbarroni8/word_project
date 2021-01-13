@@ -50,10 +50,10 @@ public class WordController {
     Response<?> getReviewWords(@PathVariable("wordbookId") Integer wordbookId,
                                @RequestBody PageUtil pageUtil,
                                HttpSession session) {
-        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
         //获取所有需复习单词(分页)
         pageUtil.renew();
-        return wordService.getReviewWords(learner_id, wordbookId, pageUtil);
+        return wordService.getReviewWords(learnerId, wordbookId, pageUtil);
     }
 
 }

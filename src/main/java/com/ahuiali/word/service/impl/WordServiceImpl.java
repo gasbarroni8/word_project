@@ -122,7 +122,7 @@ public class WordServiceImpl implements WordService {
     }
 
     /**
-     * 批量插入新词
+     * 批量插入新词(新词插入)
      *
      * @param wordbookId 词书id
      * @param learnerId  用户id
@@ -134,11 +134,10 @@ public class WordServiceImpl implements WordService {
         Response<?> response = Response.success();
         StringBuilder sql = new StringBuilder();
         String next_time = NextTimeUtils.getNextTime(1, Calendar.getInstance());
-        sql.append("insert into memorize(learner_id,wordbook_id,word_id,next_time,created,modified) values ");
+        sql.append("insert into memorize(learner_id,wordbook_id,word_id,next_time) values ");
         for (Long id : ids) {
             sql.append("(").append(learnerId).append(",").append(wordbookId).append(",")
-                    .append(id).append(",").append("\"").append(next_time).append("\"").append(",")
-                    .append("NOW(),NOW()").append("),");
+                    .append(id).append(",").append("\"").append(next_time).append("\"").append("),");
         }
 
         sql.setLength(sql.length() - 1);
@@ -155,11 +154,11 @@ public class WordServiceImpl implements WordService {
     /**
      * 更新
      *
-     * @param words 单词s
+     * @param idsList 单词 这里要wordId就行阿
      * @return
      */
     @Override
-    public Response<?> updateWords(List<Word> words) {
+    public Response<?> updateWords(List<Long> idsList) {
         Response<?> response = Response.success();
         StringBuilder sql = new StringBuilder();
         //ids的
@@ -172,15 +171,15 @@ public class WordServiceImpl implements WordService {
                 .append("WHEN memorized_count = 5 THEN ").append(" \"").append(NextTimeUtils.getNextTime(6, Calendar.getInstance())).append("\" ")
                 .append("WHEN memorized_count = 6 THEN ").append(" \"").append(NextTimeUtils.getNextTime(7, Calendar.getInstance())).append("\" ")
                 .append(" end,").append("memorized_count = memorized_count + 1 WHERE id IN (");
-        for (Word word : words) {
-            ids.append(word.getId()).append(",");
+        for (Long id : idsList) {
+            ids.append(id).append(",");
         }
         ids.setLength(ids.length() - 1);
         sql.append(ids.toString()).append(");");
         Integer count = wordMapper.updateReviewWords(sql.toString());
 
         //如果全部更新成功
-        if (count != words.size()) {
+        if (count != idsList.size()) {
             response = Response.result(Constant.Error.WORDBOOK_WORD_NOT_ALL_UPDATE);
         }
         return response;

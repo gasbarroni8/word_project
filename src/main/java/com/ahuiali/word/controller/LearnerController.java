@@ -6,9 +6,11 @@ import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.dto.LoginDto;
 import com.ahuiali.word.pojo.Learner;
 import com.ahuiali.word.service.LearnerService;
+import com.ahuiali.word.vo.RegisterVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -60,13 +62,13 @@ public class LearnerController {
     /**
      * 注册
      *
-     * @param learner
+     * @param registerVo
      * @return
      */
     @RequestMapping(value = "/register", produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> register(@RequestBody Learner learner) {
-        return learnerService.register(learner);
+    Response<?> register(@RequestBody RegisterVo registerVo) {
+        return learnerService.register(registerVo);
     }
 
     /**
@@ -201,8 +203,9 @@ public class LearnerController {
      * @return
      */
     @RequestMapping("/loginOut")
-    public String loginOut(HttpSession session) {
+    public @ResponseBody
+    Response<?> loginOut(HttpSession session) {
         session.removeAttribute(Constant.LEARNER_ID);
-        return "/learner/login";
+        return Response.success();
     }
 }

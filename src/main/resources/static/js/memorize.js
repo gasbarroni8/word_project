@@ -152,7 +152,7 @@ window.onload = function (ev) {
             contentType: "application/json;charset=UTF-8",
             // id 未背->掌握时id为words的id，其余为记忆表的id
             // type 记忆中->掌握 : 1, 未背->掌握 : 2, 掌握->未背 : 3
-            url: "/wordbook/myWordbook/words/wordTypeChange/" + wordbook_id + "/" + words[currWord - 1].id + "/2",
+                url: "/wordbook/myWordbook/words/wordTypeChange/" + wordbook_id + "/" + words[currWord - 1].id + "/2",
             dataType: "json", //json类型
             success: function (result) {
                 console.log(result);

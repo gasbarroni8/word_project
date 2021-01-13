@@ -3,6 +3,7 @@ package com.ahuiali.word.service;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.dto.LoginDto;
 import com.ahuiali.word.pojo.Learner;
+import com.ahuiali.word.vo.RegisterVo;
 
 
 public interface LearnerService {
@@ -13,7 +14,7 @@ public interface LearnerService {
 
     Response<?> queryLearnerByNickname(String nickname);
 
-    Response<?> register(Learner learner);
+    Response<?> register(RegisterVo registerVo);
 
     Response<?> confirm(String token);
 

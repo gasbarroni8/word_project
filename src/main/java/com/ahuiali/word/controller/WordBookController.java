@@ -177,7 +177,7 @@ public class WordBookController {
      * @param wordbookId 词书id
      * @param wordsType  返回单词类型，1为未背，2为记忆中，3为已掌握
      * @param pageUtil   分页类
-     * @param session    用于获取learner_id
+     * @param session    用于获取learnerId
      * @return
      */
     @RequestMapping(value = "/myWordbook/words/{wordbookId}/{wordsType}", produces = "application/json;charset=utf-8;")
@@ -187,16 +187,16 @@ public class WordBookController {
             @PathVariable("wordsType") Integer wordsType,
             @RequestBody PageUtil pageUtil,
             HttpSession session) {
-        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
         pageUtil.renew();
-        return wordService.myWordbookWords(wordbookId, learner_id, pageUtil, wordsType);
+        return wordService.myWordbookWords(wordbookId, learnerId, pageUtil, wordsType);
     }
 
     /**
      * 单词类型转移
      *
      * @param wordbookId
-     * @param id         未背->掌握时id为words的id，其余为记忆表的id
+     * @param id         word_id
      * @param type       记忆中->掌握 : 1, 未背->掌握 : 2, 掌握->未背 : 3
      * @param session
      * @return
@@ -207,8 +207,8 @@ public class WordBookController {
                                @PathVariable("id") Integer id,
                                @PathVariable("type") Integer type,
                                HttpSession session) {
-        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
-        return wordService.wordTypeChange(learner_id, wordbookId, id, type);
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
+        return wordService.wordTypeChange(learnerId, wordbookId, id, type);
     }
 
 
@@ -237,8 +237,8 @@ public class WordBookController {
      */
     @RequestMapping(value = "/myWordbook/review", produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> review(@RequestBody List<Word> words) {
-        return wordService.updateWords(words);
+    Response<?> review(@RequestBody List<Long> ids) {
+        return wordService.updateWords(ids);
     }
 
 

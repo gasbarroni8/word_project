@@ -2,15 +2,20 @@ package com.ahuiali.word.controller;
 
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.dto.NotebookDto;
 import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.WordEct;
 import com.ahuiali.word.service.NotebookService;
 import com.ahuiali.word.common.utils.PageUtil;
+import com.ahuiali.word.vo.AddNotebookVo;
+import com.ahuiali.word.vo.EditNotebookVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author ahui
@@ -41,23 +46,23 @@ public class NotebookController {
     public @ResponseBody
     Response<?> myNotebook(HttpSession session) {
         //获取学习者id
-        Integer learner_id = (Integer) session.getAttribute(Constant.LEARNER_ID);
-        return notebookService.findAllNotebookByLearnerId(learner_id);
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
+        return notebookService.findAllNotebookByLearnerId(learnerId);
     }
 
     /**
      * 修改生词本
      *
-     * @param name
-     * @param id
+     * @param editNotebookVo 新名称
+     * @param notebookId 生词本id
      * @return
      */
-    @RequestMapping(value = "/editNotebook")
-    public String editNotebook(@RequestParam(value = "notebookName", required = false) String name,
-                               @RequestParam(value = "id", required = false) Integer id) {
-        notebookService.editNotebook(name.trim(), id);
+    @RequestMapping(value = "/editNotebook/{notebookId}")
+    public @ResponseBody Response<?> editNotebook(@Valid @RequestBody EditNotebookVo editNotebookVo,
+                               @PathVariable(value = "notebookId", required = false) Integer notebookId) {
+
         //重定向
-        return "redirect:/notebook/gotoNotebook";
+        return notebookService.editNotebook(editNotebookVo.getName().trim(), notebookId);
     }
 
 
@@ -65,23 +70,19 @@ public class NotebookController {
      * 新增生词本
      *
      * @param session
-     * @param name
+     * @param addNotebookVo
      * @return
      */
     @RequestMapping(value = "/addNotebook")
-    public String addNotebook(HttpSession session,
-                              @RequestParam(value = "notebookName", required = false) String name) {
+    public @ResponseBody Response<?> addNotebook(HttpSession session,
+                                                 @Valid @RequestBody AddNotebookVo addNotebookVo) {
         //获取学习者id
         Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
-        Notebook notebook = new Notebook();
-        notebook.setLearnerId(learnerId);
-        notebook.setName(name.trim());
-        notebookService.addNotebook(notebook);
-
+        NotebookDto notebookDto = new NotebookDto();
+        notebookDto.setName(addNotebookVo.getName().trim());
         //前端自动判断，若添加成功，则在生词本列表追加，否则显示‘添加生词本失败信息’，code为601(*)
-
         //重定向
-        return "redirect:/notebook/gotoNotebook";
+        return notebookService.addNotebook(notebookDto, learnerId);
     }
 
     /**
@@ -91,10 +92,9 @@ public class NotebookController {
      * @return
      */
     @RequestMapping(value = "/removeNotebook/{id}", produces = "application/json;charset=utf-8;")
-    public String removeNotebook(@PathVariable("id") Integer id) {
+    public @ResponseBody Response<?> removeNotebook(@PathVariable("id") Integer id) {
         // TODO
-        notebookService.removeNotebook(id);
-        return "redirect:/notebook/gotoNotebook";
+        return notebookService.removeNotebook(id);
     }
 
     /**
@@ -162,5 +162,34 @@ public class NotebookController {
         return "/notebook/notebookDetail";
     }
 
+    /**
+     * 更新记忆表的单词
+     *
+     * @param
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "/myNotebook/review", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> review(@RequestBody List<Long> ids) {
+        return notebookService.updateWords(ids);
+    }
 
+    /**
+     * 返回复习词汇
+     *
+     * @param notebookId
+     * @param pageUtil
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/getReviewWords/{notebookId}", produces = "application/json;charset=utf-8;")
+    public @ResponseBody
+    Response<?> getReviewWords(@PathVariable("notebookId") Integer notebookId,
+                               @RequestBody PageUtil pageUtil,
+                               HttpSession session) {
+        //获取所有需复习单词(分页)
+        pageUtil.renew();
+        return notebookService.getReviewWords(notebookId, pageUtil);
+    }
 }

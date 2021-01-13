@@ -8,6 +8,7 @@ import com.ahuiali.word.mapper.LearnerMapper;
 import com.ahuiali.word.pojo.Learner;
 import com.ahuiali.word.service.LearnerService;
 import com.ahuiali.word.common.utils.Md5Utils;
+import com.ahuiali.word.vo.RegisterVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -145,12 +146,19 @@ public class LearnerServiceImpl implements LearnerService {
     /**
      * 保存用户，并向用户发送邮箱
      *
-     * @param learner 用户
+     * @param registerVo 用户
      * @return resp
      */
     @Override
-    public Response<?> register(Learner learner) {
-        log.info("用户注册，learner:{}", learner);
+    public Response<?> register(RegisterVo registerVo) {
+        log.info("用户注册，learner:{}", registerVo.getEmail());
+
+        // TODO这里可以判断一下两个密码是否一致
+
+        Learner learner = new Learner();
+        learner.setPassword(registerVo.getPassword());
+        learner.setEmail(registerVo.getEmail());
+        learner.setNickname(registerVo.getNickname());
         //password加密
         learner.setPassword(Md5Utils.md5(learner.getPassword()));
         //生成token，时间戳+邮箱

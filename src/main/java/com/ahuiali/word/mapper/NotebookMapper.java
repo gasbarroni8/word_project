@@ -2,6 +2,9 @@ package com.ahuiali.word.mapper;
 
 
 import com.ahuiali.word.dto.IdDto;
+import com.ahuiali.word.dto.NoteBookWordDto;
+import com.ahuiali.word.dto.NotebookDto;
+import com.ahuiali.word.dto.WordBaseDto;
 import com.ahuiali.word.pojo.Notebook;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.pojo.WordEct;
@@ -9,6 +12,7 @@ import com.ahuiali.word.common.utils.PageUtil;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -20,16 +24,17 @@ public interface NotebookMapper {
      * @return
      */
     @Select("select id,name,count from notebook where learner_id = #{learnerId} order by modified desc")
-    List<Notebook> findAllNotebookByLearnerId(Integer learnerId);
+    List<NotebookDto> findAllNotebookByLearnerId(Integer learnerId);
 
     /**
      * 新建生词本
      * @param notebook 生词本对象
      * @return
      */
-    @Insert("insert into notebook (learner_id,name,count,created,modified)" +
-            " values (#{learner_id},#{name},0,NOW(),NOW())")
-    Integer addNotebook(Notebook notebook);
+    @Insert("insert into notebook (learner_id,name,count)" +
+            " values (#{learnerId},#{notebook.name},0)")
+    @Options(useGeneratedKeys = true, keyProperty = "notebook.id", keyColumn = "id")
+    Integer addNotebook(NotebookDto notebook, Integer learnerId);
 
     /**
      * 删除生词本
@@ -62,8 +67,8 @@ public interface NotebookMapper {
      * @param word 单词
      * @return
      */
-    @Insert("INSERT INTO notebook_word (notebook_id,word,pron_us,pron_uk,paraphrase) " +
-            "SELECT #{notebookId},word,pron_us,pron_uk,translation " +
+    @Insert("INSERT INTO notebook_word (notebook_id,word,pron_us,pron_uk,paraphrase, review_count, next_time) " +
+            "SELECT #{notebookId},word,pron_us,pron_uk,translation,1,date_add(NOW(), interval 30 minute) " +
             "FROM wordect " +
             "WHERE word = #{word};")
     @Options(useGeneratedKeys = true, keyProperty = "idDto.id", keyColumn = "id")
@@ -75,9 +80,10 @@ public interface NotebookMapper {
      * @param pageUtil 分页
      * @return
      */
-    @Select("select id,word,pron_uk,pron_us,paraphrase from notebook_word where notebook_id = #{notebookId} " +
-            "limit #{pageUtil.offset},#{pageUtil.size};")
-    List<Word> listWords(Integer notebookId, PageUtil pageUtil);
+    @Select("select id,word,pron_uk as pronUk,pron_us as pronUs, paraphrase as mean, modified " +
+            "from notebook_word where notebook_id = #{notebookId} ORDER BY modified DESC " +
+            "limit #{pageUtil.offset},#{pageUtil.size}")
+    List<WordBaseDto> listWords(Integer notebookId, PageUtil pageUtil);
 
     /**
      * 查看该单词是否存在该用户的所有生词表中
@@ -94,11 +100,11 @@ public interface NotebookMapper {
     /**
      * 修改名称
      * @param name 生词本新名称
-     * @param id 生词本id
+     * @param notebookId 生词本id
      * @return
      */
-    @Update("UPDATE notebook SET NAME = #{name} , modified = NOW() WHERE id = #{id};")
-    Integer editNotebookName(String name, Integer id);
+    @Update("UPDATE notebook SET NAME = #{name} , modified = NOW() WHERE id = #{notebookId};")
+    Integer editNotebookName(String name, Integer notebookId);
 
 
     /**
@@ -133,4 +139,26 @@ public interface NotebookMapper {
      */
     @Select("select notebook_id from notebook_word where id = #{id}")
     Integer findIdByNotebookWordId(Integer id);
+
+    @InsertProvider(type = NotebookMapper.UpdateReviewWords.class,method = "update")
+    Integer updateReviewWords(String sql);
+
+    /**
+     * 获取需要复习的单词
+     * @param notebookId 生词本id
+     * @param pageUtil 分页
+     * @return
+     */
+    @Select("SELECT `id`,word,pron_us as pronUs,pron_uk as pronUk,review_count as reviewCount, paraphrase " +
+            "FROM notebook_word " +
+            "WHERE notebook_id = #{notebookId} " +
+            "AND review_count < 7 " +
+            "AND (NOW() > next_time) limit #{pageUtil.offset},#{pageUtil.size};")
+    List<NoteBookWordDto> getReviewWords(Integer notebookId, PageUtil pageUtil);
+
+    class UpdateReviewWords{
+        public String update(String sql){
+            return sql;
+        }
+    }
 }

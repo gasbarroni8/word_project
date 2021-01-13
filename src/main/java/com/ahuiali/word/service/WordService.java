@@ -18,6 +18,6 @@ public interface WordService {
 
     Response<?> insertWords(Integer wordbook_id, Integer learner_id,List<Long> ids);
 
-    Response<?> updateWords(List<Word> words);
+    Response<?> updateWords(List<Long> ids);
 
 }

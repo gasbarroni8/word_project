@@ -139,12 +139,14 @@ public interface WordMapper {
      * @param pageUtil
      * @return
      */
+    // TODO 背了7次的呢？
     @Select("SELECT m.`id`,w.word,w.pron_us,w.pron_uk,m.memorized_count,w.paraphrase " +
             "FROM memorize m  INNER JOIN words w ON \n" +
          "(m.`word_id` = w.`id`  \n" +
          "AND  m.learner_id = #{learner_id} \n" +
          "AND m.wordbook_id = #{wordbook_id}\n" +
          "AND m.is_get = 0\n" +
+         "AND m.memorized_count < 7\n" +
          "AND (NOW() > m.`next_time`)) limit #{pageUtil.offset},#{pageUtil.size};")
     List<Word> getReviewWords(Integer learner_id, Integer wordbook_id, PageUtil pageUtil);
 
