@@ -28,6 +28,14 @@ public interface LearnerMapper {
             "password = #{password} limit 1;" )
     LoginDto queryLearner(Learner learner);
 
+    /**
+     * 根据id获取邮箱
+     * @param learnerId 用户id
+     * @return
+     */
+    @Select("select email from learner where id = #{learnerId} limit 1")
+    String queryEmailById(Integer learnerId);
+
     //根据邮箱查询learner
     @Select("select id from learner where email = #{email} limit 1;")
     Learner queryLearnerByEmail(String email);

@@ -46,6 +46,11 @@ public class ChinaDailyProcessor implements PageProcessor {
      */
     @Override
     public void process(Page page) {
+        // TODO 这个好像每次都会进入阿，凎
+        String key = String.format(RedisKeyConstant.SPIDER_LINK_VISITED, CHINA_DAILY);
+        if (redisTemplate.opsForList().size(key) > 1000) {
+            redisTemplate.opsForList().trim(key, 0, 500);
+        }
         List<String> visitedUrls = redisTemplate.opsForList()
                 .range(String.format(RedisKeyConstant.SPIDER_LINK_VISITED, CHINA_DAILY), 0, -1);
         String url = page.getUrl().toString();

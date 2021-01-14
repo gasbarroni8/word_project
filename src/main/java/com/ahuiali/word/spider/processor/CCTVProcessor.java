@@ -39,8 +39,13 @@ public class CCTVProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
+        // TODO 这个好像每次都会进入阿，凎
+        String key = String.format(RedisKeyConstant.SPIDER_LINK_VISITED, CCTV);
+        if (redisTemplate.opsForList().size(key) > 1000) {
+            redisTemplate.opsForList().trim(key, 0, 500);
+        }
         List<String> visitedUrls = redisTemplate.opsForList()
-                .range(String.format(RedisKeyConstant.SPIDER_LINK_VISITED, CCTV), 0, -1);
+                .range(key, 0, -1);
         // 如果是主页
         if (UrlConstant.CCTV_REQUEST_LIST_URL.equals(page.getUrl().toString())) {
             // 找出json中的list

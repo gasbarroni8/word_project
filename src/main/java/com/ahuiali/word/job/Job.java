@@ -1,18 +1,24 @@
 package com.ahuiali.word.job;
 
 import com.ahuiali.word.common.constant.Constant;
+import com.ahuiali.word.common.constant.RedisKeyConstant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.common.utils.PageUtil;
 import com.ahuiali.word.dto.BaseInfoDto;
+import com.ahuiali.word.dto.LearnerSettingDto;
 import com.ahuiali.word.pojo.Learner;
+import com.ahuiali.word.pojo.LearnerData;
 import com.ahuiali.word.pojo.Word;
 import com.ahuiali.word.pojo.Wordbook;
+import com.ahuiali.word.service.LearnerDataService;
 import com.ahuiali.word.service.LearnerService;
 import com.ahuiali.word.service.WordService;
 import com.ahuiali.word.service.WordbookService;
 import com.ahuiali.word.spider.SpiderLaunch;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,8 +26,10 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 定时任务类
@@ -43,16 +51,22 @@ public class Job {
     private WordbookService wordbookService;
 
     @Autowired
+    private LearnerDataService learnerDataService;
+
+    @Autowired
     private JavaMailSender javaMailSender;
 
     @Autowired
     private SpiderLaunch spiderLaunch;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     /**
-     * 六小时运行一次
+     * 每天6、9、15、21点爬取
      * 爬取CCTV
      */
-//    @Scheduled(cron = "0 0 0/6 * * ? ")
+    @Scheduled(cron = "0 0 6,9,15,21 * * ? ")
     public void startSpiderCCTV() {
         log.info("开始爬取CCTV，date:{}", new Date());
         spiderLaunch.startSpiderCCTV();
@@ -60,13 +74,47 @@ public class Job {
 
     /**
      * 每天6、9、15、21点爬取
-     * 爬取CCTV
+     * 爬取中国日报
      */
-//    @Scheduled(cron = "0 0 6,9,15,21 * * ? ")
+    @Scheduled(cron = "0 0 6,9,15,21 * * ? ")
     public void startSpiderChinaDaily() {
         log.info("开始爬取ChinaDaily，date:{}", new Date());
         spiderLaunch.startSpiderChinaDaily();
     }
+
+    /**
+     * 保存用户今日学习数据
+     * 23：45分执行
+     */
+    @Scheduled(cron = "0 45 23 * * ?")
+    public void startSaveLearnerData() {
+        // 从redis中拿取数据
+        String prefix = "learner:*";
+        Set<String> keys = redisTemplate.keys(prefix);
+        if (keys != null && keys.size() > 0) {
+            List<LearnerData> dtos = new ArrayList<>(keys.size());
+            keys.forEach(e -> {
+                LearnerSettingDto dto = (LearnerSettingDto) redisTemplate.opsForValue().get(e);
+                if (dto != null) {
+                    // 清空数据
+                    LearnerData newDto = new LearnerData();
+                    BeanUtils.copyProperties(dto, newDto);
+                    newDto.setDate(new Date());
+                    // redis中数据置0
+                    dto.setTodayReadCount(0);
+                    dto.setTodayReviewCount(0);
+                    dto.setTodayLearnCount(0);
+                    // 更新清空
+                    redisTemplate.opsForValue().set(String.format(RedisKeyConstant.LEARNER_INFO, dto.getLearnerId()), dto);
+                    // 加入
+                    dtos.add(newDto);
+                }
+                learnerDataService.saveOrUpdateBatch(dtos);
+            });
+        }
+
+    }
+
 
     public static void main(String[] args) {
         new Job().cronJob1();
