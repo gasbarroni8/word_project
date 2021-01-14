@@ -4,6 +4,7 @@ import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.enums.WordTypeChangeEnum;
 import com.ahuiali.word.common.enums.WordTypeEnum;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.common.utils.UpdateBaseDataUtil;
 import com.ahuiali.word.dto.WordDto;
 import com.ahuiali.word.mapper.WordMapper;
 import com.ahuiali.word.pojo.Word;
@@ -24,6 +25,9 @@ public class WordServiceImpl implements WordService {
 
     @Autowired
     private WordMapper wordMapper;
+
+    @Autowired
+    private UpdateBaseDataUtil updateBaseDataUtil;
 
     /**
      * 返回size个该词书的单词
@@ -131,6 +135,7 @@ public class WordServiceImpl implements WordService {
      */
     @Override
     public Response<?> insertWords(Integer wordbookId, Integer learnerId, List<Long> ids) {
+
         Response<?> response = Response.success();
         StringBuilder sql = new StringBuilder();
         String next_time = NextTimeUtils.getNextTime(1, Calendar.getInstance());
@@ -145,6 +150,8 @@ public class WordServiceImpl implements WordService {
         if (count > 0) {
             //更新学习数量
             wordMapper.updateLearnCount(wordbookId, learnerId, count);
+            // 更新redis中用户的学习数据
+            updateBaseDataUtil.addTodayLearnCount(count, learnerId);
         } else {
             response = Response.result(Constant.Error.WORD_BATCH_INSERT_ERROR);
         }
@@ -158,7 +165,7 @@ public class WordServiceImpl implements WordService {
      * @return
      */
     @Override
-    public Response<?> updateWords(List<Long> idsList) {
+    public Response<?> updateWords(List<Long> idsList, Integer learnerId) {
         Response<?> response = Response.success();
         StringBuilder sql = new StringBuilder();
         //ids的
@@ -182,6 +189,8 @@ public class WordServiceImpl implements WordService {
         if (count != idsList.size()) {
             response = Response.result(Constant.Error.WORDBOOK_WORD_NOT_ALL_UPDATE);
         }
+        // 更新redis中用户的学习数据
+        updateBaseDataUtil.addTodayReviewCount(count, learnerId);
         return response;
     }
 

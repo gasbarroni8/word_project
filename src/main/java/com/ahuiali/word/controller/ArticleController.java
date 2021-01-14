@@ -27,7 +27,7 @@ public class ArticleController {
 
     /**
      * 根据文章id获取文章内容
-     * @param articleId
+     * @param articleId 文章id
      * @return
      */
     @RequestMapping(value = "/read/{id}", produces = "application/json;charset=utf-8;")
@@ -36,6 +36,12 @@ public class ArticleController {
         return articleService.getContentByArticleId(articleId);
     }
 
+    /**
+     * 根据类型获取文章
+     * @param tag 分类
+     * @param pageUtil 分页
+     * @return
+     */
     @RequestMapping(value = "/tag/{tag}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
     Response<?> getByTag(@PathVariable("tag") String tag, @RequestBody PageUtil pageUtil) {

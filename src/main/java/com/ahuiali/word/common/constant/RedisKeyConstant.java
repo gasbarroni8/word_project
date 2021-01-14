@@ -9,4 +9,5 @@ package com.ahuiali.word.common.constant;
 public class RedisKeyConstant {
 
     public final static String SPIDER_LINK_VISITED = "spider:links:visited:%s";
+    public final static String LEARNER_INFO = "learner:%s";
 }

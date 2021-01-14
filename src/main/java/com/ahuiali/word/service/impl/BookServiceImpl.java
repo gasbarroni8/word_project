@@ -4,6 +4,7 @@ import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.enums.BookIsAddEnum;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.common.utils.BookTagUtil;
+import com.ahuiali.word.common.utils.UpdateBaseDataUtil;
 import com.ahuiali.word.dto.*;
 import com.ahuiali.word.mapper.BookMapper;
 import com.ahuiali.word.pojo.Book;
@@ -33,6 +34,9 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
 
     @Autowired
     StringRedisTemplate template;
+
+    @Autowired
+    private UpdateBaseDataUtil updateBaseDataUtil;
 
     private final static String INIT_LOC = "0001_0";
 
@@ -188,12 +192,15 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
      * @param learnerId  用户id
      * @param bookIndex  书号
      * @param lastestLoc 最新位置
+     * @param time 阅读时长
      * @return resp
      */
     @Override
-    public Response<?> updateBook(Integer learnerId, Integer bookIndex, String lastestLoc) {
+    public Response<?> updateBook(Integer learnerId, Integer bookIndex, String lastestLoc, Integer time) {
         Response<?> response = Response.success();
         Integer count = bookMapper.updateBook(learnerId, bookIndex, lastestLoc);
+        // 更新当天阅读时长
+        updateBaseDataUtil.addTodayReadCount(time, learnerId);
         if (count <= ZERO) {
             response = Response.result(Constant.Error.BOOK_LOC_UPDATE_ERROR);
         }

@@ -3,43 +3,23 @@ package com.ahuiali.word.dto;
 import lombok.Data;
 
 /**
- * BaseInfoDto
- * 主页基础信息dto
+ * UserSettingDto
+ * 用户设置信息（存放到redis中）
  * @author ZhengChaoHui
- * @date 2020/12/24 12:29
+ * @date 2021/1/13 12:36
  */
 @Data
-public class BaseInfoDto {
+public class LearnerSettingDto {
 
     /**
-     * 词书id
+     * 用户id
      */
-    private Integer id;
+    private Integer learnerId;
 
     /**
-     * 词书名
+     * 用户邮箱
      */
-    private String name;
-
-    /**
-     * 词书单词数目
-     */
-    private Integer count;
-
-    /**
-     * 词书图片地址
-     */
-    private String img;
-
-    /**
-     * 词书已背单词数目
-     */
-    private Integer learnedCount;
-
-    /**
-     * 需复习单词数
-     */
-    private Integer reviewCount;
+    private String email;
 
     /**
      * 是否邮箱提醒复习，0为否，1为是

@@ -208,4 +208,20 @@ public class LearnerController {
         session.removeAttribute(Constant.LEARNER_ID);
         return Response.success();
     }
+
+    /**
+     * 更新邮箱提醒功能
+     *
+     * @param session session
+     * @param isNotice 0取消，1添加
+     * @return Response
+     */
+    @RequestMapping("/updateEmailNotice/{isNotice}")
+    public @ResponseBody
+    Response<?> updateEmailNotice(HttpSession session, @PathVariable("isNotice") Integer isNotice) {
+        //获取学习者id
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
+        learnerService.updateEmailNotice(learnerId, isNotice);
+        return Response.success();
+    }
 }

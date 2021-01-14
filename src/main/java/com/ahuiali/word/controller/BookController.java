@@ -166,12 +166,13 @@ public class BookController {
      * @param session
      * @return
      */
-    @RequestMapping(value = "/update/{bookIndex}/{latestLoc}", produces = "application/json;charset=utf-8;")
+    @RequestMapping(value = "/update/{bookIndex}/{latestLoc}/{time}", produces = "application/json;charset=utf-8;")
     public @ResponseBody
     Response<?> updateBook(@PathVariable("bookIndex") Integer bookIndex,
+                           @PathVariable("time") Integer time,
                            @PathVariable("latestLoc") String latestLoc,
                            HttpSession session) {
         Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
-        return bookService.updateBook(learnerId, bookIndex, latestLoc);
+        return bookService.updateBook(learnerId, bookIndex, latestLoc, time);
     }
 }

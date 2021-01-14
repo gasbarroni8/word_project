@@ -1,8 +1,10 @@
 package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.constant.Constant;
+import com.ahuiali.word.common.constant.RedisKeyConstant;
 import com.ahuiali.word.common.enums.StatusEnum;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.dto.LearnerSettingDto;
 import com.ahuiali.word.dto.LoginDto;
 import com.ahuiali.word.mapper.LearnerMapper;
 import com.ahuiali.word.pojo.Learner;
@@ -11,6 +13,7 @@ import com.ahuiali.word.common.utils.Md5Utils;
 import com.ahuiali.word.vo.RegisterVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -30,10 +33,13 @@ import java.util.List;
 public class LearnerServiceImpl implements LearnerService {
 
     @Autowired
-    LearnerMapper learnerMapper;
+    private LearnerMapper learnerMapper;
 
     @Autowired
-    JavaMailSender javaMailSender;
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 添加用户
@@ -152,9 +158,7 @@ public class LearnerServiceImpl implements LearnerService {
     @Override
     public Response<?> register(RegisterVo registerVo) {
         log.info("用户注册，learner:{}", registerVo.getEmail());
-
         // TODO这里可以判断一下两个密码是否一致
-
         Learner learner = new Learner();
         learner.setPassword(registerVo.getPassword());
         learner.setEmail(registerVo.getEmail());
@@ -177,6 +181,15 @@ public class LearnerServiceImpl implements LearnerService {
         if (learnerMapper.addSetting(learner) <= 0) {
             // 打印日志即可
             log.error("插入用户的setting失败, 用户数据：id:{}, email:{}", learner.getId(), learner.getEmail());
+        } else {
+            // 将用户信息放到redis中
+            LearnerSettingDto dto = new LearnerSettingDto();
+            dto.setEmail(learner.getEmail());
+            dto.setIsNotice(0);
+            dto.setTodayLearnCount(0);
+            dto.setTodayReviewCount(0);
+            dto.setLearnerId(learner.getId());
+            redisTemplate.opsForValue().set(String.valueOf(learner.getId()), dto);
         }
         //发送邮箱
         return sentEmail(learner.getEmail(), Constant.REGISTER_TITLE, String.format(Constant.REGISTER_MSG, token));
@@ -313,6 +326,21 @@ public class LearnerServiceImpl implements LearnerService {
         Response<List<Learner>> response = Response.success();
         List<Learner> learners = learnerMapper.findAllReviewNoticeLearners();
         response.setData(learners);
+        return response;
+    }
+
+    @Override
+    public Response<?> updateEmailNotice(Integer learnerId, Integer isNotice) {
+        Response<?> response = Response.success();
+        // 获取邮箱
+        String key = String.format(RedisKeyConstant.LEARNER_INFO, learnerId);
+        if (redisTemplate.hasKey(key)) {
+           LearnerSettingDto dto =  (LearnerSettingDto)redisTemplate.opsForValue().get(key);
+            if (dto != null) {
+                dto.setIsNotice(isNotice);
+                redisTemplate.opsForValue().set(key, dto);
+            }
+        }
         return response;
     }
 

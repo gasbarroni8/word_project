@@ -224,8 +224,8 @@ public class WordBookController {
     Response<?> insert(@PathVariable("wordbookId") Integer wordbookId,
                        @RequestBody List<Long> ids,
                        HttpSession session) {
-        Integer learner_id = (Integer) session.getAttribute("learnerId");
-        return wordService.insertWords(wordbookId, learner_id, ids);
+        Integer learnerId = (Integer) session.getAttribute("learnerId");
+        return wordService.insertWords(wordbookId, learnerId, ids);
     }
 
     /**
@@ -237,8 +237,9 @@ public class WordBookController {
      */
     @RequestMapping(value = "/myWordbook/review", produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> review(@RequestBody List<Long> ids) {
-        return wordService.updateWords(ids);
+    Response<?> review(@RequestBody List<Long> ids, HttpSession session) {
+        Integer learnerId = (Integer) session.getAttribute("learnerId");
+        return wordService.updateWords(ids, learnerId);
     }
 
 

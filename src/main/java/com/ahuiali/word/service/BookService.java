@@ -22,7 +22,7 @@ public interface BookService extends IService<Book> {
 
     Response<?> removeBook(Integer learnerId, Integer index_book);
 
-    Response<?> updateBook(Integer learnerId, Integer book_index, String latestLoc);
+    Response<?> updateBook(Integer learnerId, Integer book_index, String latestLoc, Integer time);
 
     Response<?> findParaCNById(Integer para_id);
 
