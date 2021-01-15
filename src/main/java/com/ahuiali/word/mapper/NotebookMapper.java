@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Date;
 import java.util.List;
 
-@Mapper
+@Repository
 public interface NotebookMapper {
     /**
      * 查询用户的所有生词本

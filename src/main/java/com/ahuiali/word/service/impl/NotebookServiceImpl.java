@@ -3,6 +3,7 @@ package com.ahuiali.word.service.impl;
 import com.ahuiali.word.common.constant.Constant;
 import com.ahuiali.word.common.resp.Response;
 import com.ahuiali.word.common.utils.NextTimeUtils;
+import com.ahuiali.word.common.utils.UpdateBaseDataUtil;
 import com.ahuiali.word.dto.IdDto;
 import com.ahuiali.word.dto.NoteBookWordDto;
 import com.ahuiali.word.dto.NotebookDto;
@@ -32,6 +33,9 @@ public class NotebookServiceImpl implements NotebookService {
 
     @Autowired
     NotebookMapper notebookMapper;
+
+    @Autowired
+    private UpdateBaseDataUtil updateBaseDataUtil;
 
     /**
      * 根据用户id查询所有生词本
@@ -204,7 +208,7 @@ public class NotebookServiceImpl implements NotebookService {
      * @return
      */
     @Override
-    public Response<?> updateWords(List<Long> idsList) {
+    public Response<?> updateWords(List<Long> idsList, Integer learnerId) {
         Response<?> response = Response.success();
         StringBuilder sql = new StringBuilder();
         //ids的
@@ -223,7 +227,8 @@ public class NotebookServiceImpl implements NotebookService {
         ids.setLength(ids.length() - 1);
         sql.append(ids.toString()).append(");");
         Integer count = notebookMapper.updateReviewWords(sql.toString());
-
+        // 更新redis中用户的学习数据
+        updateBaseDataUtil.addTodayReviewCount(count, learnerId);
         //如果全部更新成功
         if (count != idsList.size()) {
             response = Response.result(Constant.Error.NOTEBOOK_WORD_NOT_ALL_UPDATE);

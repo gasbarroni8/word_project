@@ -91,7 +91,7 @@ public class UpdateBaseDataUtil {
      * @param learnerId 用户id
      * @return LearnerSettingDto
      */
-    private LearnerSettingDto getDto(Integer learnerId){
+    public LearnerSettingDto getDto(Integer learnerId){
         LearnerSettingDto dto = new LearnerSettingDto();
         dto.setTodayReadCount(0);
         dto.setTodayReviewCount(0);

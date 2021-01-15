@@ -2,6 +2,7 @@ package com.ahuiali.word.service.impl;
 
 import com.ahuiali.word.common.constant.RedisKeyConstant;
 import com.ahuiali.word.common.resp.Response;
+import com.ahuiali.word.common.utils.UpdateBaseDataUtil;
 import com.ahuiali.word.dto.ArticleDto;
 import com.ahuiali.word.dto.BaseInfoDto;
 import com.ahuiali.word.dto.IndexDto;
@@ -36,6 +37,9 @@ public class IndexServiceImpl implements IndexService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Autowired
+    private UpdateBaseDataUtil updateBaseDataUtil;
+
     @Override
     public Response<IndexDto> getIndexDto(Integer learnerId) {
         Response<IndexDto> response = Response.success();
@@ -53,6 +57,12 @@ public class IndexServiceImpl implements IndexService {
                 baseInfoDto.setTodayReviewCount(dto.getTodayReviewCount());
                 baseInfoDto.setTodayReadCount(dto.getTodayReadCount());
             }
+        } else {
+            LearnerSettingDto dto = updateBaseDataUtil.getDto(learnerId);
+            baseInfoDto.setIsNotice(dto.getIsNotice());
+            baseInfoDto.setTodayLearnCount(dto.getTodayLearnCount());
+            baseInfoDto.setTodayReviewCount(dto.getTodayReviewCount());
+            baseInfoDto.setTodayReadCount(dto.getTodayReadCount());
         }
         // 获取最新文章
         List<ArticleDto> lastestArticle = articleService.getLastestArticle();

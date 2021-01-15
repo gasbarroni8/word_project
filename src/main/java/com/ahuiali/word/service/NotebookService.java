@@ -27,7 +27,7 @@ public interface NotebookService {
 
     Response<?> addWordEct(Integer id, WordEct wordect);
 
-    Response<?> updateWords(List<Long> ids);
+    Response<?> updateWords(List<Long> ids, Integer learnerId);
 
     Response<?> getReviewWords(Integer notebookId, PageUtil pageUtil);
 }

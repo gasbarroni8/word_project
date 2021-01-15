@@ -171,8 +171,10 @@ public class NotebookController {
      */
     @RequestMapping(value = "/myNotebook/review", produces = "application/json;charset=utf-8;")
     public @ResponseBody
-    Response<?> review(@RequestBody List<Long> ids) {
-        return notebookService.updateWords(ids);
+    Response<?> review(@RequestBody List<Long> ids, HttpSession session) {
+        //获取学习者id
+        Integer learnerId = (Integer) session.getAttribute(Constant.LEARNER_ID);
+        return notebookService.updateWords(ids, learnerId);
     }
 
     /**
