@@ -12,6 +12,5 @@ import org.springframework.stereotype.Repository;
  * @date 2021/1/3 23:51
  */
 @Mapper
-@Repository
 public interface ChapterMapper extends BaseMapper<Chapter> {
 }

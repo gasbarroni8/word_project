@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
  * @author ZhengChaoHui
  * @date 2021/1/14 11:55
  */
-@Repository
 @Mapper
 public interface LearnerDataMapper extends BaseMapper<LearnerData> {
 }

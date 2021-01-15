@@ -12,6 +12,5 @@ import org.springframework.stereotype.Repository;
  * @date 2021/1/4 0:01
  */
 @Mapper
-@Repository
 public interface ParagraphMapper extends BaseMapper<Paragraph> {
 }

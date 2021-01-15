@@ -14,7 +14,6 @@ import java.util.List;
  * @author ZhengChaoHui
  * @date 2019/9/18 22:27
  */
-@Repository
 @Mapper
 public interface WordMapper {
 

@@ -13,7 +13,6 @@ import java.util.List;
  * Created by shkstart on 2019/9/28
  */
 
-@Repository
 @Mapper
 public interface VocabularyMapper {
 

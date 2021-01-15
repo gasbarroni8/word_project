@@ -11,7 +11,6 @@ import java.util.List;
 /**
  * Created by shkstart on 2019/10/20
  */
-@Repository
 @Mapper
 public interface LearnerMapper {
 

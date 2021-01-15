@@ -18,7 +18,6 @@ import java.util.List;
  * @date 2020/12/12 21:11
  */
 @Mapper
-@Repository
 public interface ArticleMapper extends BaseMapper<Article> {
 
     @Select("SELECT id, title, source, url, description, date, image FROM article ORDER BY date DESC LIMIT 15;")

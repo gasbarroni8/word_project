@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Date;
 import java.util.List;
 
-@Repository
 @Mapper
 public interface NotebookMapper {
     /**

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Mapper
-@Repository
 public interface BookMapper extends BaseMapper<Book> {
 
     @Select("SELECT id,title,img,author,tag,summary,book_index,is_hot FROM book;")

@@ -12,7 +12,6 @@ import java.util.List;
  * Created by shkstart on 2019/10/6
  * @author ahui
  */
-@Repository
 @Mapper
 public interface SentencesMapper {
 

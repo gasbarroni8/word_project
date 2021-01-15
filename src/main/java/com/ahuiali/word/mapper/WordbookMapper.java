@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * @author ahui
  */
-@Repository
 @Mapper
 public interface WordbookMapper {
 

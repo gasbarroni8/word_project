@@ -12,6 +12,5 @@ import org.springframework.stereotype.Repository;
  * @date 2020/12/13 9:10
  */
 @Mapper
-@Repository
 public interface ArticleParagraphMapper extends BaseMapper<ArticleParagraph> {
 }
