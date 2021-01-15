@@ -97,6 +97,7 @@ public class UpdateBaseDataUtil {
         dto.setTodayReviewCount(0);
         dto.setTodayLearnCount(0);
         dto.setIsNotice(0);
+        dto.setLearnerId(learnerId);
         dto.setEmail(learnerMapper.queryEmailById(learnerId));
         return dto;
     }

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by shkstart on 2019/10/20
  */
-@Mapper
+@Repository
 public interface LearnerMapper {
 
     //插入一个learner
