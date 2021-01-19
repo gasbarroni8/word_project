@@ -1,3 +1,5 @@
+### 注意，已经用uniapp改写前端，原有的网页版暂不支持了
+
 #### 配置
 要注意自己配置相应的redis，mysql和邮箱验证功能<br>
 
@@ -8,8 +10,12 @@
 4. 162本双语小说
 5. 10本单词表（四六级，gre，雅思等等大学以上的单词表）
 
+#### 安卓apk
+apk地址（安卓）链接：https://pan.baidu.com/s/1L2ySka-l7_xzf51PDra5DQ 
+提取码：r9sz 
+
 #### 线上地址:
-www.ahuiali.com
+www.ahuiali.com（暂时无法浏览）
 
 #### 联系
     qq：1170782807
