@@ -51,8 +51,8 @@ public class SpiderLaunch {
                     .addUrl(chinaDailyUrl)
                     .addPipeline(chinaDailySqlPipeline)
                     .thread(5)
-                    .run();
-//                    .runAsync();
+//                    .run();
+                    .runAsync();
         }
     }
 
@@ -65,8 +65,8 @@ public class SpiderLaunch {
                 .addUrl(UrlConstant.CCTV_REQUEST_LIST_URL)
                 .addPipeline(cctvSqlPipeline)
                 .thread(5)
-                .run();
-//                .runAsync();
+//                .run();
+                .runAsync();
     }
 
 

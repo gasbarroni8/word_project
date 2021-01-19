@@ -110,7 +110,7 @@ public class LearnerController {
             Integer learnerID = (Integer) session.getAttribute(Constant.LEARNER_ID);
             if (learnerID == null) {
                 session.setAttribute(Constant.LEARNER_ID, response.getData().getId());
-                //七天有效
+                //七天有效 好像这里的没什么用
                 if (isRemember == 1) {
                     session.setMaxInactiveInterval(7 * 24 * 60);
                 }
